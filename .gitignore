@@ -2,6 +2,9 @@
 [Bb]in/
 [Oo]bj/
 
+# Ignore Visual Studio .vs directory
+.vs/
+
 # Ignore user-specific files
 *.suo
 *.user
