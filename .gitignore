@@ -1,0 +1,37 @@
+# Ignore .NET build output directories
+[Bb]in/
+[Oo]bj/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore NuGet packages
+packages/
+
+# Enable "build/" folder in the NuGet Packages folder
+!packages/build/
+
+# Ignore ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Ignore SQL Server files
+*.mdf
+*.ldf
+
+# Ignore Windows Service files
+*.InstallLog
+*.InstallState
+*.PerformanceCounterInstaller.InstallState
+
+# Others
+*.log
+*.bak
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
