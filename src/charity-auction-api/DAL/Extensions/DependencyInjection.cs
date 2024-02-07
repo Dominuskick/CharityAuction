@@ -1,4 +1,6 @@
-﻿using DAL.EF;
+﻿using DAL.Interfaces;
+using BLL.EF;
+using DAL.Repositories.Implementation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,14 +11,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Extensions
+namespace BLL.Extensions
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddDbContext<AuctionDbContext>(options =>
+                .AddDbContext<DbContext, AuctionDbContext>(options =>
                     options.UseSqlServer(configuration.GetDefaultConnectionString()), ServiceLifetime.Scoped);
             /*  .AddIdentity<AuctionUser, IdentityRole>(options =>
               {
@@ -31,7 +33,10 @@ namespace DAL.Extensions
               .AddTokenProvider<FourDigitTokenProvider>(FourDigitTokenProvider.FourDigitEmail)
               .AddEntityFrameworkStores<AuctionSystemDbContext>()
               .AddDefaultTokenProviders();*/
-
+            services.AddScoped<IAuctionRepository, AuctionRepository>();
+            services.AddScoped<IBidRepository, BidRepository>();
+            services.AddScoped<IPictureRepository, PictureRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             return services;
         }
     }

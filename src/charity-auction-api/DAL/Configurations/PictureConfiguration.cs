@@ -1,13 +1,13 @@
-﻿using DAL.Domain;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace DAL.Configurations
+namespace BLL.Configurations
 {
     public class PictureConfiguration : IEntityTypeConfiguration<Picture>
     {
@@ -18,10 +18,14 @@ namespace DAL.Configurations
 
             builder
                 .HasKey(p => p.Id);
+            builder
+                .Property(p => p.Id)
+                .HasDefaultValueSql("newid()");
 
             builder
                 .Property(p => p.Url)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(ModelConstants.Picture.UrlMaxLength);
 
             builder
                 .Property(p => p.AuctionId)

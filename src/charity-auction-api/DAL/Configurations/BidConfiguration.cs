@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Domain;
+using Domain.Entities;
 
-namespace DAL.Configurations
+namespace BLL.Configurations
 {
     public class BidConfiguration : IEntityTypeConfiguration<Bid>
     {
@@ -18,17 +18,23 @@ namespace DAL.Configurations
 
             builder
                 .HasKey(p => p.Id);
+            builder
+                .Property(p => p.Id)
+                .HasDefaultValueSql("newid()");
 
             builder
-                .Property(b => b.Amount)
-                .IsRequired();
+                .Property(p => p.Amount)
+                .IsRequired()
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValue(ModelConstants.Bid.MinAmount);
 
             builder
                 .Property(p => p.UserId)
                 .IsRequired();
 
             builder
-                .Property(p => p.AuctionId);
+                .Property(p => p.AuctionId)
+                .IsRequired();
         }
     }
 }

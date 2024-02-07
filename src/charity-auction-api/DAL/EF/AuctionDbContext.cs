@@ -1,4 +1,4 @@
-﻿using DAL.Domain;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF
+namespace BLL.EF
 {
     public class AuctionDbContext : IdentityDbContext<User>
     {
@@ -18,7 +18,9 @@ namespace DAL.EF
 
         public DbSet<Auction> Auctions { get; set; }
         public DbSet<Bid> Bids { get; set; }
-
+        public DbSet<Picture> Pictures { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var decimalProps = modelBuilder.Model

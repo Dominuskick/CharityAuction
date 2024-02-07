@@ -5,19 +5,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Domain;
+using Domain.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAL.Configurations
+namespace BLL.Configurations
 {
-    public class AuctionConfiguration
+    public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
     {
         public void Configure(EntityTypeBuilder<Auction> builder)
         {
             builder
-                .ToTable("Items");
+                .ToTable("Auctions");
 
             builder
                 .HasKey(p => p.Id);
+            builder
+                .Property(p => p.Id)
+                .ValueGeneratedOnAdd();
 
             builder
                 .Property(p => p.Title)
@@ -42,28 +46,36 @@ namespace DAL.Configurations
                 .IsRequired();
 
             builder
-                  .Property(a => a.CurrentPrice)
-                  .HasComputedColumnSql("[StartPrice]")
-                    .IsRequired();
+                .Property(a => a.CurrentPrice)
+                .HasComputedColumnSql("[StartPrice]")
+                .IsRequired();
 
             builder
                 .Property(a => a.MinIncrease)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValue(ModelConstants.Auction.MinMinIncrease);
 
             builder
                 .Property(a => a.StartPrice)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValue(ModelConstants.Auction.MinStartingPrice);
 
             builder
                 .HasMany(b => b.Bids)
                 .WithOne(i => i.Auction)
                 .HasForeignKey(i => i.AuctionId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(b => b.Pictures)
                 .WithOne(i => i.Auction)
                 .HasForeignKey(i => i.AuctionId);
+
+            builder
+                .Property(p => p.CategoryId)
+                .IsRequired();
         }
     }
 }

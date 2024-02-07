@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Domain
+namespace BLL.Models
 {
-    public class Picture
+    public class PictureDto
     {
-        public Guid Id { get; set; }
         public string Url { get; set; }
-
         public Guid AuctionId { get; set; }
-        public Auction Auction { get; set; }
     }
 }

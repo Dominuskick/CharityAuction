@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Domain
+namespace Domain.Entities
 {
-    public class Auction
+    public class Auction : Entity
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
@@ -16,6 +16,8 @@ namespace DAL.Domain
         public decimal StartPrice { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
+        public Guid CategoryId { get; set; }
+        public virtual Category Category { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();

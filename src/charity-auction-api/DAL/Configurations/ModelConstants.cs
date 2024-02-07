@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Configurations
+namespace BLL.Configurations
 {
     public static class ModelConstants
     {
@@ -40,6 +40,16 @@ namespace DAL.Configurations
 
             public const decimal MaxMinIncrease = decimal.MaxValue;
             public const string MaxMinIncreaseAsString = "79228162514264337593543950335";
+        }
+
+        public static class Category
+        {
+            public const int NameMaxLength = 50;
+        }
+
+        public static class Picture
+        {
+            public const int UrlMaxLength = 250;
         }
     }
 }

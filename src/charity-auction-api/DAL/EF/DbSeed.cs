@@ -1,4 +1,4 @@
-﻿using DAL.Domain;
+﻿using Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF
+namespace BLL.EF
 {
     public class DbSeed
     {
@@ -14,13 +14,15 @@ namespace DAL.EF
         {
             var context = serviceProvider.GetRequiredService<AuctionDbContext>();
             context.Database.EnsureCreated();
-            if (!context.Auctions.Any())
-            {
-                SeedAuction(context);
-            }
+            List<User> users = new List<User>();
+            List<Category> categories = new List<Category>();
             if(!context.Users.Any())
             {
                 SeedUsers(context);
+            }
+            if (!context.Auctions.Any())
+            {
+                SeedAuction(context);
             }
             if (!context.Bids.Any())
             {
@@ -29,7 +31,7 @@ namespace DAL.EF
             
         }
 
-        private static void SeedBids(AuctionDbContext context)
+        private static List<Bid> SeedBids(AuctionDbContext context)
         {
             var bids = new List<Bid>
             {
@@ -56,9 +58,11 @@ namespace DAL.EF
                 }
             };
             context.Bids.AddRange(bids);
+
+            return bids;
         }
 
-        private static void SeedAuction(AuctionDbContext context)
+        private static List<Auction> SeedAuction(AuctionDbContext context)
         {
             var auctions = new List<Auction>
             {
@@ -94,11 +98,23 @@ namespace DAL.EF
                 }
             };
             context.Auctions.AddRange(auctions);
+
+            return auctions;
         }
 
-        private static void SeedUsers(AuctionDbContext context)
+        private static List<User> SeedUsers(AuctionDbContext context)
         {
-            
+            var users = new List<User>
+            {
+                new User
+                {
+                    UserName = "user1",
+                    Email = ""
+                }
+            };
+            context.Users.AddRange(users);
+
+            return users;
         }
     }
 }

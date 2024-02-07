@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Domain;
+using Domain.Entities;
 
-namespace DAL.Configurations
+namespace BLL.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {
