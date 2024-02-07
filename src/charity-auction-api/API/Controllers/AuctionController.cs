@@ -30,14 +30,33 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAuction([FromRoute] Guid id)
         {
-            var auctionDto = await auctionService.GetAuction(id);
-            if (auctionDto != null)
+            var result = await auctionService.GetAuction(id);
+            if (result.IsSuccess)
             {
-                return Ok(auctionDto);
+                return Ok(result.Data);
             }
             return NotFound();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllAuctions()
+        {
+            var result = await auctionService.GetAllAuctions();
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return NotFound(result.Error);
+        }
 
-        // Add other actions here...
+        [HttpGet("find")]
+        public async Task<IActionResult> FindAuctions([FromQuery] Func<AuctionDto, bool> predicate)
+        {
+            var result = await auctionService.FindAuctions(predicate);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return NotFound(result.Error);
+        }
     }
 }

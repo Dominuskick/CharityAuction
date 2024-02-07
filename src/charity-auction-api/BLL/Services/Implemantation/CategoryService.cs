@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Constants;
 using BLL.Models;
 using BLL.Models.Responses;
 using BLL.Services.Interfaces;
@@ -25,38 +26,68 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result> AddCategory(CategoryDto categoryDto)
         {
-            try
+            if (categoryDto == null)
             {
-                await categoryRepository.CreateAsync(mapper.Map<Category>(categoryDto));
-                return Result.Success();
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure(ex.Message);
+                return Result.Failure("CategoryDto is null");
             }
 
+            var category = mapper.Map<Category>(categoryDto);
+            if (category == null)
+            {
+                return Result.Failure("Mapping failed");
+            }
+
+            await categoryRepository.CreateAsync(category);
+            return Result.Success();
         }
 
-        public Task<Result> DeleteCategory(CategoryDto categoryDto)
+        public async Task<Result> DeleteCategory(CategoryDto categoryDto)
         {
-            throw new NotImplementedException();
+            if (categoryDto == null)
+            {
+                return Result.Failure("CategoryDto is null");
+            }
+
+            var category = mapper.Map<Category>(categoryDto);
+            if (category == null)
+            {
+                return Result.Failure("Mapping failed");
+            }
+
+            await categoryRepository.DeleteAsync(category.Id);
+            return Result.Success();
         }
 
-        public Task<IEnumerable<CategoryDto>> GetAll()
+        public async Task<Result<IEnumerable<CategoryDto>>> GetAll()
         {
-            throw new NotImplementedException();
+            var categories = await categoryRepository.GetAllAsync();
+            if (categories == null)
+            {
+                return Result<IEnumerable<CategoryDto>>.Failure("No categories found");
+            }
+
+            var categoryDtos = mapper.Map<IEnumerable<CategoryDto>>(categories);
+            if (categoryDtos == null)
+            {
+                return Result<IEnumerable<CategoryDto>>.Failure("Mapping failed");
+            }
+
+            return Result<IEnumerable<CategoryDto>>.Success(categoryDtos);
         }
 
         public async Task<Result<CategoryDto>> GetById(Guid id)
         {
-            try
+            var result = await categoryRepository.GetAsync(id);
+            if (result != null)
             {
-                var result = await categoryRepository.GetAsync(id);
-                return Result<CategoryDto>.Success(mapper.Map<CategoryDto>(result));
+                var map = mapper.Map<CategoryDto>(result);
+                if(map != null)
+                    return Result<CategoryDto>.Success(map);
+                else return Result<CategoryDto>.Failure(Messages.MappingError);
             }
-            catch(Exception ex)
+            else
             {
-                return Result<CategoryDto>.Failure(ex.Message);
+                return Result<CategoryDto>.Failure(Messages.AuctionNotFound);
             }
         }
     }

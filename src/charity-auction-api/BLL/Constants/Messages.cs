@@ -22,5 +22,7 @@ namespace BLL.Constants
         public static string PasswordError = "Bad password.";
         public static string UserAlreadyExists = "The user already exists.";
         public static string AccessTokenCreated = "Access token has created.";
+
+        public static string MappingError = "Mapping error.";
     }
 }

@@ -36,20 +36,56 @@ namespace BLL.Services.Implemantation
             }
         }
 
-        public Task<IEnumerable<AuctionDto>> FindAuctions(Func<AuctionDto, bool> predicate)
+        public async Task<Result<IEnumerable<AuctionDto>>> FindAuctions(Func<AuctionDto, bool> predicate)
         {
-            throw new NotImplementedException();
+            var auctions = await auctionRepository.GetAllAsync();
+            if (auctions == null)
+            {
+                return Result<IEnumerable<AuctionDto>>.Failure("No auctions found");
+            }
+
+            var auctionDtos = mapper.Map<IEnumerable<AuctionDto>>(auctions);
+            if (auctionDtos == null)
+            {
+                return Result<IEnumerable<AuctionDto>>.Failure("Mapping failed");
+            }
+
+            var filteredAuctions = auctionDtos.Where(predicate);
+            return Result<IEnumerable<AuctionDto>>.Success(filteredAuctions);
         }
 
-        public Task<IEnumerable<AuctionDto>> GetAllAuctions()
+        public async Task<Result<IEnumerable<AuctionDto>>> GetAllAuctions()
         {
-            throw new NotImplementedException();
+            var auctions = await auctionRepository.GetAllAsync();
+            if (auctions == null)
+            {
+                return Result<IEnumerable<AuctionDto>>.Failure("No auctions found");
+            }
+
+            var auctionDtos = mapper.Map<IEnumerable<AuctionDto>>(auctions);
+            if (auctionDtos == null)
+            {
+                return Result<IEnumerable<AuctionDto>>.Failure("Mapping failed");
+            }
+
+            return Result<IEnumerable<AuctionDto>>.Success(auctionDtos);
         }
 
-        public async Task<AuctionDto> GetAuction(Guid id)
+        public async Task<Result<AuctionDto>> GetAuction(Guid id)
         {
             var auction = await auctionRepository.GetAsync(id);
-            return mapper.Map<AuctionDto>(auction);
+            if (auction == null)
+            {
+                return Result<AuctionDto>.Failure("No auction found with the provided id");
+            }
+
+            var auctionDto = mapper.Map<AuctionDto>(auction);
+            if (auctionDto == null)
+            {
+                return Result<AuctionDto>.Failure("Mapping failed");
+            }
+
+            return Result<AuctionDto>.Success(auctionDto);
         }
     }
 }
