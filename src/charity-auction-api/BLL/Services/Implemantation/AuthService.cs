@@ -24,23 +24,41 @@ namespace BLL.Services.Implemantation
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserService userService;
-        private readonly IRefreshTokenService refreshTokenService;
-        private readonly JwtSettings jwtSettings;
+        private readonly ITokenService tokenService;
         private readonly IMapper _mapper;
 
-        public AuthService(UserManager<User> userManager, IUserService userService, IRefreshTokenService refreshTokenService, IMapper mapper, IOptions<JwtSettings> jwtSettings)
+        public AuthService(UserManager<User> userManager, 
+            IUserService userService, 
+            ITokenService tokenService,
+            IMapper mapper)
         {
             _userManager = userManager;
             _mapper = mapper;
-            this.jwtSettings = jwtSettings.Value;
-            this.refreshTokenService = refreshTokenService;
-            this.userService = userService;
+            this.tokenService = tokenService;
         }
 
-        public async Task<Result<UserDetailsDto>> Register(RegisterDto registerDto)
+        public async Task<Result<UserDetailsDto>> Register(RegisterDto userDto)
         {
-            return await userService.CreateUser(registerDto);
+            var user = new User
+            {
+                UserName = userDto.UserName,
+                Email = userDto.Email,
+                FullName = userDto.FullName
+            };
+
+
+            var result = await _userManager.CreateAsync(user, userDto.Password);
+            if (result.Succeeded)
+            {
+                var map = _mapper.Map<UserDetailsDto>(user);
+                if (map is null)
+                {
+                    return Result<UserDetailsDto>.Failure(Messages.MappingError);
+                }
+                return Result<UserDetailsDto>.Success(map);
+            }
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            return Result<UserDetailsDto>.Failure(errors);
         }
 
         public async Task<Result<AuthSuccessResponse>> Login(LoginDto loginDto)
@@ -56,7 +74,8 @@ namespace BLL.Services.Implemantation
             {
                 return Result<AuthSuccessResponse>.Failure(Messages.PasswordError);
             }
-            return Result<AuthSuccessResponse>.Success(await GenerateAuthResponse(user));
+            var map = _mapper.Map<UserDetailsDto>(user);
+            return Result<AuthSuccessResponse>.Success(await tokenService.GenerateToken(map));
         }
 
         public async Task<Result> Logout(string refreshToken)
@@ -67,7 +86,8 @@ namespace BLL.Services.Implemantation
                 return Result.Success();
             }
 
-            var refToken = (await refreshTokenService.FindRefreshToken(Guid.Parse(refreshToken))).Data.SingleOrDefault();
+            var response = (await tokenService.FindRefreshToken(refreshToken));
+            var refToken = response.Data.SingleOrDefault();
 
             if(refToken is null)
             {
@@ -75,12 +95,10 @@ namespace BLL.Services.Implemantation
             }
             refToken.Invalidated = true;
 
-            refreshTokenService.UpdateRefreshToken(refToken);
+            await tokenService.UpdateRefreshToken(refToken);
 
             return Result.Success();
         }
-
-       
       
     }
 }

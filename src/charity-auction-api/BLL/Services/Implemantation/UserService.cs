@@ -24,30 +24,6 @@ namespace BLL.Services.Implemantation
             _mapper = mapper;
         }
 
-        public async Task<Result<UserDetailsDto>> CreateUser(RegisterDto userDto)
-        {
-            var user = new User
-            {
-                UserName = userDto.UserName,
-                Email = userDto.Email,
-                FullName = userDto.FullName
-            };
-
-
-            var result = await _userManager.CreateAsync(user, userDto.Password);
-            if (result.Succeeded)
-            {
-                var map = _mapper.Map<UserDetailsDto>(user);
-                if (map is null)
-                {
-                    return Result<UserDetailsDto>.Failure(Messages.MappingError);
-                }
-                return Result<UserDetailsDto>.Success(map);
-            }
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            return Result<UserDetailsDto>.Failure(errors);
-        }
-
         public async Task<Result> DeleteUser(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());

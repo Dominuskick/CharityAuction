@@ -1,6 +1,7 @@
 ﻿using BLL.Constants;
 using BLL.Models.Responses;
 using BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -10,9 +11,9 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IRefreshTokenService refreshTokenService;
+        private readonly ITokenService refreshTokenService;
 
-        public AuthController(IAuthService userService, IRefreshTokenService refreshTokenService)
+        public AuthController(IAuthService userService, ITokenService refreshTokenService)
         {
             this._authService = userService;
             this.refreshTokenService = refreshTokenService;
@@ -21,9 +22,9 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var result = await _authService.Login(loginDto);
-            SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             if (result.IsSuccess)
             {
+                SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
                 return Ok(result.Data);
             }
             return BadRequest(result.Error);
@@ -52,9 +53,10 @@ namespace API.Controllers
                 return this.Unauthorized();
             }
 
-            model.RefreshToken = Guid.Parse(refreshToken);
+            model.RefreshToken = refreshToken;
             model.Token = jwtToken;
             var result = await refreshTokenService.RevokeRefreshToken(model);
+            if(!result.IsSuccess) return BadRequest(result.Error);
             this.SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
@@ -62,6 +64,7 @@ namespace API.Controllers
         /// <summary>
         /// Invalidates jwt tokens and removes cookies - logout user
         /// </summary>
+        [Authorize]
         [HttpPost]
         [Route(nameof(Logout))]
         public async Task<IActionResult> Logout()

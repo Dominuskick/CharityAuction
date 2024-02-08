@@ -23,12 +23,12 @@ namespace BLL.Helpers
             CreateMap<Category, CategotyDetailsDto>().ReverseMap();
             CreateMap<Auction, CreateAuctionDto>().ReverseMap();
 
-            CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<User, RegisterDto>().ReverseMap();
-            CreateMap<User, LoginDto>().ReverseMap();
-            CreateMap<User, UserDetailsDto>().ReverseMap();
-            CreateMap<UserDetailsDto, RegisterDto>().ReverseMap();
-            CreateMap<UserDetailsDto, LoginDto>().ReverseMap();
+            CreateMap<User, UserDto>();
+            CreateMap<User, RegisterDto>();
+            CreateMap<User, LoginDto>();
+            CreateMap<User, UserDetailsDto>();
+            /*CreateMap<UserDetailsDto, RegisterDto>();
+            CreateMap<UserDetailsDto, LoginDto>();*/
         }
     }
 }

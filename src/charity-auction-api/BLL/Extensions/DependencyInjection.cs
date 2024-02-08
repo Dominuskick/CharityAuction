@@ -42,12 +42,15 @@ namespace BLL.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddPersistence(configuration);
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapperProfile());
             });
+
+            // Validate all mappings
+            mapperConfig.AssertConfigurationIsValid();
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);

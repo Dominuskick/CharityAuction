@@ -1,5 +1,6 @@
 ﻿using BLL.Models;
 using BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace API.Controllers
         {
             this.auctionService = auctionService;
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAuction([FromBody] CreateAuctionDto auctionDto)
         {

@@ -9,7 +9,6 @@ namespace BLL.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<Result<UserDetailsDto>> CreateUser(RegisterDto userDto);
         Task<Result> DeleteUser(Guid id);
         Task<Result<IEnumerable<UserDetailsDto>>> GetAllUsers();
         Task<Result<UserDetailsDto>> GetUser(Guid id);

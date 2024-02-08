@@ -17,14 +17,6 @@ namespace DAL.Configurations
                 .HasKey(p => p.Token);
 
             builder
-                .Property(p => p.Token)
-                .HasDefaultValueSql("newid()");
-
-            builder
-                .Property(p => p.JwtId)
-                .IsRequired();
-
-            builder
                 .Property(p => p.UserId)
                 .IsRequired();
         }

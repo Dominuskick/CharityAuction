@@ -1,5 +1,6 @@
 ﻿using BLL.Models;
 using BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -14,7 +15,7 @@ namespace API.Controllers
         {
             _categoryService = categoryService;
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryDto categoryDto)
         {
@@ -25,7 +26,7 @@ namespace API.Controllers
             }
             return BadRequest(result.Error);
         }
-
+        
         [HttpDelete]
         public async Task<IActionResult> DeleteCategory([FromBody] Guid id)
         {

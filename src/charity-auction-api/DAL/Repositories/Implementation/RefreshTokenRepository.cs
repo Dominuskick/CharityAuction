@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Implementation
 {
-    public class RefreshTokenRepository : BaseRepository<RefreshToken, Guid>, IRefreshTokenRepository
+    public class RefreshTokenRepository : BaseRepository<RefreshToken, string>, IRefreshTokenRepository
     {
         public RefreshTokenRepository(DbContext context) : base(context)
         {

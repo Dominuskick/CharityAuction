@@ -12,7 +12,6 @@ namespace BLL.Services.Interfaces
     {
         Task<Result<AuthSuccessResponse>> Login(LoginDto loginDto);
         Task<Result<UserDetailsDto>> Register(RegisterDto registerDto);
-        Task<AuthSuccessResponse> GenerateAuthResponse(User user);
         Task<Result> Logout(string refreshToken);
     }
 }

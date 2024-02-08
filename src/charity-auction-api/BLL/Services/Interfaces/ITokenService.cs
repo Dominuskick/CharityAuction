@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Interfaces
 {
-    public interface IRefreshTokenService
+    public interface ITokenService
     {
+        public Task<AuthSuccessResponse> GenerateToken(UserDetailsDto user);
         public Task<Result<AuthSuccessResponse>> RevokeRefreshToken(AuthSuccessResponse refreshToken);
-        public RefreshToken CreateRefreshToken(SecurityToken token, User user);
-        Task<Result<IEnumerable<RefreshToken>>> FindRefreshToken(Guid token);
+        public RefreshToken CreateRefreshToken(SecurityToken token, UserDetailsDto user);
+        Task<Result<IEnumerable<RefreshToken>>> FindRefreshToken(string token);
         Task<Result> UpdateRefreshToken(RefreshToken refreshToken);
     }
 }
