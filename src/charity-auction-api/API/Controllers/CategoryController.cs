@@ -27,9 +27,9 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCategory([FromBody] CategoryDto categoryDto)
+        public async Task<IActionResult> DeleteCategory([FromBody] Guid id)
         {
-            var result = await _categoryService.DeleteCategory(categoryDto);
+            var result = await _categoryService.DeleteCategory(id);
             if (result.IsSuccess)
             {
                 return Ok();

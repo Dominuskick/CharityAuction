@@ -11,5 +11,6 @@ namespace BLL.Constants
         public const int PageSize = 24;
 
         public const int RefreshTokenExpirationTimeInMonths = 6;
+        public const int AuctionExpirationTimeInDays = 14;
     }
 }

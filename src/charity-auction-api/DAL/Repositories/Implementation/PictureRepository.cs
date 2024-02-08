@@ -1,4 +1,4 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Repositories.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;

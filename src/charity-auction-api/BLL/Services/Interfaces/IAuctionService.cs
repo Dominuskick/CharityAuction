@@ -10,9 +10,9 @@ namespace BLL.Services.Interfaces
 {
     public interface IAuctionService
     {
-        public Task<Result<IEnumerable<AuctionDto>>> GetAllAuctions();
-        public Task<Result<AuctionDto>> GetAuction(Guid id);
+        public Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions();
+        public Task<Result<AuctionDetailsDto>> GetAuction(Guid id);
         public Task<Result<IEnumerable<AuctionDto>>> FindAuctions(Func<AuctionDto, bool> predicate);
-        public Task<Result> CreateAuction(AuctionDto auctionDto);
+        public Task<Result> CreateAuction(CreateAuctionDto auctionDto);
     }
 }

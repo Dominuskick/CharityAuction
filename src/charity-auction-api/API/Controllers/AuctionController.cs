@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAuction([FromBody] AuctionDto auctionDto)
+        public async Task<IActionResult> CreateAuction([FromBody] CreateAuctionDto auctionDto)
         {
             var result = await auctionService.CreateAuction(auctionDto);
             if (result.IsSuccess)
@@ -48,15 +48,5 @@ namespace API.Controllers
             return NotFound(result.Error);
         }
 
-        [HttpGet("find")]
-        public async Task<IActionResult> FindAuctions([FromQuery] Func<AuctionDto, bool> predicate)
-        {
-            var result = await auctionService.FindAuctions(predicate);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Data);
-            }
-            return NotFound(result.Error);
-        }
     }
 }

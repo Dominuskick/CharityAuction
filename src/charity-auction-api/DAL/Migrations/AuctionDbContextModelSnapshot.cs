@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BLL.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
     partial class AuctionDbContextModelSnapshot : ModelSnapshot

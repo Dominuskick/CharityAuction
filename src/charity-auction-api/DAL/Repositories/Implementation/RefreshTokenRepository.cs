@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Implementation
 {
-    public class CategoryRepository : BaseRepository<Category, Guid>, ICategoryRepository
+    public class RefreshTokenRepository : BaseRepository<RefreshToken, Guid>, IRefreshTokenRepository
     {
-        public CategoryRepository(DbContext context) : base(context)
+        public RefreshTokenRepository(DbContext context) : base(context)
         {
         }
     }

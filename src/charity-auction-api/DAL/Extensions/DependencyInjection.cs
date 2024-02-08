@@ -1,5 +1,4 @@
-﻿using DAL.Interfaces;
-using BLL.EF;
+﻿using BLL.EF;
 using DAL.Repositories.Implementation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
+using DAL.Repositories.Interfaces;
 
 namespace BLL.Extensions
 {
@@ -19,24 +20,26 @@ namespace BLL.Extensions
         {
             services
                 .AddDbContext<DbContext, AuctionDbContext>(options =>
-                    options.UseSqlServer(configuration.GetDefaultConnectionString()), ServiceLifetime.Scoped);
-            /*  .AddIdentity<AuctionUser, IdentityRole>(options =>
+                    options.UseSqlServer(configuration.GetDefaultConnectionString()), ServiceLifetime.Scoped)
+                .AddIdentity<User, IdentityRole>(options =>
               {
+                  options.Password.RequiredLength = 5;
                   options.Password.RequireDigit = false;
                   options.Password.RequireLowercase = false;
                   options.Password.RequireNonAlphanumeric = false;
                   options.Password.RequireUppercase = false;
 
-                  options.SignIn.RequireConfirmedEmail = true;
                   options.Lockout.MaxFailedAccessAttempts = 6;
               })
-              .AddTokenProvider<FourDigitTokenProvider>(FourDigitTokenProvider.FourDigitEmail)
-              .AddEntityFrameworkStores<AuctionSystemDbContext>()
-              .AddDefaultTokenProviders();*/
+              //.AddTokenProvider<FourDigitTokenProvider>(FourDigitTokenProvider.FourDigitEmail)
+              .AddEntityFrameworkStores<AuctionDbContext>()
+              .AddDefaultTokenProviders();
             services.AddScoped<IAuctionRepository, AuctionRepository>();
             services.AddScoped<IBidRepository, BidRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             return services;
         }
     }

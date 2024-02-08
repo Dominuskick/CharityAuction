@@ -20,7 +20,7 @@ namespace BLL.EF
         public DbSet<Bid> Bids { get; set; }
         public DbSet<Picture> Pictures { get; set; }
         public DbSet<Category> Categories { get; set; }
-        
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var decimalProps = modelBuilder.Model

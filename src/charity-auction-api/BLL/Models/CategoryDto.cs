@@ -10,4 +10,9 @@ namespace BLL.Models
     {
         public string Name { get; set; }
     }
+
+    public class CategotyDetailsDto : CategoryDto
+    {
+        public Guid Id { get; set; }
+    }
 }

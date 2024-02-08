@@ -17,12 +17,26 @@ namespace BLL.Constants
 
         public static string AuthorizationDenied = "You are not authorized.";
         public static string UserRegistered = "The user has registered.";
+        public static string UserNotRegistered = "The user has not registered.";
         public static string UserNotFound = "User not found.";
         public static string SuccessfulLogin = "Login successful.";
         public static string PasswordError = "Bad password.";
         public static string UserAlreadyExists = "The user already exists.";
         public static string AccessTokenCreated = "Access token has created.";
+        public static string UserUpdateError = "User update error.";
 
         public static string MappingError = "Mapping error.";
+
+
+        public static string CategoryNotFound = "Category not found.";
+        public static string CategoryCreated = "Category has created.";
+        public static string CategoryUpdated = "Category has updated.";
+        public static string CategoryDeleted = "Category has deleted.";
+        public static string CategoriesListed = "Categories has listed.";
+
+
+        public static string RefreshTokenInvalid = "Refresh token is invalid.";
+        public static string RefreshTokenNotFound = "Refresh token not found.";
+
     }
 }

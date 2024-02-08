@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Interfaces
 {
-    public interface ICategoryRepository : IBaseRepository<Category,  Guid>
+    public interface IRefreshTokenRepository : IBaseRepository<RefreshToken, Guid>
     {
-        
     }
 }

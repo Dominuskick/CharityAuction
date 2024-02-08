@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BLL.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20240206225822_AddCategory")]
-    partial class AddCategory
+    [Migration("20240207161515_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
