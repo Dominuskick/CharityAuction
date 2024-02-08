@@ -1,34 +1,13 @@
 .header {
-  width: var(--responsive-width);
+  width: 100%;
   height: 128px;
-  padding-left: var(--responsive-padding-left);
-  padding-right: var(--responsive-padding-right);
-  display: flex;
-  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
-.logoWrapper {
+.row {
   display: flex;
-  gap: 8px;
   align-items: center;
-}
-
-.logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #131313;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo > span {
-  color: #fff;
-  font-family: 'K2D', sans-serif;
-  font-weight: bold;
-  font-size: 14px;
 }
 
 .searchBar {

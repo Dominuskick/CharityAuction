@@ -1,0 +1,21 @@
+.btn {
+  width: 306px;
+  height: 48px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+  background-color: transparent;
+  border-radius: 20px;
+  border: 1px solid #131313;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+}
+
+.btn__white {
+  border-color: #fff;
+  color: #fff;
+}

@@ -16,6 +16,7 @@
   --responsive-width: 1440px;
   --responsive-padding-left: 72px;
   --responsive-padding-right: 72px;
+  /* overflow-x: hidden; */
 }
 
 a {
@@ -23,9 +24,8 @@ a {
   color: var(--color);
 }
 
-main {
-  min-height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.responsiveWrapper {
+  width: var(--responsive-width);
+  padding-left: var(--responsive-padding-left);
+  padding-right: var(--responsive-padding-right);
 }

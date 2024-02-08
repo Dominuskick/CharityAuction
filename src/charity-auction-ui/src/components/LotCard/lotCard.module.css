@@ -1,0 +1,47 @@
+.lotCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  cursor: pointer;
+}
+
+.lotCard > img {
+  width: 306px;
+  height: 281px;
+}
+
+.lotCardDescription {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.lotCardDescriptionPoints {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.lotCardDescriptionPoints > p {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 16px;
+  font-style: normal;
+  line-height: 20px;
+}
+
+.lotCardDescriptionPoints > p > b {
+  font-weight: 700;
+}
+
+.lotCardDescriptionPoints > p > span {
+  font-weight: 500;
+}

@@ -1,7 +1,83 @@
 .footer {
-  width: 100%;
+  height: 206px;
+  padding-top: 32px;
+}
+
+.row {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.left {
+  width: 416px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.left > p {
+  font-size: 20px;
+}
+
+.copyright {
+  margin-top: 4px;
+  display: flex;
   align-items: center;
-  background-color: antiquewhite;
+  gap: 4px;
+}
+
+.copyright > span:first-child {
+  width: 12px;
+  height: 12px;
+  background-image: url('../../assets/icons/copyright.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.copyright > span {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contacts > h4 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.contactsPoints {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.line {
+  display: flex;
+  gap: 24px;
+}
+
+.phones {
+  display: flex;
+  flex-direction: column;
+}
+
+.line > span:first-child {
+  width: 86px;
+}
+
+.line > span {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 100% */
 }

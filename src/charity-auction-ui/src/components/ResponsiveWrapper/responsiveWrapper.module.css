@@ -1,0 +1,6 @@
+.responsiveWrapper {
+  width: var(--responsive-width);
+  padding-left: var(--responsive-padding-left);
+  padding-right: var(--responsive-padding-right);
+  margin: 0 auto;
+}

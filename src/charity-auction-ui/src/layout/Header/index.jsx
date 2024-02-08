@@ -1,31 +1,29 @@
 import React from 'react';
 import styles from './header.module.css';
 import { Link } from 'react-router-dom';
+import { Logo, ResponsiveWrapper } from '@/components';
 
 const index = () => {
   return (
     <header className={styles.header}>
-      <Link to={'/'}>
-        <div className={styles.logoWrapper}>
-          <div className={styles.logo}>
-            <span>BOG</span>
+      <ResponsiveWrapper>
+        <div className={styles.row}>
+          <Logo />
+          <div className={styles.searchBar}>
+            <span></span>
+            <input type="text" placeholder="Що шукаєте" />
           </div>
-          <h1>BetOnGoodness</h1>
+          <div className={styles.links}>
+            <Link to={'/lots'}>Лоти</Link>
+            <a href="#scope">Мета</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div className={styles.auth}>
+            <span></span>
+            <span>Увійти</span>
+          </div>
         </div>
-      </Link>
-      <div className={styles.searchBar}>
-        <span></span>
-        <input type="text" placeholder="Що шукаєте" />
-      </div>
-      <div className={styles.links}>
-        <Link to={'/lots'}>Лоти</Link>
-        <a>Мета</a>
-        <a>FAQ</a>
-      </div>
-      <div className={styles.auth}>
-        <span></span>
-        <span>Увійти</span>
-      </div>
+      </ResponsiveWrapper>
     </header>
   );
 };
