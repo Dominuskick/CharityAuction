@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from './button.module.css';
 
-const index = ({ children, isWhite }) => {
+const index = ({ children, isBlack, isWide }) => {
   return (
     <button
-      className={`${styles.btn} ${isWhite ? styles.btn__white : undefined}`}
+      className={`${styles.btn} ${isBlack ? styles.btn__black : undefined} ${
+        isWide ? styles.btn__wide : undefined
+      }`}
     >
       {children}
     </button>

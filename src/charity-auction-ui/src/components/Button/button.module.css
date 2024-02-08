@@ -9,13 +9,20 @@
 
   background-color: transparent;
   border-radius: 20px;
+  background-color: #fff;
+  color: #131313;
   border: 1px solid #131313;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
 
   cursor: pointer;
 }
 
-.btn__white {
+.btn__black {
+  background-color: #131313;
   border-color: #fff;
   color: #fff;
+}
+
+.btn__wide {
+  width: 416px;
 }

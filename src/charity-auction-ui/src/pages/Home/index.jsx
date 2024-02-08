@@ -101,7 +101,7 @@ const index = () => {
                 чи втратили рідних у цьому конфлікті. Кожна покупка на нашому
                 аукціоні стане кроком до покращення життя цих сімей
               </p>
-              <Button isWhite={true}>Долучитись</Button>
+              <Button isBlack={true}>Долучитись</Button>
             </div>
           </ResponsiveWrapper>
         </section>
@@ -114,7 +114,9 @@ const index = () => {
                   <LotCard {...lotCardData} key={`Lot card ${i}`} />
                 ))}
               </div>
-              <Button>Зробити ставку</Button>
+              <Button isBlack={true} isWide={true}>
+                Перейти до всіх лотів
+              </Button>
             </div>
           </ResponsiveWrapper>
         </section>

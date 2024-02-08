@@ -1,3 +1,7 @@
+main {
+  padding-top: 128px;
+}
+
 section.dark {
   background-color: #131313;
   color: #fff;
@@ -75,4 +79,9 @@ section.dark {
 
 .row-title-text {
   font-weight: 700;
+}
+
+.scopeSection,
+.faqSection {
+  scroll-margin-top: 128px;
 }

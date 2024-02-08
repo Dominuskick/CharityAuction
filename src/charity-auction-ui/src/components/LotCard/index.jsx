@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './lotCard.module.css';
+import { Button } from '..';
 
 const index = ({ name, endTime, highestBid, src }) => {
   return (
@@ -21,6 +22,7 @@ const index = ({ name, endTime, highestBid, src }) => {
             <span>{highestBid.toLocaleString()} грн</span>
           </p>
         </div>
+        <Button>Зробити ставку</Button>
       </div>
     </div>
   );
