@@ -5,6 +5,7 @@
   padding-bottom: 40px;
 
   position: fixed;
+  z-index: 10;
   background-color: #fff;
 }
 
