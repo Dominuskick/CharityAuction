@@ -40,7 +40,9 @@ const index = () => {
                   <div>
                     <div className={styles.column}>
                       <b>Поточна ціна</b>
-                      <span>(6 ставок)</span>
+                      <Link to={'/lot/bets'}>
+                        <span>(6 ставок)</span>
+                      </Link>
                     </div>
                     <span>{highestBid.toLocaleString()} грн</span>
                   </div>
