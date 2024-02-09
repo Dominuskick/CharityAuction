@@ -64,6 +64,42 @@ const index = () => {
       highestBid: 1500,
       src: candleImg,
     },
+    {
+      name: 'Картина “50 котів”',
+      endTime: '19.02.2024, 20:00',
+      highestBid: 1100,
+      src: catImg,
+    },
+    {
+      name: 'Книга “Мовчазна пацієнтка”',
+      endTime: '20.02.2024, 22:00',
+      highestBid: 300,
+      src: bookImg,
+    },
+    {
+      name: 'Підставка для свічки',
+      endTime: '22.02.2024, 17:00',
+      highestBid: 1500,
+      src: candleImg,
+    },
+    {
+      name: 'Картина “50 котів”',
+      endTime: '19.02.2024, 20:00',
+      highestBid: 1100,
+      src: catImg,
+    },
+    {
+      name: 'Книга “Мовчазна пацієнтка”',
+      endTime: '20.02.2024, 22:00',
+      highestBid: 300,
+      src: bookImg,
+    },
+    {
+      name: 'Підставка для свічки',
+      endTime: '22.02.2024, 17:00',
+      highestBid: 1500,
+      src: candleImg,
+    },
   ];
 
   return (
@@ -108,8 +144,8 @@ const index = () => {
               </div>
             </div>
             <div className={styles.lotList}>
-              {lotCardsData.map((lotData) => (
-                <LotCard {...lotData} />
+              {lotCardsData.map((lotData, i) => (
+                <LotCard {...lotData} btnDisable={true} key={`Lot ${i}`} />
               ))}
             </div>
             <div className={styles.pageControls}>

@@ -55,6 +55,7 @@
 }
 
 .sortWrapper > label {
+  min-width: 100.1px;
   margin-right: 20px;
 }
 

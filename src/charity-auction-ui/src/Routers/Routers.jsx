@@ -8,10 +8,12 @@ import {
   LotBets,
   LotList,
 } from '@/pages';
+import ScrollToTop from '@/utils/helpers/scrollToTop';
 
 const Routers = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registration" element={<Registration />} />

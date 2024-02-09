@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './header.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Logo, ResponsiveWrapper } from '@/components';
 
 const index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const { hash } = location;
+
+    if (hash) {
+      const element = document.querySelector(hash);
+
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
+
   return (
     <header className={styles.header}>
       <ResponsiveWrapper>
@@ -15,8 +29,8 @@ const index = () => {
           </div>
           <div className={styles.links}>
             <Link to={'/lots'}>Лоти</Link>
-            <a href="#scope">Мета</a>
-            <a href="#faq">FAQ</a>
+            <Link to={'/#scope'}>Мета</Link>
+            <Link to={'/#faq'}>FAQ</Link>
           </div>
           <div className={styles.authWrapper}>
             <Link to={'/login'}>
