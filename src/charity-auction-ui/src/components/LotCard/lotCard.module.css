@@ -10,6 +10,7 @@
 .lotCard > img {
   width: 306px;
   height: 281px;
+  border-radius: 32px;
 }
 
 .lotCardDescription {
