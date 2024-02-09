@@ -1,3 +1,3 @@
 export { default as Home } from './Home';
-export { default as About } from './About';
+export { default as Registration } from './Registration';
 export { default as Error } from './Error';

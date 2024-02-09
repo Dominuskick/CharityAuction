@@ -1,12 +1,12 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-import { Home, About, Error } from '@/pages';
+import { Home, Registration, Error } from '@/pages';
 
 const Routers = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/registration" element={<Registration />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

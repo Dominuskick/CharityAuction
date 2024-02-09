@@ -68,8 +68,11 @@
   font-weight: 700;
 }
 
-.auth {
+.authWrapper {
   margin-left: auto;
+}
+
+.auth {
   display: flex;
   width: 126px;
   height: 48px;

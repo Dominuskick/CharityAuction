@@ -18,9 +18,13 @@ const index = () => {
             <a href="#scope">Мета</a>
             <a href="#faq">FAQ</a>
           </div>
-          <div className={styles.auth}>
-            <span></span>
-            <span>Увійти</span>
+          <div className={styles.authWrapper}>
+            <Link to={'/registration'}>
+              <div className={styles.auth}>
+                <span></span>
+                <span>Увійти</span>
+              </div>
+            </Link>
           </div>
         </div>
       </ResponsiveWrapper>
