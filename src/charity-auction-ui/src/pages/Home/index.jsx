@@ -7,6 +7,7 @@ import bookImg from '../../assets/img/bookHome.png';
 import candleImg from '../../assets/img/candleHome.png';
 import { Button, LotCard, ResponsiveWrapper } from '@/components';
 import Faq from 'react-faq-component';
+import { Link } from 'react-router-dom';
 
 const index = () => {
   const lotCardsData = [
@@ -114,9 +115,11 @@ const index = () => {
                   <LotCard {...lotCardData} key={`Lot card ${i}`} />
                 ))}
               </div>
-              <Button isBlack={true} isWide={true}>
-                Перейти до всіх лотів
-              </Button>
+              <Link to={'/lots'}>
+                <Button isBlack={true} isWide={true}>
+                  Перейти до всіх лотів
+                </Button>
+              </Link>
             </div>
           </ResponsiveWrapper>
         </section>

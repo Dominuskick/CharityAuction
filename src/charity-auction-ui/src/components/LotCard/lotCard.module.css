@@ -4,7 +4,8 @@
   align-items: center;
   gap: 20px;
 
-  /* cursor: pointer; */
+  background-color: #fff;
+  color: #131313;
 }
 
 .lotCard > img {
