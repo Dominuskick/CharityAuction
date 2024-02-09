@@ -24,10 +24,10 @@ namespace API.Controllers
             var result = await _authService.Login(loginDto);
             if (result.IsSuccess)
             {
-                SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
-                return Ok(result.Data);
+                SetCookies(result.Data.Token, result.Data.RefreshToken);
+                return Ok(result);
             }
-            return BadRequest(result.Error);
+            return BadRequest(result);
         }
 
         [HttpPost("register")]
@@ -36,13 +36,12 @@ namespace API.Controllers
             var result = await _authService.Register(registerDto);
             if (result.IsSuccess)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Error);
+            return BadRequest(result);
         }
 
-        [HttpPost]
-        [Route(nameof(Refresh))]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(AuthSuccessResponse model)
         {
             var refreshToken = this.Request.Cookies[ApiConstants.RefreshToken];
@@ -56,7 +55,7 @@ namespace API.Controllers
             model.RefreshToken = refreshToken;
             model.Token = jwtToken;
             var result = await refreshTokenService.RevokeRefreshToken(model);
-            if(!result.IsSuccess) return BadRequest(result.Error);
+            if(!result.IsSuccess) return BadRequest(result);
             this.SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
@@ -65,8 +64,7 @@ namespace API.Controllers
         /// Invalidates jwt tokens and removes cookies - logout user
         /// </summary>
         [Authorize]
-        [HttpPost]
-        [Route(nameof(Logout))]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             this.Request.Cookies.TryGetValue(ApiConstants.RefreshToken, out var refreshToken);

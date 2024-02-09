@@ -13,7 +13,6 @@ namespace BLL.Models
         public decimal StartPrice { get; set; }
         public decimal MinIncrease { get; set; }
         public Guid CategoryId { get; set; }
-        public string UserId { get; set; }
     }
 
     public class AuctionDetailsDto : AuctionDto
@@ -28,9 +27,16 @@ namespace BLL.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal StartPrice { get; set; }
-        public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
         public Guid CategoryId { get; set; }
         public string UserId { get; set; }
+    }
+
+    public class UpdateAuctionDto
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public decimal StartPrice { get; set; }
     }
 }

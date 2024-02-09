@@ -46,11 +46,6 @@ namespace BLL.Configurations
                 .IsRequired();
 
             builder
-                .Property(a => a.CurrentPrice)
-                .HasComputedColumnSql("[StartPrice]")
-                .IsRequired();
-
-            builder
                 .Property(a => a.MinIncrease)
                 .IsRequired()
                 .HasColumnType("decimal(18, 2)")

@@ -17,18 +17,22 @@ namespace BLL.Helpers
         {
             CreateMap<Auction, AuctionDto>().ReverseMap();
             CreateMap<Bid, BidDto>().ReverseMap();
+            CreateMap<Bid, BidDetailsDto>().ReverseMap().IgnoreAllPropertiesWithAnInaccessibleSetter();
+            CreateMap<Bid, CreateBidDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Picture, PictureDto>().ReverseMap();
-            CreateMap<Auction, AuctionDetailsDto>().ReverseMap();
             CreateMap<Category, CategotyDetailsDto>().ReverseMap();
+            CreateMap<Auction, AuctionDetailsDto>().ReverseMap();
             CreateMap<Auction, CreateAuctionDto>().ReverseMap();
+            CreateMap<Auction, UpdateAuctionDto>().ReverseMap();
 
-            CreateMap<User, UserDto>();
-            CreateMap<User, RegisterDto>();
-            CreateMap<User, LoginDto>();
             CreateMap<User, UserDetailsDto>();
-            /*CreateMap<UserDetailsDto, RegisterDto>();
-            CreateMap<UserDetailsDto, LoginDto>();*/
+            /*CreateMap<RegisterDto, UserDetailsDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName));
+            CreateMap<LoginDto, UserDetailsDto>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));*/
+            /*CreateMap<UserDetailsDto, RegisterDto>().ReverseMap();
+            CreateMap<UserDetailsDto, LoginDto>().ReverseMap();*/
         }
     }
 }

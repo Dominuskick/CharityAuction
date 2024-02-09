@@ -37,6 +37,10 @@ namespace BLL.Constants
 
         public static string RefreshTokenInvalid = "Refresh token is invalid.";
         public static string RefreshTokenNotFound = "Refresh token not found.";
+        public const string AuctionEnded = "The auction has already ended.";
+        public const string AuctionNotStarted = "The auction has not started yet.";
+        public const string BidTooLow = "Your bid is too low.";
+        public static string BidNotFound = "Bid not found.";
 
     }
 }

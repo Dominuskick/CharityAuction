@@ -26,16 +26,16 @@ namespace API.Controllers
             }
             return BadRequest(result.Error);
         }
-        
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteCategory([FromBody] Guid id)
         {
             var result = await _categoryService.DeleteCategory(id);
             if (result.IsSuccess)
             {
-                return Ok();
+                return Ok(result);
             }
-            return BadRequest(result.Error);
+            return BadRequest(result);
         }
 
         [HttpGet]
@@ -44,9 +44,9 @@ namespace API.Controllers
             var result = await _categoryService.GetAll();
             if(result.IsSuccess)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return NotFound(result.Error);
+            return NotFound(result);
         }
 
         [HttpGet("{id}")]
@@ -57,7 +57,7 @@ namespace API.Controllers
             {
                 return Ok(result.Data);
             }
-            return NotFound(result.Error);
+            return NotFound(result);
         }
     }
 }

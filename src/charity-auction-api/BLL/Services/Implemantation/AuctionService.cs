@@ -18,27 +18,21 @@ namespace BLL.Services.Implemantation
     public class AuctionService : IAuctionService
     {
         private readonly IAuctionRepository auctionRepository;
-        private readonly UserManager<User> userManager;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IBidRepository bidRepository;
         private readonly IMapper mapper;
 
-        public AuctionService(IAuctionRepository auctionRepository, IMapper mapper, UserManager<User> userManager, ICategoryRepository categoryRepository)
+        public AuctionService(IAuctionRepository auctionRepository, IMapper mapper, UserManager<User> userManager, ICategoryRepository categoryRepository, IBidRepository bidRepository)
         {
             this.auctionRepository = auctionRepository;
             this.mapper = mapper;
-            this.userManager = userManager;
             this.categoryRepository = categoryRepository;
+            this.bidRepository = bidRepository;
         }
 
-        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto)
+        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId)
         {
-            var userExists = await userManager.FindByIdAsync(auctionDto.UserId);
             var categoryExists = await categoryRepository.GetAsync(auctionDto.CategoryId);
-
-            if (userExists is null)
-            {
-                return Result.Failure(Messages.UserNotFound);
-            }
 
             if (categoryExists is null)
             {
@@ -51,30 +45,26 @@ namespace BLL.Services.Implemantation
                 StartPrice = auctionDto.StartPrice,
                 MinIncrease = auctionDto.MinIncrease,
                 CategoryId = auctionDto.CategoryId,
-                UserId = auctionDto.UserId,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)
+                UserId = userId,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)
             };
             await auctionRepository.CreateAsync(mapper.Map<Auction>(auction));
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<AuctionDto>>> FindAuctions(Func<AuctionDto, bool> predicate)
+        public async Task<Result<IEnumerable<AuctionDetailsDto>>> FindAuctions(Func<AuctionDetailsDto, bool> predicate)
         {
             var auctions = await auctionRepository.GetAllAsync();
             if (auctions == null)
             {
-                return Result<IEnumerable<AuctionDto>>.Failure("No auctions found");
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure("No auctions found");
             }
 
-            var auctionDtos = mapper.Map<IEnumerable<AuctionDto>>(auctions);
-            if (auctionDtos == null)
-            {
-                return Result<IEnumerable<AuctionDto>>.Failure("Mapping failed");
-            }
+            var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
 
             var filteredAuctions = auctionDtos.Where(predicate);
-            return Result<IEnumerable<AuctionDto>>.Success(filteredAuctions);
+            return Result<IEnumerable<AuctionDetailsDto>>.Success(filteredAuctions);
         }
 
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions()
@@ -86,10 +76,6 @@ namespace BLL.Services.Implemantation
             }
 
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
-            if (auctionDtos == null)
-            {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure("Mapping failed");
-            }
 
             return Result<IEnumerable<AuctionDetailsDto>>.Success(auctionDtos);
         }
@@ -103,14 +89,45 @@ namespace BLL.Services.Implemantation
             }
 
             var auctionDto = mapper.Map<AuctionDetailsDto>(auction);
-            if (auctionDto == null)
-            {
-                return Result<AuctionDetailsDto>.Failure("Mapping failed");
-            }
 
             return Result<AuctionDetailsDto>.Success(auctionDto);
         }
 
+        public async Task<Result> DeleteAuction(Guid id)
+        {
+            var auction = await auctionRepository.GetAsync(id);
+            if(bidRepository.GetAllAsync().Result.Any(b => b.AuctionId == id))
+            {
+                return Result.Failure("Auction cannot be deleted because it has already been bid on");
+            }
+            if (auction == null)
+            {
+                return Result.Failure(Messages.AuctionNotFound);
+            }
+            await auctionRepository.DeleteAsync(id);
+            return Result.Success();
+        }
+
+
+        public async Task<Result> UpdateAuction(UpdateAuctionDto auctionDto)
+        {
+            var auction = await auctionRepository.GetAsync(auctionDto.Id);
+            if (auction == null)
+            {
+                return Result.Failure("No auction found with the provided id");
+            }
+            if(auction.StartDate > DateTime.UtcNow)
+                return Result.Failure("Auction cannot be updated because it has already been started");
+            // Update the properties of the auction
+            auction.Title = auctionDto.Title;
+            auction.Description = auctionDto.Description;
+            auction.StartPrice = auctionDto.StartPrice;
+
+            // Update the auction in the database
+            await auctionRepository.UpdateAsync(auction);
+
+            return Result.Success();
+        }
 
     }
 }

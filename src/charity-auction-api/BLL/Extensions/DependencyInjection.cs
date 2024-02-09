@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using BLL.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Claims;
 
 namespace BLL.Extensions
 {
@@ -32,6 +33,7 @@ namespace BLL.Extensions
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
+                NameClaimType = ClaimTypes.NameIdentifier,
                 ClockSkew = TimeSpan.Zero
             };
             services.AddSingleton(tokenValidationParameters);
@@ -43,6 +45,7 @@ namespace BLL.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IBidService, BidService>();
             services.AddPersistence(configuration);
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -65,12 +68,11 @@ namespace BLL.Extensions
                    o.TokenValidationParameters = new TokenValidationParameters
                    {
                        ValidateIssuerSigningKey = true,
-                       ValidateIssuer = true,
-                       ValidateAudience = true,
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
                        ValidateLifetime = true,
+                       NameClaimType = ClaimTypes.NameIdentifier,
                        ClockSkew = TimeSpan.Zero,
-                       ValidIssuer = configuration["JwtSettings:Issuer"],
-                       ValidAudience = configuration["JwtSettings:Audience"],
                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                    };
                });

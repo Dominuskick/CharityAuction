@@ -14,7 +14,6 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal StartPrice { get; set; }
-        public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
         public Guid CategoryId { get; set; }
         public virtual Category Category { get; set; }

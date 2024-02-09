@@ -48,7 +48,8 @@ namespace BLL.Services.Implemantation
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new[]
                 {
-                    new System.Security.Claims.Claim("Id", user.Id.ToString()),
+                    new System.Security.Claims.Claim("Id", user.Id),
+                    new System.Security.Claims.Claim("NameIdentifier", user.Id),
                     new System.Security.Claims.Claim("Email", user.Email),
                     new System.Security.Claims.Claim("UserName", user.UserName),
                 }),
