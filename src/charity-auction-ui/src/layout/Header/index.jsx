@@ -19,7 +19,7 @@ const index = () => {
             <a href="#faq">FAQ</a>
           </div>
           <div className={styles.authWrapper}>
-            <Link to={'/registration'}>
+            <Link to={'/login'}>
               <div className={styles.auth}>
                 <span></span>
                 <span>Увійти</span>

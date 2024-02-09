@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './about.module.css';
+import styles from './registration.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
 import { Link } from 'react-router-dom';
@@ -66,7 +66,7 @@ const index = () => {
               <Button>Зареєструватись</Button>
               <div className={styles.row}>
                 <span>Вже маєте акаунт?</span>
-                <Link to={'/logIn'}>
+                <Link to={'/login'}>
                   <span className={styles.underLine}>Увійти</span>
                 </Link>
               </div>
