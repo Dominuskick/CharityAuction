@@ -4,7 +4,7 @@
   align-items: center;
   gap: 20px;
 
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .lotCard > img {

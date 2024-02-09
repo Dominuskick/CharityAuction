@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './lotCard.module.css';
 import { Button } from '..';
+import { Link } from 'react-router-dom';
 
 const index = ({ name, endTime, highestBid, src }) => {
   return (
@@ -22,7 +23,9 @@ const index = ({ name, endTime, highestBid, src }) => {
             <span>{highestBid.toLocaleString()} грн</span>
           </p>
         </div>
-        <Button>Зробити ставку</Button>
+        <Link to={'/lot'}>
+          <Button>Зробити ставку</Button>
+        </Link>
       </div>
     </div>
   );
