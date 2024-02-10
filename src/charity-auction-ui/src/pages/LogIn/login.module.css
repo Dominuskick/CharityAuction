@@ -19,7 +19,7 @@
   padding: 56px 68px;
 }
 
-.login > button {
+.btnWrapper {
   width: 360px;
   margin: 40px 0;
 }

@@ -7,6 +7,7 @@ import {
   Lot,
   LotBets,
   LotList,
+  Account,
 } from '@/pages';
 import ScrollToTop from '@/utils/helpers/scrollToTop';
 
@@ -21,6 +22,7 @@ const Routers = () => {
         <Route path="/lots" element={<LotList />} />
         <Route path="/lot" element={<Lot />} />
         <Route path="/lot/bets" element={<LotBets />} />
+        <Route path="/account" element={<Account />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

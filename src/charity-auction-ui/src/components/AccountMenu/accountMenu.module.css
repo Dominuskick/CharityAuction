@@ -1,0 +1,58 @@
+.menu {
+  width: 306px;
+  height: 200px;
+  padding: 12px 0px;
+  border-radius: 32px;
+  background-color: #fff;
+}
+
+.menuItem {
+  display: flex;
+  height: 44px;
+  padding: 12px 10px 6px 40px;
+  gap: 6px;
+
+  border-radius: 32px;
+
+  color: var(--text_black, #131313);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 100% */
+
+  cursor: pointer;
+}
+
+.active .menuItem {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    rgba(255, 255, 255, 0);
+}
+
+.menuItem > span {
+  width: 20px;
+  height: 20px;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.menuHome {
+  background-image: url('../../assets/icons/home.svg');
+}
+
+.menuLots {
+  background-image: url('../../assets/icons/sell.svg');
+}
+
+.menuBets {
+  background-image: url('../../assets/icons/hammer.svg');
+}
+
+.menuNotifications {
+  background-image: url('../../assets/icons/alert.svg');
+}

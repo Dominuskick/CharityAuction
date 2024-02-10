@@ -24,11 +24,7 @@ const index = ({ name, endTime, highestBid, src, btnDisable }) => {
               <span>{highestBid.toLocaleString()} грн</span>
             </p>
           </div>
-          {!btnDisable && (
-            <Link to={'/lot'}>
-              <Button>Зробити ставку</Button>
-            </Link>
-          )}
+          {!btnDisable && <Button>Зробити ставку</Button>}
         </div>
       </div>
     </Link>

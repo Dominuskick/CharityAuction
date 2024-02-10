@@ -28,7 +28,11 @@ const index = () => {
                   <label className={styles.text}>Запам’ятати мене</label>
                 </div>
               </div>
-              <Button>Увійти до кабінету</Button>
+              <div className={styles.btnWrapper}>
+                <Link to={'/account'}>
+                  <Button>Увійти до кабінету</Button>
+                </Link>
+              </div>
               <div className={styles.row}>
                 <span>Ще не зареєстровані?</span>
                 <Link to={'/registration'}>
