@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogin, setTokens } from '@/slices/authSlice';
+import authService from '@/utils/api/authService';
 
 const index = () => {
+  const dispatch = useDispatch();
+  const { login, accessToken, refreshToken } = useSelector(
+    (state) => state.auth
+  );
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [btnClick, setBtnClick] = useState(false);
+
+  useEffect(() => {
+    const loginUser = async () => {
+      const data = {
+        email: email,
+        password: password,
+      };
+
+      console.log(data);
+
+      try {
+        const response = await authService.login(data);
+        console.log('LogIn successful:', response.data);
+
+        if (response) {
+          dispatch(setLogin('newLogin'));
+        }
+      } catch (error) {
+        console.error('LogIn failed:', error);
+      }
+    };
+
+    if (email && password) {
+      loginUser();
+    }
+  }, [btnClick]);
+
   return (
     <>
       <Header />
@@ -17,11 +56,19 @@ const index = () => {
               <div className={styles.inputListWrapper}>
                 <div className={styles.inputWrapper}>
                   <label>Email</label>
-                  <input type="email" placeholder="example@gmail.com" />
+                  <input
+                    type="email"
+                    placeholder="example@gmail.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputWrapper}>
                   <label>Пароль</label>
-                  <input type="password" placeholder="********" />
+                  <input
+                    type="password"
+                    placeholder="********"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputWrapperLine}>
                   <CheckBox />
@@ -29,9 +76,9 @@ const index = () => {
                 </div>
               </div>
               <div className={styles.btnWrapper}>
-                <Link to={'/account'}>
-                  <Button>Увійти до кабінету</Button>
-                </Link>
+                <Button onClick={() => setBtnClick(!btnClick)}>
+                  Увійти до кабінету
+                </Button>
               </div>
               <div className={styles.row}>
                 <span>Ще не зареєстровані?</span>
