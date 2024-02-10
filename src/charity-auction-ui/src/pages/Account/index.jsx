@@ -31,7 +31,9 @@ const index = () => {
                   ваші лоти. Ми, в свою чергу, забезпечимо вам комфортне
                   перебування на нашій платформі
                 </p>
-                <Button>Створити лот</Button>
+                <Link to={'/account/createLot'}>
+                  <Button>Створити лот</Button>
+                </Link>
               </div>
             </div>
           </div>
