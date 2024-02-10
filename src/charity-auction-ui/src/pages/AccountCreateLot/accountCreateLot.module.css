@@ -211,3 +211,28 @@
 .btnWrapper > button {
   width: 100%;
 }
+
+.lotPublished {
+  color: #131313;
+}
+
+.lotPublished > h2 {
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 36px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.lotPublished > h3 {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 36px;
+  text-align: center;
+}
+
+.lotPublished > .btnWrapper {
+  margin-top: 40px;
+}
