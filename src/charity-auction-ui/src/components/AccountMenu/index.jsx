@@ -7,6 +7,7 @@ const index = () => {
     <div className={styles.menu}>
       <NavLink
         to={'/account'}
+        end
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         <div className={styles.menuItem}>

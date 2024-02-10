@@ -6,4 +6,5 @@ export { default as LotBets } from './LotBets';
 export { default as LotList } from './LotList';
 export { default as Account } from './Account';
 export { default as AccountCreateLot } from './AccountCreateLot';
+export { default as AccountLots } from './AccountLots';
 export { default as Error } from './Error';
