@@ -184,6 +184,7 @@ const index = () => {
                   endTime={lotCardData.endDate}
                   highestBid={lotCardData.currentPrice}
                   src={defaultImg}
+                  id={lotCardData.id}
                   btnDisable={true}
                   key={`Lot ${i}`}
                 />

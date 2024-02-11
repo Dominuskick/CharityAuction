@@ -1,11 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './lot.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
 import { Link } from 'react-router-dom';
-import img from '../../assets/img/catHome.png';
+import img from '../../assets/img/defaultLot.jpg';
+import { useParams } from 'react-router-dom';
+import auctionService from '@/utils/api/auctionService';
+import {
+  formatDateString,
+  calculateTimeRemaining,
+} from '@/utils/helpers/dateManipulation';
 
 const index = () => {
+  const { lotId } = useParams();
+
+  const [lotCardData, setLotCardData] = useState([]);
+
+  useEffect(() => {
+    const getAuction = async () => {
+      try {
+        const response = await auctionService.getAuction(lotId);
+        console.log('Receive auction successful:', response.data);
+
+        if (response) {
+          setLotCardData(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error('Receive auction failed:', error);
+      }
+    };
+
+    getAuction();
+  }, []);
+
   const name = 'Картина “50 котів”';
   const endTime = '19.02.2024, 20:00';
   const highestBid = 1100;
@@ -16,7 +44,7 @@ const index = () => {
       <main className={styles.darkMain}>
         <div className={styles.mainContent}>
           <div className="responsiveWrapper">
-            <h2 className={styles.name}>Картина “50 котів”</h2>
+            <h2 className={styles.name}>{lotCardData.title}</h2>
             <div className={styles.line}>
               <div className={styles.images}>
                 <div className={styles.imageSelected}>
@@ -31,11 +59,11 @@ const index = () => {
                 <div className={styles.infoCardContent}>
                   <p>
                     <b>Закінчення</b>
-                    <span>{endTime}</span>
+                    <span>{formatDateString(lotCardData.endDate)}</span>
                   </p>
                   <p>
                     <b>До закінчення</b>
-                    <span>5 днів 4 години 30 хвилин</span>
+                    <span>{calculateTimeRemaining(lotCardData.endDate)}</span>
                   </p>
                   <div>
                     <div className={styles.column}>
@@ -44,7 +72,12 @@ const index = () => {
                         <span>(6 ставок)</span>
                       </Link>
                     </div>
-                    <span>{highestBid.toLocaleString()} грн</span>
+                    <span>
+                      {lotCardData.currentPrice !== undefined
+                        ? lotCardData.currentPrice.toLocaleString()
+                        : 'Нема ціни...'}{' '}
+                      грн
+                    </span>
                   </div>
                   <div className={styles.makeBid}>
                     <label>Зробити ставку</label>
@@ -59,15 +92,7 @@ const index = () => {
                 </div>
               </div>
             </div>
-            <p className={styles.description}>
-              Це захоплююча картина, яка вражає своєю яскравістю та
-              живописністю. Передає різноманіття котів за допомогою
-              багатошарової ольорової палітри, де кожен кіт має свій власний
-              характер і вираз. Від грайливих рудих до вишуканих чорних - кожен
-              кіт привертає увагу своєю унікальністю. Ця картина не лише додасть
-              кольору вашому простору, але й стане чудовим додатком до колекції
-              для любителів котів і мистецтва
-            </p>
+            <p className={styles.description}>{lotCardData.description}</p>
             <div className={styles.comments}>
               <h3>
                 Коментарі <span>2</span>

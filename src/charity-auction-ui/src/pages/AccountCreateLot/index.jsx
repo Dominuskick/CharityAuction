@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './accountCreateLot.module.css';
 import { Header, Footer } from '@/layout';
 import Select from 'react-select';
 import { Button } from '@/components';
 import { Link } from 'react-router-dom';
+import auctionService from '@/utils/api/auctionService';
 
 const index = () => {
   const [isPublished, setIsPublished] = useState(false);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [startPrice, setStartPrice] = useState(0);
+  const [step, setStep] = useState(0);
 
   const categoryOptions = [
     { value: 'Антикваріат', label: 'Антикваріат' },
@@ -47,6 +52,30 @@ const index = () => {
     }
   };
 
+  const createAuction = async () => {
+    const newAuctionData = {
+      title: name,
+      description: description,
+      startPrice: startPrice,
+      minIncrease: step,
+      categoryName: 'string',
+    };
+
+    console.log(newAuctionData);
+
+    try {
+      const response = await auctionService.createAuction(newAuctionData);
+      console.log('Create auction successful:', response.data);
+
+      if (response) {
+        console.log('ДА ЕСТЬ ЖЕ!!!!!!!!!!    ЧИНАЗЕС!!!!!!!!!!');
+        setIsPublished(true);
+      }
+    } catch (error) {
+      console.error('Create auction failed:', error);
+    }
+  };
+
   if (!isPublished) {
     return (
       <>
@@ -61,6 +90,7 @@ const index = () => {
                   <input
                     type="text"
                     placeholder="Наприклад, картина з котами"
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 <div
@@ -98,26 +128,37 @@ const index = () => {
                 </div>
                 <div className={styles.inputWrapper}>
                   <label>Придумайте опис</label>
-                  <textarea placeholder="Опис" />
+                  <textarea
+                    placeholder="Опис"
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
                 </div>
                 <div className={styles.row}>
                   <div className={styles.inputWrapper}>
                     <label>Початкова ціна</label>
                     <div className={styles.bidInput}>
-                      <input type="number" placeholder="Ваша ставка" />
+                      <input
+                        type="number"
+                        placeholder="Ваша ставка"
+                        onChange={(e) => setStartPrice(e.target.value)}
+                      />
                       <span>грн</span>
                     </div>
                   </div>
                   <div className={styles.inputWrapper}>
                     <label>Мінімальний крок ставки</label>
                     <div className={styles.bidInput}>
-                      <input type="number" placeholder="Ваша ставка" />
+                      <input
+                        type="number"
+                        placeholder="Ваша ставка"
+                        onChange={(e) => setStep(e.target.value)}
+                      />
                       <span>грн</span>
                     </div>
                   </div>
                 </div>
                 <div className={styles.btnWrapper}>
-                  <Button onClick={() => setIsPublished(true)}>
+                  <Button onClick={() => createAuction(true)}>
                     Виставити лот на аукціон
                   </Button>
                 </div>
