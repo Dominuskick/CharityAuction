@@ -110,13 +110,13 @@ namespace API.Controllers
         /// <summary>
         /// Filters and sorts auctions.
         /// </summary>
-        /// <param name="categoryIds">Filters auctions by categoryId. Only auctions whose category matches the specified string will be returned.</param>
+        /// <param name="categoryNames">Filters auctions by categoryNames. Only auctions whose category matches the specified string will be returned.</param>
         /// <param name="sortOrder">Sorts the auctions by the specified property. Possible values are "price", "price_desc", "date", "date_desc", "isActive", "isActive_desc, IsUnActive, isUnActive_desc".</param>
         /// <returns>A Result object containing a list of filtered and sorted auctions, or an error message if no auctions were found.</returns>
         [HttpGet("filter")]
-        public async Task<IActionResult> FilterAuctions([FromQuery] List<string> categoriesIds, [FromQuery] string sortOrder)
+        public async Task<IActionResult> FilterAuctions([FromQuery] List<string> categoryNames, [FromQuery] string sortOrder)
         {
-            var result = await auctionService.FilterAuctions(categoriesIds, sortOrder);
+            var result = await auctionService.FilterAuctions(categoryNames, sortOrder);
             if (result.IsSuccess)
             {
                 return Ok(result);

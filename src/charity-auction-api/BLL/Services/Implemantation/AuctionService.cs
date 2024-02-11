@@ -77,6 +77,14 @@ namespace BLL.Services.Implemantation
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
 
             var filteredAuctions = auctionDtos.Where(predicate);
+
+            foreach (var auctionDto in filteredAuctions)
+            {
+                var pictures = await pictureService.GetPictures(auctionDto.Id);
+                if (pictures.IsSuccess)
+                    auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
+                else auctionDto.Pictures = null;
+            }
             return Result<IEnumerable<AuctionDetailsDto>>.Success(filteredAuctions);
         }
 
@@ -175,7 +183,7 @@ namespace BLL.Services.Implemantation
         }
 
 
-        public async Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryIds, string sortOrder)
+        public async Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryNames, string sortOrder)
         {
             var auctions = await auctionRepository.GetAllAsync();
             if (!auctions.Any())
@@ -184,13 +192,15 @@ namespace BLL.Services.Implemantation
             }
 
             // Filtering
-            if (categoryIds != null && categoryIds.Count > 0)
+            if (categoryNames != null && categoryNames.Count > 0)
             {
-                auctions = auctions.Where(a => categoryIds.Contains(a.CategoryId.ToString()));
+                var categories = await categoryRepository.FindAsync(c => categoryNames.Contains(c.Name));
+                var categoryIds = categories.Select(c => c.Id).ToList();
+                auctions = auctions.Where(a => categoryIds.Contains(a.CategoryId));
             }
             else
             {
-                Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.CategoryNotFound);
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.CategoryNotFound);
             }
 
             // Sorting
@@ -225,7 +235,17 @@ namespace BLL.Services.Implemantation
                     break;
             }
 
-            return Result<IEnumerable<AuctionDetailsDto>>.Success(mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions));
+            var auctionsDto = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
+
+            foreach (var auctionDto in auctionsDto)
+            {
+                var pictures = await pictureService.GetPictures(auctionDto.Id);
+                if (pictures.IsSuccess)
+                    auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
+                else auctionDto.Pictures = null;
+            }
+
+            return Result<IEnumerable<AuctionDetailsDto>>.Success(auctionsDto);
         }
 
     }
