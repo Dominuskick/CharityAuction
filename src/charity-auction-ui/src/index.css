@@ -1,0 +1,34 @@
+@import url(./styles/typography.css);
+
+* {
+  box-sizing: border-box;
+  /* font-family: Montserrat,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif; */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #fff;
+  color: #131313;
+
+  --responsive-width: 1440px;
+  --responsive-padding-left: 72px;
+  --responsive-padding-right: 72px;
+  /* overflow-x: hidden; */
+}
+
+a {
+  text-decoration: none;
+  color: var(--color);
+}
+
+.responsiveWrapper {
+  width: var(--responsive-width);
+  padding-left: var(--responsive-padding-left);
+  padding-right: var(--responsive-padding-right);
+}

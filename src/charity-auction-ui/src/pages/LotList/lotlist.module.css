@@ -1,0 +1,115 @@
+.darkMain {
+  background-color: #131313;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding-top: 128px;
+}
+
+.mainContent {
+  padding: 80px 0;
+}
+
+.mainContent > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 46px;
+  margin-bottom: 40px;
+}
+
+.filters {
+  max-width: 1208px;
+  display: flex;
+  flex-direction: row;
+  min-height: 32px;
+  height: fit-content;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 60px;
+  gap: 50px;
+
+  margin-bottom: 24px;
+}
+
+.selectWrapper {
+  min-width: 210px;
+  min-height: 32px;
+  color: #131313;
+  border-radius: 4px;
+}
+
+.sortWrapper {
+  min-width: 786.1px;
+  width: 786.1px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sortWrapper > label {
+  min-width: 100.1px;
+  margin-right: 20px;
+}
+
+.lotList {
+  width: 1208px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 89px;
+
+  border-radius: 32px;
+  background-color: #fff;
+  padding: 56px;
+
+  margin-bottom: 32px;
+}
+
+.pageControls {
+  display: flex;
+  gap: 11px;
+}
+
+.pageControls span {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 71.429% */
+
+  cursor: pointer;
+}
+
+.pagePrev,
+.pageNext {
+  background: url('../../assets/icons/arrow.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+}
+
+.page.curPage {
+  background-color: #fff;
+  color: #131313;
+  cursor: default;
+  pointer-events: none;
+}
+
+.pageNext {
+  transform: rotate(180deg);
+}

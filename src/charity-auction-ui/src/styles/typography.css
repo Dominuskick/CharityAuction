@@ -1,0 +1,43 @@
+body {
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+}
+
+h1 {
+  font-family: 'K2D', sans-serif;
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 68px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+p {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
+}
+
+input {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+input::placeholder {
+  color: #131313;
+}
+
+.row-title-text {
+  font-weight: 700;
+}

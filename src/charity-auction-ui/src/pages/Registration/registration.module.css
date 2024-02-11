@@ -1,0 +1,179 @@
+.darkMain {
+  background-color: #131313;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding-top: 128px;
+}
+
+.mainContent {
+  padding: 80px 292px;
+}
+
+.registrationWrapper {
+  width: 856px;
+  height: 1280px;
+  background-color: #fff;
+  border-radius: 32px;
+
+  padding: 56px 68px;
+}
+
+.registration > button {
+  width: 360px;
+  margin: 40px 0;
+}
+
+.registration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #131313;
+}
+
+.registration > h2 {
+  height: 76px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  letter-spacing: 0.2px;
+
+  margin-bottom: 36px;
+}
+
+.registration > hr {
+  width: 100%;
+  height: 3px;
+  background-color: #a1a1a1;
+
+  margin-bottom: 32px;
+}
+
+.inputListWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 554px;
+  gap: 20px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputWrapper > label {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+}
+
+.inputWrapper > input {
+  width: 554px;
+  height: 56px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  border: 1px solid #131313;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+}
+
+.inputWrapper > input::placeholder {
+  color: #a5a5a5;
+}
+
+.inputWrapperLine {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.checkbox {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid #000;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkbox > input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+}
+
+.inputWrapperLine > label {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+}
+
+.underLine {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0.2px;
+  text-decoration-line: underline;
+  cursor: pointer;
+  color: #010101;
+}
+
+.text {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+  letter-spacing: 0.2px;
+}
+
+.inputWrapperLine:last-child {
+  align-items: flex-start;
+}
+
+.row {
+  width: 554px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.row span {
+  display: block;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 120% */
+  letter-spacing: 0.2px;
+}
+
+.row span.underLine {
+  font-weight: 700;
+}

@@ -1,0 +1,87 @@
+main {
+  padding-top: 128px;
+}
+
+section.dark {
+  background-color: #131313;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+.aucSectionContent {
+  padding-top: 92px;
+  padding-bottom: 118px;
+  padding-right: 26px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.aucSectionContent > img {
+  width: 500px;
+  height: 500px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.left > h2 {
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  gap: 24px;
+}
+
+.scopeSectionContent,
+.popularSectionContent,
+.faqSectionContent {
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.scopeSectionContent > h2,
+.popularSectionContent > h2,
+.faqSectionContent > h2 {
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.lotList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 79px;
+}
+
+.faqSectionContent {
+  gap: 52px;
+}
+
+.faqWrapper {
+  width: 856px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 32px;
+}
+
+.row-title-text {
+  font-weight: 700;
+}
+
+.scopeSection,
+.faqSection {
+  scroll-margin-top: 128px;
+}

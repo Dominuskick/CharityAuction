@@ -1,0 +1,23 @@
+.logoWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #131313;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo > span {
+  color: #fff;
+  font-family: 'K2D', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+}
