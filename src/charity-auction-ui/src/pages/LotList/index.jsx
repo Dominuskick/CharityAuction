@@ -61,7 +61,7 @@ const index = () => {
 
         if (response) {
           setLotCardsData(response.data);
-          setTotalPages(~~(response.data.length / 9 + 1));
+          setTotalPages(Math.ceil(response.data.length / 9));
         }
       } catch (error) {
         console.error('Receive auction list failed:', error);
@@ -92,9 +92,18 @@ const index = () => {
 
   const renderPages = () => {
     const pages = [];
-    const visiblePages = Math.min(totalPages, 3); // Не более 3 видимых страниц
+    const visiblePages = 3; // Всегда рендерим 3 страницы
+    const halfVisible = Math.floor(visiblePages / 2);
 
-    for (let i = 1; i <= visiblePages; i++) {
+    let startPage = Math.max(1, currentPage - halfVisible);
+    let endPage = Math.min(totalPages, startPage + visiblePages - 1);
+
+    if (endPage - startPage + 1 < visiblePages) {
+      // Корректировка начальной страницы, если не хватает видимых страниц
+      startPage = Math.max(1, endPage - visiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <span
           key={i}
