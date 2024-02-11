@@ -18,6 +18,6 @@ namespace BLL.Services.Interfaces
         public Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId, IEnumerable<IFormFile> pictures);
         Task<Result> DeleteAuction(Guid id);
         public Task<Result> UpdateAuction(UpdateAuctionDto auctionDto);
-        Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categories, string sortOrder);
+        Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryNames, string sortOrder);
     }
 }
