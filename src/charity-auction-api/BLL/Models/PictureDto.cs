@@ -25,6 +25,5 @@ namespace BLL.Models
 
         public ICollection<IFormFile> PicturesToAdd { get; set; }
 
-        public ICollection<Guid> PicturesToRemove { get; set; }
     }
 }

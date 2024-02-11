@@ -59,8 +59,8 @@ namespace API.Controllers
         [Route("bids-user")]
         public async Task<IActionResult> GetBidsCurrentUser()
         {
-            string userId = User.FindFirstValue("id");
-            var result = await bidService.FindBids(b => b.UserId == userId);
+            string UserName = User.FindFirstValue("UserName");
+            var result = await bidService.FindBids(b => b.UserName == UserName);
             if (result.IsSuccess)
             {
                 return Ok(result);
