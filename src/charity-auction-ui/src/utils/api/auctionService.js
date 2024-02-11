@@ -45,12 +45,7 @@ const auctionService = {
   },
   createAuction: async (auctionData) => {
     try {
-      const refresh = await authService.refreshTokens();
-      if (!refresh) {
-        throw new Error(error.message || 'Refresh tokens failed');
-      }
-
-      const accessToken = refresh.data.token;
+      const accessToken = Cookies.get('accessToken');
 
       console.log(accessToken);
 
@@ -74,6 +69,57 @@ const auctionService = {
     } catch (error) {
       // console.error('Error during auction creation:', error);
       throw new Error(error.message || 'Create Auction failed');
+    }
+  },
+  getUserAuctions: async () => {
+    try {
+      const accessToken = Cookies.get('accessToken');
+
+      const response = await fetch(`${API_BASE_URL}/Auction/auction-user`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        return result;
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to fetch user auctions');
+      }
+    } catch (error) {
+      throw new Error(error.message || 'Failed to fetch user auctions');
+    }
+  },
+  deleteAuctionById: async (auctionId) => {
+    try {
+      const refresh = await authService.refreshTokens();
+      if (!refresh) {
+        throw new Error('Refresh tokens failed');
+      }
+
+      const accessToken = refresh.data.token;
+
+      const response = await fetch(`${API_BASE_URL}/Auction/${auctionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        // Успешное удаление
+        return { success: true };
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete auction');
+      }
+    } catch (error) {
+      throw new Error(error.message || 'Failed to delete auction');
     }
   },
 };

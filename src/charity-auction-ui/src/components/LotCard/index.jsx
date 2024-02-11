@@ -6,6 +6,7 @@ import {
   formatDateString,
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
+import auctionService from '@/utils/api/auctionService';
 
 const index = ({
   name,
@@ -15,6 +16,7 @@ const index = ({
   id,
   btnDisable,
   isEditable,
+  setDeleteToggle,
 }) => {
   if (!isEditable) {
     return (
@@ -43,6 +45,19 @@ const index = ({
       </Link>
     );
   } else {
+    const deleteAuctionById = async () => {
+      try {
+        const response = await auctionService.deleteAuctionById(id);
+        console.log('Delete auction successful:', response.data);
+
+        if (response) {
+          setDeleteToggle((cur) => !cur);
+        }
+      } catch (error) {
+        console.error('Delete auction failed:', error);
+      }
+    };
+
     return (
       <div className={`${styles.lotCard} ${styles.editable}`}>
         <Link to={`/lot/${id}`}>
@@ -70,7 +85,9 @@ const index = ({
         <hr />
         <div className={styles.controls}>
           <span className={styles.btn}>Редагувати</span>
-          <span className={styles.btn}>Видалити</span>
+          <span className={styles.btn} onClick={deleteAuctionById}>
+            Видалити
+          </span>
         </div>
       </div>
     );

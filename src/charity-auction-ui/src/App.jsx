@@ -16,10 +16,13 @@ function App() {
         console.log('Refresh successful:', response.data);
 
         if (response) {
-          dispatch(setLogin(localStorage.getItem('login') || null));
+          dispatch(
+            setLogin(response.data.userName || localStorage.getItem('login'))
+          );
         }
       } catch (error) {
         console.error('Refresh failed:', error);
+        dispatch(setLogin(undefined));
       }
     };
 

@@ -3,10 +3,21 @@ import styles from './accountCreateLot.module.css';
 import { Header, Footer } from '@/layout';
 import Select from 'react-select';
 import { Button } from '@/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
+import { useSelector } from 'react-redux';
 
 const index = () => {
+  const userName = useSelector((state) => state.auth.login);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userName) {
+      navigate('/');
+    }
+  }, [userName]);
+
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

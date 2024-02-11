@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
-import { Button, CheckBox, LotCard } from '@/components';
-import { Link } from 'react-router-dom';
+import { LotCard } from '@/components';
 import Select from 'react-select';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';

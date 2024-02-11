@@ -24,7 +24,6 @@ const index = () => {
 
         if (response) {
           setLotCardData(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         console.error('Receive auction failed:', error);

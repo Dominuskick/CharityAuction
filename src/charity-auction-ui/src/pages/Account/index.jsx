@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
-import { AccountMenu, Button, CheckBox, LotCard } from '@/components';
+import { AccountMenu, Button } from '@/components';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
-  console.log(name);
 
   return (
     <>

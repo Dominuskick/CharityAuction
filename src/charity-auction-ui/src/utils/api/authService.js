@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../constants/backend';
+import Cookies from 'js-cookie';
 
 const authService = {
   register: async (userData) => {
@@ -36,6 +37,7 @@ const authService = {
 
       if (response.ok) {
         const result = await response.json();
+        Cookies.set('accessToken', result.data.token);
         return result;
       } else {
         const error = await response.json();
@@ -58,6 +60,7 @@ const authService = {
 
       if (response.ok) {
         const result = await response.json();
+        Cookies.set('accessToken', result.data.token);
         return result;
       } else {
         const error = await response.json();

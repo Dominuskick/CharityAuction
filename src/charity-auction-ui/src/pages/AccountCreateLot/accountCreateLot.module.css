@@ -236,3 +236,7 @@
 .lotPublished > .btnWrapper {
   margin-top: 40px;
 }
+
+.btnWrapper button {
+  width: 100%;
+}
