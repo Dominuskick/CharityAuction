@@ -193,6 +193,7 @@ const index = () => {
                   highestBid={lotCardData.currentPrice}
                   src={defaultImg}
                   id={lotCardData.id}
+                  pictures={lotCardData.pictures}
                   btnDisable={true}
                   key={`Lot ${i}`}
                 />

@@ -43,7 +43,7 @@ const auctionService = {
       throw new Error(error.message || 'Get Lot failed');
     }
   },
-  createAuction: async (auctionData) => {
+  createAuction: async (formData) => {
     try {
       const accessToken = Cookies.get('accessToken');
 
@@ -52,10 +52,9 @@ const auctionService = {
       const response = await fetch(`${API_BASE_URL}/Auction`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(auctionData),
+        body: formData,
       });
 
       if (response.ok) {

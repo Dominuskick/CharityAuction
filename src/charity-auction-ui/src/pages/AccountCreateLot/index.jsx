@@ -6,17 +6,10 @@ import { Button } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
+import defaultImg from '../../assets/img/defaultLot.jpg';
 
 const index = () => {
   const userName = useSelector((state) => state.auth.login);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!userName) {
-      navigate('/');
-    }
-  }, [userName]);
 
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
@@ -54,8 +47,10 @@ const index = () => {
   };
 
   const [images, setImages] = useState(Array(4).fill(null));
+  const [imagesSend, setImagesSend] = useState(Array(4).fill(null));
 
   const onImageChange = (index, event) => {
+    onImageSendChange(index, event);
     if (event.target.files && event.target.files[0]) {
       const newImages = [...images];
       newImages[index] = URL.createObjectURL(event.target.files[0]);
@@ -63,20 +58,37 @@ const index = () => {
     }
   };
 
-  const createAuction = async () => {
-    const newAuctionData = {
-      title: name,
-      description: description,
-      startPrice: startPrice,
-      minIncrease: step,
-      categoryName: 'string',
-    };
+  const onImageSendChange = (index, event) => {
+    if (event.target.files && event.target.files[0]) {
+      const newImages = [...imagesSend];
+      newImages[index] = event.target.files[0];
+      setImagesSend(newImages);
+    }
+    console.log(event.target.files[0]);
+  };
 
-    console.log(newAuctionData);
+  const createAuction = async () => {
+    const formData = new FormData();
+
+    // Append auction data to the FormData
+    formData.append('Title', name);
+    formData.append('Description', description);
+    formData.append('StartPrice', startPrice);
+    formData.append('MinIncrease', step);
+    formData.append('CategoryName', 'string');
+    formData.append(`Pictures`, imagesSend[0]);
+
+    imagesSend.forEach((image) => {
+      if (image) {
+        formData.append(`Pictures`, image);
+      }
+    });
+
+    console.log(formData);
 
     try {
-      const response = await auctionService.createAuction(newAuctionData);
-      console.log('Create auction successful:', response.data);
+      const response = await auctionService.createAuction(formData);
+      console.log('Create auction successful:', response);
 
       if (response) {
         console.log('ДА ЕСТЬ ЖЕ!!!!!!!!!!    ЧИНАЗЕС!!!!!!!!!!');

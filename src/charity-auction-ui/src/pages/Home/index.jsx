@@ -7,8 +7,10 @@ import { Button, LotCard, ResponsiveWrapper } from '@/components';
 import Faq from 'react-faq-component';
 import { Link } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
+import { useSelector } from 'react-redux';
 
 const index = () => {
+  const login = useSelector((state) => state.auth.login);
   const [lotCardsData, setLotCardsData] = useState([]);
 
   useEffect(() => {
@@ -80,8 +82,12 @@ const index = () => {
                   - зробимо світ краще разом!
                 </p>
                 <div className={styles.buttons}>
-                  <Button>Зробити ставку</Button>
-                  <Button>Розмістити лот</Button>
+                  <Link to={login ? 'lots' : '/login'}>
+                    <Button>Зробити ставку</Button>
+                  </Link>
+                  <Link to={login ? '/account/createLot' : '/login'}>
+                    <Button>Розмістити лот</Button>
+                  </Link>
                 </div>
               </div>
               <img src={img} alt="Благодійний аукціон" />
@@ -99,7 +105,9 @@ const index = () => {
                 чи втратили рідних у цьому конфлікті. Кожна покупка на нашому
                 аукціоні стане кроком до покращення життя цих сімей
               </p>
-              <Button isBlack={true}>Долучитись</Button>
+              <Link to={login ? '/account/createLot' : '/login'}>
+                <Button isBlack={true}>Долучитись</Button>
+              </Link>
             </div>
           </ResponsiveWrapper>
         </section>
@@ -115,7 +123,7 @@ const index = () => {
                         name={lotCardData.title}
                         endTime={lotCardData.endDate}
                         highestBid={lotCardData.currentPrice}
-                        src={defaultImg}
+                        pictures={lotCardData.pictures}
                         id={lotCardData.id}
                         key={`Lot card ${i}`}
                       />

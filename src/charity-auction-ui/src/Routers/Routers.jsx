@@ -23,7 +23,7 @@ const Routers = () => {
         <Route path="/login" element={<LogIn />} />
         <Route path="/lots" element={<LotList />} />
         <Route path="/lot/:lotId" element={<Lot />} />
-        <Route path="/lot/bets" element={<LotBets />} />
+        <Route path="/lot/:lotId/bets" element={<LotBets />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/createLot" element={<AccountCreateLot />} />
         <Route path="/account/lots" element={<AccountLots />} />

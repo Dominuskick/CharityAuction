@@ -7,14 +7,15 @@ import {
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
 import auctionService from '@/utils/api/auctionService';
+import defaultImg from '../../assets/img/defaultLot.jpg';
 
 const index = ({
   name,
   endTime,
   highestBid,
-  src,
   id,
   btnDisable,
+  pictures,
   isEditable,
   setDeleteToggle,
 }) => {
@@ -22,7 +23,10 @@ const index = ({
     return (
       <Link to={`/lot/${id}`}>
         <div className={styles.lotCard}>
-          <img src={src} alt={`Картинка лоту під назвою ${name}`}></img>
+          <img
+            src={pictures ? pictures[0] : defaultImg}
+            alt={`Картинка лоту під назвою ${name}`}
+          ></img>
           <div className={styles.lotCardDescription}>
             <h3>{name}</h3>
             <div className={styles.lotCardDescriptionPoints}>
@@ -62,7 +66,10 @@ const index = ({
       <div className={`${styles.lotCard} ${styles.editable}`}>
         <Link to={`/lot/${id}`}>
           <div className={styles.row}>
-            <img src={src} alt={`Картинка лоту під назвою ${name}`}></img>
+            <img
+              src={pictures ? pictures[0] : defaultImg}
+              alt={`Картинка лоту під назвою ${name}`}
+            ></img>
             <div className={styles.lotCardDescription}>
               <h3>{name}</h3>
               <div className={styles.lotCardDescriptionPoints}>

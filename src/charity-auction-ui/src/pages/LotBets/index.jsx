@@ -1,34 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './lotbets.module.css';
 import { Header, Footer } from '@/layout';
-import { Button, CheckBox } from '@/components';
+import { Button } from '@/components';
 import { Link } from 'react-router-dom';
-import img from '../../assets/img/catHome.png';
+import { useParams } from 'react-router-dom';
+import auctionService from '@/utils/api/auctionService';
+import bidsService from '@/utils/api/bidsService';
+import { formatDateString } from '@/utils/helpers/dateManipulation';
 
 const index = () => {
-  const name = 'Картина “50 котів”';
-  const data = [
-    {
-      name: 'Arcan689',
-      bet: 1100,
-      time: '13.02.2024, 18:48',
-    },
-    {
-      name: 'Capibara54',
-      bet: 950,
-      time: '13.02.2024, 16:12',
-    },
-    {
-      name: 'Arcan689',
-      bet: 840,
-      time: '11.02.2024, 07:37',
-    },
-    {
-      name: 'Mangust189',
-      bet: 750,
-      time: '10.02.2024, 13:21',
-    },
-  ];
+  const { lotId } = useParams();
+
+  const [lotCardData, setLotCardData] = useState([]);
+  const [bidsData, setBidsData] = useState([]);
+
+  useEffect(() => {
+    const getAuction = async () => {
+      try {
+        const response = await auctionService.getAuction(lotId);
+        console.log('Receive bids successful:', response.data);
+        const response2 = await bidsService.getBids(lotId);
+
+        if (response && response2) {
+          setLotCardData(response.data);
+          setBidsData(response2.data);
+          console.log(lotId);
+          console.log(response2.data);
+        }
+      } catch (error) {
+        console.error('Receive bids failed:', error);
+      }
+    };
+
+    getAuction();
+  }, []);
 
   return (
     <>
@@ -37,7 +42,7 @@ const index = () => {
         <div className={styles.mainContent}>
           <div className={styles.betsWrapper}>
             <div className={styles.betsContent}>
-              <h2>{name}</h2>
+              <h2>{lotCardData && lotCardData.title}</h2>
               <div className={styles.betList}>
                 <div className={styles.betListHeader}>
                   <h3>Учасник:</h3>
@@ -45,17 +50,19 @@ const index = () => {
                   <h3>Час:</h3>
                 </div>
                 <div className={styles.betListBody}>
-                  {data.map((item) => (
+                  {bidsData.map((item) => (
                     <div className={styles.bet}>
-                      <p className={styles.name}>{item.name}</p>
-                      <p className={styles.betValue}>{item.bet}</p>
-                      <p className={styles.time}>{item.time}</p>
+                      <p className={styles.name}>User</p>
+                      <p className={styles.betValue}>{item.amount}</p>
+                      <p className={styles.time}>
+                        {formatDateString(item.date)}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
               <div className={styles.btnContainer}>
-                <Link to={'/lot'}>
+                <Link to={`/lot/${lotId}`}>
                   <Button>Повернутись до лоту</Button>
                 </Link>
               </div>

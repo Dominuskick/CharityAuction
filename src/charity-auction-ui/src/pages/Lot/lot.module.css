@@ -254,3 +254,11 @@
 
   margin-bottom: 8px;
 }
+
+.microImg {
+  cursor: pointer;
+}
+
+.microImgSelected {
+  border: 2px solid white;
+}

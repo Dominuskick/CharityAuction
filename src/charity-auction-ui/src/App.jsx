@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import Routers from './Routers/Routers';
 import './App.css';
 import authService from './utils/api/authService';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogin } from '@/slices/authSlice';
 
 function App() {
   const dispatch = useDispatch();
-  const login = useSelector((state) => state.auth.login);
 
   useEffect(() => {
     const refreshCookies = async () => {

@@ -49,7 +49,7 @@ const index = () => {
                       name={lotCardData.title}
                       endTime={lotCardData.endDate}
                       highestBid={lotCardData.currentPrice}
-                      src={defaultImg}
+                      pictures={lotCardData.pictures}
                       id={lotCardData.id}
                       isEditable={true}
                       setDeleteToggle={setDeleteToggle}

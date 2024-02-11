@@ -3,18 +3,25 @@ import styles from './lot.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
 import { Link } from 'react-router-dom';
-import img from '../../assets/img/defaultLot.jpg';
+import defaultLotImg from '../../assets/img/defaultLot.jpg';
 import { useParams } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import {
   formatDateString,
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
+import bidsService from '@/utils/api/bidsService';
 
 const index = () => {
   const { lotId } = useParams();
 
   const [lotCardData, setLotCardData] = useState([]);
+
+  const [bid, setBid] = useState(0);
+
+  const [bids, setBids] = useState([]);
+
+  const [btnTrigger, setBtnTrigger] = useState(false);
 
   useEffect(() => {
     const getAuction = async () => {
@@ -24,6 +31,7 @@ const index = () => {
 
         if (response) {
           setLotCardData(response.data);
+          setSelectedImg(response.data.pictures[0]);
         }
       } catch (error) {
         console.error('Receive auction failed:', error);
@@ -31,11 +39,46 @@ const index = () => {
     };
 
     getAuction();
-  }, []);
+  }, [btnTrigger]);
 
-  const name = 'Картина “50 котів”';
-  const endTime = '19.02.2024, 20:00';
-  const highestBid = 1100;
+  useEffect(() => {
+    const getBids = async () => {
+      try {
+        const bidsResponse = await bidsService.getBids(lotId);
+
+        if (bidsResponse) {
+          setBids(bidsResponse.data);
+        }
+      } catch (error) {
+        console.error('Receive bids failed:', error);
+      }
+    };
+
+    getBids();
+  }, [btnTrigger]);
+
+  const createBid = async () => {
+    const data = {
+      amount: bid,
+      auctionId: lotId,
+    };
+
+    console.log(data);
+
+    try {
+      const response = await bidsService.createBid(data);
+      console.log('Create bid successful:', response);
+
+      if (response) {
+        setBid(0);
+        setBtnTrigger((val) => !val);
+      }
+    } catch (error) {
+      console.error('Create auction failed:', error);
+    }
+  };
+
+  const [selectedImg, setSelectedImg] = useState(defaultLotImg);
 
   return (
     <>
@@ -47,11 +90,44 @@ const index = () => {
             <div className={styles.line}>
               <div className={styles.images}>
                 <div className={styles.imageSelected}>
-                  <img src={img} alt={`Зображення лоту з назвою ${name}`} />
+                  <img
+                    src={selectedImg}
+                    alt={`Зображення лоту з назвою ${
+                      lotCardData && lotCardData.title
+                    }`}
+                  />
                 </div>
                 <div className={styles.imgRow}>
-                  <img src={img} alt={`Зображення лоту з назвою ${name}`} />
-                  <img src={img} alt={`Зображення лоту з назвою ${name}`} />
+                  {lotCardData && lotCardData.pictures ? (
+                    lotCardData.pictures.map(
+                      (pic, i) =>
+                        i < 4 && (
+                          <img
+                            src={pic}
+                            alt={`Зображення лоту з назвою ${
+                              lotCardData && lotCardData.title
+                            } під номером ${i}`}
+                            className={`${styles.microImg} ${
+                              selectedImg === lotCardData.pictures[i] &&
+                              styles.microImgSelected
+                            }`}
+                            onClick={() =>
+                              setSelectedImg(lotCardData.pictures[i])
+                            }
+                            key={`Зображення лоту з назвою ${
+                              lotCardData && lotCardData.title
+                            } під номером ${i}`}
+                          />
+                        )
+                    )
+                  ) : (
+                    <img
+                      src={defaultLotImg}
+                      alt={`Зображення лоту з назвою ${
+                        lotCardData && lotCardData.title
+                      }`}
+                    />
+                  )}
                 </div>
               </div>
               <div className={styles.infoCard}>
@@ -67,8 +143,8 @@ const index = () => {
                   <div>
                     <div className={styles.column}>
                       <b>Поточна ціна</b>
-                      <Link to={'/lot/bets'}>
-                        <span>(6 ставок)</span>
+                      <Link to={`/lot/${lotCardData.id}/bets`}>
+                        <span>({bids.length} ставок)</span>
                       </Link>
                     </div>
                     <span>
@@ -81,12 +157,19 @@ const index = () => {
                   <div className={styles.makeBid}>
                     <label>Зробити ставку</label>
                     <div className={styles.bidInput}>
-                      <input type="number" placeholder="Ваша ставка" />
+                      <input
+                        type="number"
+                        placeholder="Ваша ставка"
+                        onChange={(e) => {
+                          setBid(e.target.value);
+                        }}
+                        value={bid}
+                      />
                       <span>грн</span>
                     </div>
                   </div>
                   <div className={styles.btnContainer}>
-                    <Button>Підтвердити ставку</Button>
+                    <Button onClick={createBid}>Підтвердити ставку</Button>
                   </div>
                 </div>
               </div>
