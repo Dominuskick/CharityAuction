@@ -103,9 +103,11 @@
   background-size: 40%;
 }
 
-.curPage {
+.page.curPage {
   background-color: #fff;
   color: #131313;
+  cursor: default;
+  pointer-events: none;
 }
 
 .pageNext {

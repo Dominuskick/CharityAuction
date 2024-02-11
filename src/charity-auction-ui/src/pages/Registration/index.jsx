@@ -43,7 +43,7 @@ const index = () => {
           setIsRegistered(true);
         }
       } catch (error) {
-        console.error('Registration failed:', error.response.data);
+        console.error('Registration failed:', error);
       }
     };
 

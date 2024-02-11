@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLogin, setTokens } from '@/slices/authSlice';
+import { setLogin } from '@/slices/authSlice';
 import authService from '@/utils/api/authService';
 
 const index = () => {
   const dispatch = useDispatch();
-  const { login, accessToken, refreshToken } = useSelector(
-    (state) => state.auth
-  );
+  const login = useSelector((state) => state.auth.login);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [btnClick, setBtnClick] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loginUser = async () => {
@@ -32,7 +32,7 @@ const index = () => {
         console.log('LogIn successful:', response.data);
 
         if (response) {
-          dispatch(setLogin('newLogin'));
+          dispatch(setLogin(response.data.userName));
         }
       } catch (error) {
         console.error('LogIn failed:', error);
@@ -43,6 +43,12 @@ const index = () => {
       loginUser();
     }
   }, [btnClick]);
+
+  useEffect(() => {
+    if (login && email && password) {
+      navigate('/account');
+    }
+  }, [login]);
 
   return (
     <>

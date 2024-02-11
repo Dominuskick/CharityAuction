@@ -3,13 +3,11 @@ import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
 import { AccountMenu, Button, CheckBox, LotCard } from '@/components';
 import { Link } from 'react-router-dom';
-import catImg from '../../assets/img/catHome.png';
-import bookImg from '../../assets/img/bookHome.png';
-import candleImg from '../../assets/img/candleHome.png';
-import Select from 'react-select';
+import { useSelector } from 'react-redux';
 
 const index = () => {
-  const name = 'traygard';
+  const name = useSelector((state) => state.auth.login);
+  console.log(name);
 
   return (
     <>

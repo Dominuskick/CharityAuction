@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox, LotCard } from '@/components';
 import { Link } from 'react-router-dom';
-import catImg from '../../assets/img/catHome.png';
-import bookImg from '../../assets/img/bookHome.png';
-import candleImg from '../../assets/img/candleHome.png';
 import Select from 'react-select';
+import auctionService from '@/utils/api/auctionService';
+import defaultImg from '../../assets/img/defaultLot.jpg';
 
 const index = () => {
   const categoryOptions = [
@@ -45,62 +44,97 @@ const index = () => {
     }),
   };
 
-  const lotCardsData = [
-    {
-      name: 'Картина “50 котів”',
-      endTime: '19.02.2024, 20:00',
-      highestBid: 1100,
-      src: catImg,
-    },
-    {
-      name: 'Книга “Мовчазна пацієнтка”',
-      endTime: '20.02.2024, 22:00',
-      highestBid: 300,
-      src: bookImg,
-    },
-    {
-      name: 'Підставка для свічки',
-      endTime: '22.02.2024, 17:00',
-      highestBid: 1500,
-      src: candleImg,
-    },
-    {
-      name: 'Картина “50 котів”',
-      endTime: '19.02.2024, 20:00',
-      highestBid: 1100,
-      src: catImg,
-    },
-    {
-      name: 'Книга “Мовчазна пацієнтка”',
-      endTime: '20.02.2024, 22:00',
-      highestBid: 300,
-      src: bookImg,
-    },
-    {
-      name: 'Підставка для свічки',
-      endTime: '22.02.2024, 17:00',
-      highestBid: 1500,
-      src: candleImg,
-    },
-    {
-      name: 'Картина “50 котів”',
-      endTime: '19.02.2024, 20:00',
-      highestBid: 1100,
-      src: catImg,
-    },
-    {
-      name: 'Книга “Мовчазна пацієнтка”',
-      endTime: '20.02.2024, 22:00',
-      highestBid: 300,
-      src: bookImg,
-    },
-    {
-      name: 'Підставка для свічки',
-      endTime: '22.02.2024, 17:00',
-      highestBid: 1500,
-      src: candleImg,
-    },
-  ];
+  const [lotCardsData, setLotCardsData] = useState([]);
+  const itemsPerPage = 9; // Количество элементов на странице
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(itemsPerPage);
+  const [visibleLotCardsData, setVisibleLotCardsData] = useState([]);
+
+  useEffect(() => {
+    const getAuctionList = async () => {
+      try {
+        const response = await auctionService.getAuctionList();
+        console.log('Receive auction list successful:', response.data);
+
+        if (response) {
+          setLotCardsData(response.data);
+          setTotalPages(~~(response.data.length / 9 + 1));
+        }
+      } catch (error) {
+        console.error('Receive auction list failed:', error);
+      }
+    };
+
+    getAuctionList();
+  }, []);
+
+  useEffect(() => {
+    const newStartIndex = (currentPage - 1) * itemsPerPage;
+    const newEndIndex = newStartIndex + itemsPerPage;
+    const newVisibleLotCardsData = lotCardsData.slice(
+      newStartIndex,
+      newEndIndex
+    );
+
+    setStartIndex(newStartIndex);
+    setEndIndex(newEndIndex);
+    setVisibleLotCardsData(newVisibleLotCardsData);
+  }, [currentPage, lotCardsData]);
+
+  const handlePageClick = (page) => {
+    console.log(page);
+    setCurrentPage(page);
+    // Здесь можно добавить логику для загрузки данных по выбранной странице
+  };
+
+  const renderPages = () => {
+    const pages = [];
+    const visiblePages = Math.min(totalPages, 3); // Не более 3 видимых страниц
+
+    for (let i = 1; i <= visiblePages; i++) {
+      pages.push(
+        <span
+          key={i}
+          className={`${styles.page} ${currentPage === i && styles.curPage} ${
+            styles.pageButton
+          }`}
+          onClick={() => handlePageClick(i)}
+        >
+          {i}
+        </span>
+      );
+    }
+
+    return pages;
+  };
+
+  const renderPagination = () => {
+    return (
+      <div className={styles.pageControls}>
+        <span
+          className={`${styles.pagePrev} ${
+            currentPage === 1 && styles.disabled
+          }`}
+          onClick={() =>
+            currentPage !== 1 && handlePageClick(Math.max(1, currentPage - 1))
+          }
+        ></span>
+        {renderPages()}
+        <span
+          className={`${styles.pageNext} ${
+            currentPage === totalPages && styles.disabled
+          }`}
+          onClick={() =>
+            currentPage !== totalPages &&
+            handlePageClick(Math.min(totalPages, currentPage + 1))
+          }
+        ></span>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -144,17 +178,18 @@ const index = () => {
               </div>
             </div>
             <div className={styles.lotList}>
-              {lotCardsData.map((lotData, i) => (
-                <LotCard {...lotData} btnDisable={true} key={`Lot ${i}`} />
+              {visibleLotCardsData.map((lotCardData, i) => (
+                <LotCard
+                  name={lotCardData.title}
+                  endTime={lotCardData.endDate}
+                  highestBid={lotCardData.currentPrice}
+                  src={defaultImg}
+                  btnDisable={true}
+                  key={`Lot ${i}`}
+                />
               ))}
             </div>
-            <div className={styles.pageControls}>
-              <span className={styles.pagePrev}></span>
-              <span className={`${styles.page} ${styles.curPage}`}>1</span>
-              <span className={styles.page}>2</span>
-              <span className={styles.page}>3</span>
-              <span className={styles.pageNext}></span>
-            </div>
+            {renderPagination()}
           </div>
         </div>
       </main>

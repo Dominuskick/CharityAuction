@@ -1,35 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './home.module.css';
 import { Header, Footer } from '@/layout';
 import img from '../../assets/img/home.png';
-import catImg from '../../assets/img/catHome.png';
-import bookImg from '../../assets/img/bookHome.png';
-import candleImg from '../../assets/img/candleHome.png';
+import defaultImg from '../../assets/img/defaultLot.jpg';
 import { Button, LotCard, ResponsiveWrapper } from '@/components';
 import Faq from 'react-faq-component';
 import { Link } from 'react-router-dom';
+import auctionService from '@/utils/api/auctionService';
 
 const index = () => {
-  const lotCardsData = [
-    {
-      name: 'Картина “50 котів”',
-      endTime: '19.02.2024, 20:00',
-      highestBid: 1100,
-      src: catImg,
-    },
-    {
-      name: 'Книга “Мовчазна пацієнтка”',
-      endTime: '20.02.2024, 22:00',
-      highestBid: 300,
-      src: bookImg,
-    },
-    {
-      name: 'Підставка для свічки',
-      endTime: '22.02.2024, 17:00',
-      highestBid: 1500,
-      src: candleImg,
-    },
-  ];
+  const [lotCardsData, setLotCardsData] = useState([]);
+
+  useEffect(() => {
+    const getAuctionList = async () => {
+      try {
+        const response = await auctionService.getAuctionList();
+        console.log('Receive auction list successful:', response.data);
+
+        if (response) {
+          setLotCardsData(response.data);
+        }
+      } catch (error) {
+        console.error('Receive auction list failed:', error);
+      }
+    };
+
+    getAuctionList();
+  }, []);
 
   const FAQdata = {
     title: '',
@@ -111,9 +108,18 @@ const index = () => {
             <div className={styles.popularSectionContent}>
               <h2>Популярні лоти</h2>
               <div className={styles.lotList}>
-                {lotCardsData.map((lotCardData, i) => (
-                  <LotCard {...lotCardData} key={`Lot card ${i}`} />
-                ))}
+                {lotCardsData.map(
+                  (lotCardData, i) =>
+                    i < 3 && (
+                      <LotCard
+                        name={lotCardData.title}
+                        endTime={lotCardData.endDate}
+                        highestBid={lotCardData.currentPrice}
+                        src={defaultImg}
+                        key={`Lot card ${i}`}
+                      />
+                    )
+                )}
               </div>
               <Link to={'/lots'}>
                 <Button isBlack={true} isWide={true}>
