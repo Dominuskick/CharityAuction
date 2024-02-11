@@ -15,16 +15,21 @@ namespace BLL.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<Auction, AuctionDto>().ReverseMap();
             CreateMap<Bid, BidDto>().ReverseMap();
             CreateMap<Bid, BidDetailsDto>().ReverseMap().IgnoreAllPropertiesWithAnInaccessibleSetter();
             CreateMap<Bid, CreateBidDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<Picture, PictureDto>().ReverseMap();
             CreateMap<Category, CategotyDetailsDto>().ReverseMap();
-            CreateMap<Auction, AuctionDetailsDto>().ReverseMap();
-            CreateMap<Auction, CreateAuctionDto>().ReverseMap();
-            CreateMap<Auction, UpdateAuctionDto>().ReverseMap();
+
+            CreateMap<Auction, AuctionDto>().ReverseMap();
+            CreateMap<Auction, AuctionDetailsDto>()
+                .ForMember(dest => dest.Pictures, opt => opt.Ignore());
+
+
+            CreateMap<Picture, PictureDto>();
+
+
+
 
             CreateMap<User, UserDetailsDto>();
             /*CreateMap<RegisterDto, UserDetailsDto>()

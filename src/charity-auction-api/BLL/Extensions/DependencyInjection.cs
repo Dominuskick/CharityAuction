@@ -13,9 +13,9 @@ using BLL.Services.Implemantation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using BLL.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
+using BLL.Models.AppSettings;
 
 namespace BLL.Extensions
 {
@@ -39,6 +39,15 @@ namespace BLL.Extensions
             services.AddSingleton(tokenValidationParameters);
 
 
+            services
+                .Configure<CloudinaryOptions>(options =>
+                {
+                    options.CloudName = configuration.GetSection("Cloudinary:CloudName").Value;
+                    options.ApiKey = configuration.GetSection("Cloudinary:ApiKey").Value;
+                    options.ApiSecret = configuration.GetSection("Cloudinary:ApiSecret").Value;
+                });
+
+
 
             services.AddScoped<IAuctionService, AuctionService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -46,6 +55,8 @@ namespace BLL.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IBidService, BidService>();
+            services.AddScoped<IPictureService, PictureService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddPersistence(configuration);
             var mapperConfig = new MapperConfiguration(mc =>
             {

@@ -49,10 +49,21 @@ namespace API.Controllers
             return NotFound(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _categoryService.GetById(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return NotFound(result);
+        }
+
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetByName(string name)
+        {
+            var result = await _categoryService.GetByName(name);
             if (result.IsSuccess)
             {
                 return Ok(result.Data);

@@ -84,5 +84,13 @@ namespace BLL.Services.Implemantation
                 return Result<CategotyDetailsDto>.Failure(Messages.AuctionNotFound);
             }
         }
+
+        public async Task<Result<CategotyDetailsDto>> GetByName(string name)
+        {
+            var result = await categoryRepository.FindAsync(s => s.Name == name);
+            if(!result.Any())
+                Result<CategotyDetailsDto>.Failure(Messages.CategoryNotFound);
+            return Result<CategotyDetailsDto>.Success(mapper.Map<CategotyDetailsDto>(result.FirstOrDefault()));
+        }
     }
 }

@@ -24,6 +24,12 @@ namespace DAL.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
+        public virtual async Task CreateRangeAsync(IEnumerable<TEntity> items)
+        {
+            await _set.AddRangeAsync(items);
+            await _context.SaveChangesAsync();
+        }
+
         public virtual async Task DeleteAsync(TKey id)
         {
             var item = await GetAsync(id);

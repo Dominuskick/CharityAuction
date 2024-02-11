@@ -1,5 +1,4 @@
 ﻿using BLL.Models.Responses;
-using BLL.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ using System.Security.Claims;
 using AutoMapper;
 using DAL.Repositories.Interfaces;
 using System.Security.Cryptography;
+using BLL.Models.AppSettings;
 
 namespace BLL.Services.Implemantation
 {
@@ -25,7 +25,6 @@ namespace BLL.Services.Implemantation
         private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IUserService userService;
         private readonly TokenValidationParameters tokenValidationParameters;
-        private readonly IMapper _mapper;
 
         public TokenService(IOptions<JwtSettings> jwtSettings, 
             IRefreshTokenRepository refreshTokenRepository, 
@@ -37,7 +36,6 @@ namespace BLL.Services.Implemantation
             this.refreshTokenRepository = refreshTokenRepository;
             this.userService = userService;
             this.tokenValidationParameters = tokenValidationParameters;
-            _mapper = mapper;
         }
 
         public async Task<AuthSuccessResponse> GenerateToken(UserDetailsDto user)
@@ -65,6 +63,7 @@ namespace BLL.Services.Implemantation
 
             var result = new AuthSuccessResponse
             {
+                UserName = user.UserName,
                 Token = encryptedToken,
                 RefreshToken = refreshToken.Token,
             };
@@ -107,19 +106,19 @@ namespace BLL.Services.Implemantation
             }
         }
 
-        public async Task<Result<AuthSuccessResponse>> RevokeRefreshToken(AuthSuccessResponse refreshToken)
+        public async Task<Result<AuthSuccessResponse>> RevokeRefreshToken(AuthSuccessResponse token)
         {
-            var validatedToken = this.GetPrincipalFromToken(refreshToken.Token);
+            var validatedToken = this.GetPrincipalFromToken(token.Token);
 
-            var expiryDateUnix =
+            /*var expiryDateUnix =
                 long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                .AddSeconds(expiryDateUnix);
+                .AddSeconds(expiryDateUnix);*/
 
-            var storedRefreshToken = await refreshTokenRepository.GetAsync(refreshToken.RefreshToken);
+            var storedRefreshToken = await refreshTokenRepository.GetAsync(token.RefreshToken);
             if (storedRefreshToken == null) return Result<AuthSuccessResponse>.Failure(Messages.RefreshTokenNotFound);
             if (validatedToken == null
-                || expiryDateTimeUtc > DateTime.UtcNow
+                //|| expiryDateTimeUtc > DateTime.UtcNow
                 || storedRefreshToken == null
                 || DateTime.UtcNow > storedRefreshToken.ExpiryDate
                 || storedRefreshToken.Invalidated

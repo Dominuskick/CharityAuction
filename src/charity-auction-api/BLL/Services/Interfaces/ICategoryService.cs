@@ -14,5 +14,6 @@ namespace BLL.Services.Interfaces
         public Task<Result<IEnumerable<CategotyDetailsDto>>> GetAll();
         public Task<Result> AddCategory(CategoryDto categoryDto);
         public Task<Result> DeleteCategory(Guid id);
+        Task<Result<CategotyDetailsDto>> GetByName(string name);
     }
 }

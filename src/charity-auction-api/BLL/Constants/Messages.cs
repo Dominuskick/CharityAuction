@@ -41,6 +41,16 @@ namespace BLL.Constants
         public const string AuctionNotStarted = "The auction has not started yet.";
         public const string BidTooLow = "Your bid is too low.";
         public static string BidNotFound = "Bid not found.";
-
+        public static class SortOrder
+        {
+            public const string Price = "price";
+            public const string PriceDesc = "price_desc";
+            public const string Date = "date";
+            public const string DateDesc = "date_desc";
+            public const string IsActive = "isActive";
+            public const string IsActiveDesc = "isActive_desc";
+            public const string IsUnActive = "isUnActive";
+            public const string IsUnActiveDesc = "isUnActive_desc";
+        }
     }
 }

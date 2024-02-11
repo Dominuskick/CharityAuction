@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +14,16 @@ namespace BLL.Models
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
         public decimal MinIncrease { get; set; }
-        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; }
+
+        [FromForm]
+        public IEnumerable<IFormFile> Pictures { get; set; }
     }
 
     public class AuctionDetailsDto : AuctionDto
     {
         public Guid Id { get; set; }
+        public IEnumerable<string> Pictures { get; set; }
     }
 
     public class AuctionDto
@@ -27,9 +33,11 @@ namespace BLL.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal StartPrice { get; set; }
+        public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
         public Guid CategoryId { get; set; }
         public string UserId { get; set; }
+
     }
 
     public class UpdateAuctionDto
@@ -38,5 +46,9 @@ namespace BLL.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
+        public string CategoryName { get; set; }
+
+        public ICollection<IFormFile> PicturesToAdd { get; set; }
+        public ICollection<Guid> PicturesToRemove { get; set; }
     }
 }

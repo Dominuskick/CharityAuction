@@ -28,7 +28,6 @@ namespace BLL.Services.Implemantation
         private readonly IMapper _mapper;
 
         public AuthService(UserManager<User> userManager, 
-            IUserService userService, 
             ITokenService tokenService,
             IMapper mapper)
         {

@@ -12,6 +12,7 @@ using BLL.Constants;
 using DAL.Repositories.Implementation;
 using Microsoft.AspNetCore.Identity;
 using DAL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services.Implemantation
 {
@@ -19,37 +20,49 @@ namespace BLL.Services.Implemantation
     {
         private readonly IAuctionRepository auctionRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IPictureService pictureService;
         private readonly IBidRepository bidRepository;
         private readonly IMapper mapper;
 
-        public AuctionService(IAuctionRepository auctionRepository, IMapper mapper, UserManager<User> userManager, ICategoryRepository categoryRepository, IBidRepository bidRepository)
+        public AuctionService(IAuctionRepository auctionRepository, IMapper mapper, UserManager<User> userManager, ICategoryRepository categoryRepository, IBidRepository bidRepository, IPictureService pictureService)
         {
             this.auctionRepository = auctionRepository;
             this.mapper = mapper;
             this.categoryRepository = categoryRepository;
             this.bidRepository = bidRepository;
+            this.pictureService = pictureService;
         }
 
-        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId)
+        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId, IEnumerable<IFormFile> pictures)
         {
-            var categoryExists = await categoryRepository.GetAsync(auctionDto.CategoryId);
+            var categoryExists = await categoryRepository.FindAsync(a => a.Name == auctionDto.CategoryName);
 
-            if (categoryExists is null)
+            if (!categoryExists.Any())
             {
                 return Result.Failure(Messages.CategoryNotFound);
             }
+            var category = categoryExists.FirstOrDefault();
             var auction = new AuctionDto
             {
                 Title = auctionDto.Title,
                 Description = auctionDto.Description,
                 StartPrice = auctionDto.StartPrice,
                 MinIncrease = auctionDto.MinIncrease,
-                CategoryId = auctionDto.CategoryId,
+                CategoryId = category.Id,
+                CurrentPrice = auctionDto.StartPrice,
                 UserId = userId,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)
             };
-            await auctionRepository.CreateAsync(mapper.Map<Auction>(auction));
+
+
+            var createdAuction = mapper.Map<Auction>(auction);
+            await auctionRepository.CreateAsync(createdAuction);
+
+            var auctionId = createdAuction.Id;
+
+            var picturesDto = new CreatePictureDto { Pictures = pictures, AuctionId = auctionId };
+            await pictureService.AddPictures(picturesDto);
             return Result.Success();
         }
 
@@ -76,6 +89,19 @@ namespace BLL.Services.Implemantation
             }
 
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
+            if (auctionDtos == null)
+            {
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure("No auctions found");
+            }
+
+            foreach (var auctionDto in auctionDtos)
+            {
+                var pictures = await pictureService.GetPictures(auctionDto.Id);
+                if(pictures.IsSuccess)
+                auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
+                else auctionDto.Pictures = null;
+            }
+
 
             return Result<IEnumerable<AuctionDetailsDto>>.Success(auctionDtos);
         }
@@ -89,6 +115,10 @@ namespace BLL.Services.Implemantation
             }
 
             var auctionDto = mapper.Map<AuctionDetailsDto>(auction);
+            var pictures = await pictureService.GetPictures(auctionDto.Id);
+            if(pictures.IsSuccess)
+                auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
+            else auctionDto.Pictures = null;
 
             return Result<AuctionDetailsDto>.Success(auctionDto);
         }
@@ -111,6 +141,9 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result> UpdateAuction(UpdateAuctionDto auctionDto)
         {
+            var categories = await categoryRepository.FindAsync(c => c.Name == auctionDto.CategoryName);
+            if(!categories.Any()) return Result.Failure("No category found with the provided name");
+            var category = categories.FirstOrDefault();
             var auction = await auctionRepository.GetAsync(auctionDto.Id);
             if (auction == null)
             {
@@ -118,15 +151,81 @@ namespace BLL.Services.Implemantation
             }
             if(auction.StartDate > DateTime.UtcNow)
                 return Result.Failure("Auction cannot be updated because it has already been started");
+
             // Update the properties of the auction
             auction.Title = auctionDto.Title;
             auction.Description = auctionDto.Description;
             auction.StartPrice = auctionDto.StartPrice;
+            auction.CurrentPrice = auctionDto.StartPrice;
+            auction.CategoryId = category.Id;
+            
 
             // Update the auction in the database
             await auctionRepository.UpdateAsync(auction);
+            var auctionId = auction.Id;
 
+            var updatePictureDto = new UpdatePictureDto { PicturesToAdd = auctionDto.PicturesToAdd, PicturesToRemove = auctionDto.PicturesToRemove, AuctionId = auctionId };
+
+            var result = await pictureService.UpdatePictures(updatePictureDto);
+            if (!result.IsSuccess)
+            {
+                return Result.Failure(result.Error);
+            }
             return Result.Success();
+        }
+
+
+        public async Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryIds, string sortOrder)
+        {
+            var auctions = await auctionRepository.GetAllAsync();
+            if (!auctions.Any())
+            {
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.AuctionNotFound);
+            }
+
+            // Filtering
+            if (categoryIds != null && categoryIds.Count > 0)
+            {
+                auctions = auctions.Where(a => categoryIds.Contains(a.CategoryId.ToString()));
+            }
+            else
+            {
+                Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.CategoryNotFound);
+            }
+
+            // Sorting
+            switch (sortOrder)
+            {
+                case Messages.SortOrder.Price:
+                    auctions = auctions.OrderBy(a => a.StartPrice);
+                    break;
+                case Messages.SortOrder.PriceDesc:
+                    auctions = auctions.OrderByDescending(a => a.StartPrice);
+                    break;
+                case Messages.SortOrder.Date:
+                    auctions = auctions.OrderBy(a => a.StartDate);
+                    break;
+                case Messages.SortOrder.DateDesc:
+                    auctions = auctions.OrderByDescending(a => a.StartDate);
+                    break;
+                case Messages.SortOrder.IsActive:
+                    auctions = auctions.OrderBy(a => a.EndDate > DateTime.UtcNow);
+                    break;
+                case Messages.SortOrder.IsActiveDesc:
+                    auctions = auctions.OrderByDescending(a => a.EndDate > DateTime.UtcNow);
+                    break;
+                case Messages.SortOrder.IsUnActive:
+                    auctions = auctions.OrderBy(a => a.EndDate < DateTime.UtcNow);
+                    break;
+                case Messages.SortOrder.IsUnActiveDesc:
+                    auctions = auctions.OrderByDescending(a => a.EndDate < DateTime.UtcNow);
+                    break;
+                default:
+                    auctions = auctions.OrderBy(a => a.StartDate); // Default sort order
+                    break;
+            }
+
+            return Result<IEnumerable<AuctionDetailsDto>>.Success(mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions));
         }
 
     }

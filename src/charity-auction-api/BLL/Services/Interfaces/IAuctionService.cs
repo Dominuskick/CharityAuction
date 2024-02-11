@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services.Interfaces
 {
@@ -13,8 +15,9 @@ namespace BLL.Services.Interfaces
         public Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions();
         public Task<Result<AuctionDetailsDto>> GetAuction(Guid id);
         public Task<Result<IEnumerable<AuctionDetailsDto>>> FindAuctions(Func<AuctionDetailsDto, bool> predicate);
-        public Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId);
+        public Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId, IEnumerable<IFormFile> pictures);
         Task<Result> DeleteAuction(Guid id);
         public Task<Result> UpdateAuction(UpdateAuctionDto auctionDto);
+        Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categories, string sortOrder);
     }
 }

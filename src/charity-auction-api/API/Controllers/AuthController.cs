@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh(AuthSuccessResponse model)
+        public async Task<IActionResult> Refresh()
         {
             var refreshToken = this.Request.Cookies[ApiConstants.RefreshToken];
             var jwtToken = this.Request.Cookies[ApiConstants.JwtToken];
@@ -52,8 +52,11 @@ namespace API.Controllers
                 return this.Unauthorized();
             }
 
-            model.RefreshToken = refreshToken;
-            model.Token = jwtToken;
+            AuthSuccessResponse model = new AuthSuccessResponse
+            {
+                Token = jwtToken,
+                RefreshToken = refreshToken
+            };
             var result = await refreshTokenService.RevokeRefreshToken(model);
             if(!result.IsSuccess) return BadRequest(result);
             this.SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
@@ -87,6 +90,7 @@ namespace API.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddMonths(ApplicationConstants.RefreshTokenExpirationTimeInMonths)
             };
 
@@ -99,6 +103,7 @@ namespace API.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
+                SameSite = SameSiteMode.None,
                 // It doesn't mater what time we will set since we check the expiration time later :)
                 Expires = DateTimeOffset.MaxValue
             };

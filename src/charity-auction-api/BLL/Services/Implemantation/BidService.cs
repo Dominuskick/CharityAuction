@@ -67,7 +67,10 @@ namespace BLL.Services.Implemantation
                 UserId = userId,
                 Date = DateTime.UtcNow
             };
+
+            auction.CurrentPrice = bidDto.Amount;
             await bidRepository.CreateAsync(bid);
+            await auctionRepository.UpdateAsync(auction);
             return Result.Success();
         }
 

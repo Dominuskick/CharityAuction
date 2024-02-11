@@ -16,5 +16,6 @@ namespace DAL.Repositories.Interfaces
         Task UpdateAsync(TEntity item);
         Task DeleteAsync(TKey id);
         IQueryable<TEntity> GetAllAsQueryable();
+        Task CreateRangeAsync(IEnumerable<TEntity> items);
     }
 }

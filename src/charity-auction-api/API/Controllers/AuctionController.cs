@@ -20,12 +20,12 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateAuction([FromBody] CreateAuctionDto auctionDto)
+        public async Task<IActionResult> CreateAuction([FromForm] CreateAuctionDto auctionDto)
         {
             string userId = User.FindFirstValue("id");
 
 
-            var result = await auctionService.CreateAuction(auctionDto, userId);
+            var result = await auctionService.CreateAuction(auctionDto, userId, auctionDto.Pictures);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -89,11 +89,11 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAuction([FromRoute] Guid id, [FromBody] UpdateAuctionDto auctionDto)
+        [HttpPut()]
+        public async Task<IActionResult> UpdateAuction([FromForm] UpdateAuctionDto auctionDto)
         {
             string userId = User.FindFirstValue("id");
-            var auction = await auctionService.GetAuction(id);
+            var auction = await auctionService.GetAuction(auctionDto.Id);
 
             if (auction.Data.UserId != userId)
             {
@@ -101,6 +101,22 @@ namespace API.Controllers
             }
 
             var result = await auctionService.UpdateAuction(auctionDto);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
+        }
+        /// <summary>
+        /// Filters and sorts auctions.
+        /// </summary>
+        /// <param name="categoryIds">Filters auctions by categoryId. Only auctions whose category matches the specified string will be returned.</param>
+        /// <param name="sortOrder">Sorts the auctions by the specified property. Possible values are "price", "price_desc", "date", "date_desc", "isActive", "isActive_desc, IsUnActive, isUnActive_desc".</param>
+        /// <returns>A Result object containing a list of filtered and sorted auctions, or an error message if no auctions were found.</returns>
+        [HttpGet("filter")]
+        public async Task<IActionResult> FilterAuctions([FromQuery] List<string> categoriesIds, [FromQuery] string sortOrder)
+        {
+            var result = await auctionService.FilterAuctions(categoriesIds, sortOrder);
             if (result.IsSuccess)
             {
                 return Ok(result);
