@@ -11,5 +11,6 @@ namespace BLL.Extensions
     {
         public static string GetDefaultConnectionString(this IConfiguration configuration)
             => configuration.GetConnectionString("DefaultConnection");
+
     }
 }

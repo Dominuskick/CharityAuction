@@ -1,4 +1,5 @@
 ﻿using BLL.Models;
+using BLL.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace BLL.Services.Interfaces
 {
     public interface IPictureService
     {
-        public Task<PictureDto> AddPicture(PictureDto pictureDto);
-        public Task<bool> DeletePicture(Guid id);
-        public Task<PictureDto> GetPicture(Guid id);
-        public Task<IEnumerable<PictureDto>> GetPictures();
+        Task<Result<IEnumerable<PictureDto>>> AddPictures(CreatePictureDto pictureDto);
+        Task<Result<PictureDto>> GetPicture(Guid id);
+        Task<Result<IEnumerable<PictureDto>>> GetPictures(Guid auctionId);
+        Task<Result> DeletePicture(Guid id);
+        Task<Result> UpdatePictures(UpdatePictureDto pictureDto);
     }
 }

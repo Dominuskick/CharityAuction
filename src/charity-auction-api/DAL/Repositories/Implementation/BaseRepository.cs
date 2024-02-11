@@ -1,4 +1,4 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +21,12 @@ namespace DAL.Repositories.Implementation
         public virtual async Task CreateAsync(TEntity item)
         {
             await _set.AddAsync(item);
+            await _context.SaveChangesAsync();
+        }
+
+        public virtual async Task CreateRangeAsync(IEnumerable<TEntity> items)
+        {
+            await _set.AddRangeAsync(items);
             await _context.SaveChangesAsync();
         }
 

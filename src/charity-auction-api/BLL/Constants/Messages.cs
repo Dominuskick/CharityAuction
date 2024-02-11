@@ -17,10 +17,40 @@ namespace BLL.Constants
 
         public static string AuthorizationDenied = "You are not authorized.";
         public static string UserRegistered = "The user has registered.";
+        public static string UserNotRegistered = "The user has not registered.";
         public static string UserNotFound = "User not found.";
         public static string SuccessfulLogin = "Login successful.";
         public static string PasswordError = "Bad password.";
         public static string UserAlreadyExists = "The user already exists.";
         public static string AccessTokenCreated = "Access token has created.";
+        public static string UserUpdateError = "User update error.";
+
+        public static string MappingError = "Mapping error.";
+
+
+        public static string CategoryNotFound = "Category not found.";
+        public static string CategoryCreated = "Category has created.";
+        public static string CategoryUpdated = "Category has updated.";
+        public static string CategoryDeleted = "Category has deleted.";
+        public static string CategoriesListed = "Categories has listed.";
+
+
+        public static string RefreshTokenInvalid = "Refresh token is invalid.";
+        public static string RefreshTokenNotFound = "Refresh token not found.";
+        public const string AuctionEnded = "The auction has already ended.";
+        public const string AuctionNotStarted = "The auction has not started yet.";
+        public const string BidTooLow = "Your bid is too low.";
+        public static string BidNotFound = "Bid not found.";
+        public static class SortOrder
+        {
+            public const string Price = "price";
+            public const string PriceDesc = "price_desc";
+            public const string Date = "date";
+            public const string DateDesc = "date_desc";
+            public const string IsActive = "isActive";
+            public const string IsActiveDesc = "isActive_desc";
+            public const string IsUnActive = "isUnActive";
+            public const string IsUnActiveDesc = "isUnActive_desc";
+        }
     }
 }

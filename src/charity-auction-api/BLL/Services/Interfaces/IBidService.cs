@@ -1,4 +1,5 @@
 ﻿using BLL.Models;
+using BLL.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,10 @@ namespace BLL.Services.Interfaces
 {
     public interface IBidService
     {
-        public Task<BidDto> CreateBid(BidDto bidDto);
-        public Task<BidDto> UpdateBid(BidDto bidDto);
-        public Task<bool> DeleteBid(Guid id);
-        public Task<bool> GetBid(Guid id);
-        public Task<IEnumerable<BidDto>> GetAllBids();
-
+        Task<Result> CreateBid(CreateBidDto bidDto, string userId);
+        Task<Result<IEnumerable<BidDetailsDto>>> GetAllBids();
+        Task<Result<BidDetailsDto>> GetBidById(Guid id);
+        Task<Result<IEnumerable<BidDetailsDto>>> FindBids(Func<BidDetailsDto, bool> predicate);
+        Task<Result<BidDetailsDto>> GetHighestBid(Guid auctionId);
     }
 }

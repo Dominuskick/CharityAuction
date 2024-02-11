@@ -73,7 +73,6 @@ namespace BLL.EF
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(7),
                     StartPrice = 100,
-                    CurrentPrice = 100,
                     UserId = Guid.NewGuid().ToString()
                 },
                 new Auction
@@ -83,7 +82,6 @@ namespace BLL.EF
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(7),
                     StartPrice = 200,
-                    CurrentPrice = 200,
                     UserId = Guid.NewGuid().ToString()
     },
                 new Auction
@@ -93,7 +91,6 @@ namespace BLL.EF
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(7),
                     StartPrice = 300,
-                    CurrentPrice = 300,
                     UserId = Guid.NewGuid().ToString()
                 }
             };

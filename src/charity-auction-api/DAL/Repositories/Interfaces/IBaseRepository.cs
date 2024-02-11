@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Interfaces
+namespace DAL.Repositories.Interfaces
 {
     public interface IBaseRepository<TEntity, TKey> where TEntity : class
     {
@@ -16,5 +16,6 @@ namespace DAL.Interfaces
         Task UpdateAsync(TEntity item);
         Task DeleteAsync(TKey id);
         IQueryable<TEntity> GetAllAsQueryable();
+        Task CreateRangeAsync(IEnumerable<TEntity> items);
     }
 }

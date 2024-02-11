@@ -1,4 +1,4 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Repositories.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Implementation
 {
-    public class UserRepostory : BaseRepository<User, Guid>, IUserRepository
+    public class UserRepository : BaseRepository<User, Guid>, IUserRepository
     {
-        public UserRepostory(DbContext context) : base(context)
+        public UserRepository(DbContext context) : base(context)
         {
         }
     }
