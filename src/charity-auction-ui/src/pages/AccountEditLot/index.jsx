@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import styles from './accountCreateLot.module.css';
+import styles from './accountEditLot.module.css';
 import { Header, Footer } from '@/layout';
 import Select from 'react-select';
 import { Button } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
-import defaultImg from '../../assets/img/defaultLot.jpg';
+import { useParams } from 'react-router-dom';
 
 const index = () => {
+  const { lotId } = useParams();
   const userName = useSelector((state) => state.auth.login);
 
   const [isPublished, setIsPublished] = useState(false);
@@ -67,36 +68,68 @@ const index = () => {
     console.log(event.target.files[0]);
   };
 
-  const createAuction = async () => {
+  const editAuction = async () => {
     const formData = new FormData();
 
     // Append auction data to the FormData
+    formData.append('Id', lotId);
     formData.append('Title', name);
     formData.append('Description', description);
     formData.append('StartPrice', startPrice);
-    formData.append('MinIncrease', step);
     formData.append('CategoryName', 'string');
 
     imagesSend.forEach((image) => {
       if (image) {
-        formData.append(`Pictures`, image);
+        formData.append(`PicturesToAdd`, image);
       }
     });
 
     console.log(formData);
 
     try {
-      const response = await auctionService.createAuction(formData);
-      console.log('Create auction successful:', response);
+      const response = await auctionService.editAuction(formData);
+      console.log('Edit auction successful:', response);
 
       if (response) {
-        console.log('ДА ЕСТЬ ЖЕ!!!!!!!!!!    ЧИНАЗЕС!!!!!!!!!!');
         setIsPublished(true);
       }
     } catch (error) {
-      console.error('Create auction failed:', error);
+      console.error('Edit auction failed:', error);
     }
   };
+
+  const [lotCardData, setLotCardData] = useState([]);
+
+  useEffect(() => {
+    const getAuction = async () => {
+      try {
+        const response = await auctionService.getAuction(lotId);
+        console.log('Receive auction successful:', response.data);
+
+        if (response) {
+          setLotCardData(response.data);
+          setName(response.data.title);
+          setDescription(response.data.description);
+          setStartPrice(response.data.startPrice);
+          setStep(response.data.minIncrease);
+
+          const imgArr = [];
+          for (let i = 0; i < 4; i++) {
+            if (i < response.data.pictures.length) {
+              imgArr.push(response.data.pictures[i]);
+            } else {
+              imgArr.push(null);
+            }
+          }
+          setImages(imgArr);
+        }
+      } catch (error) {
+        console.error('Receive auction failed:', error);
+      }
+    };
+
+    getAuction();
+  }, []);
 
   if (!isPublished) {
     return (
@@ -106,13 +139,14 @@ const index = () => {
           <div className={styles.mainContent}>
             <div className="responsiveWrapper">
               <div className={styles.newLot}>
-                <h2 className={styles.header}>Створення аукціону</h2>
+                <h2 className={styles.header}>Редагування аукціону</h2>
                 <div className={`${styles.inputWrapper} ${styles.inputName}`}>
                   <label>Вкажіть назву</label>
                   <input
                     type="text"
                     placeholder="Наприклад, картина з котами"
                     onChange={(e) => setName(e.target.value)}
+                    value={lotCardData ? lotCardData.title : ''}
                   />
                 </div>
                 <div
@@ -153,16 +187,18 @@ const index = () => {
                   <textarea
                     placeholder="Опис"
                     onChange={(e) => setDescription(e.target.value)}
+                    value={lotCardData ? lotCardData.description : ''}
                   />
                 </div>
                 <div className={styles.row}>
                   <div className={styles.inputWrapper}>
-                    <label>Початкова ціна</label>
+                    <label>Ціна</label>
                     <div className={styles.bidInput}>
                       <input
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStartPrice(e.target.value)}
+                        value={lotCardData ? lotCardData.currentPrice : null}
                       />
                       <span>грн</span>
                     </div>
@@ -174,15 +210,14 @@ const index = () => {
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStep(e.target.value)}
+                        value={lotCardData ? lotCardData.minIncrease : null}
                       />
                       <span>грн</span>
                     </div>
                   </div>
                 </div>
                 <div className={styles.btnWrapper}>
-                  <Button onClick={() => createAuction(true)}>
-                    Виставити лот на аукціон
-                  </Button>
+                  <Button onClick={editAuction}>Зберегти зміни</Button>
                 </div>
               </div>
             </div>
@@ -200,7 +235,7 @@ const index = () => {
             <div className="responsiveWrapper">
               <div className={`${styles.newLot} ${styles.lotPublished}`}>
                 <h2>Дякуємо за участь в аукціоні!</h2>
-                <h3>Ваш лот стане доступним, після модерації</h3>
+                <h3>Ваш лот буде відредаговано, після модерації</h3>
                 <div className={styles.btnWrapper}>
                   <Link to={'/account'}>
                     <Button>Повернутись до особистого кабінету</Button>

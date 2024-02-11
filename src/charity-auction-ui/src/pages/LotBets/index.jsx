@@ -50,9 +50,9 @@ const index = () => {
                   <h3>Час:</h3>
                 </div>
                 <div className={styles.betListBody}>
-                  {bidsData.map((item) => (
-                    <div className={styles.bet}>
-                      <p className={styles.name}>User</p>
+                  {bidsData.map((item, i) => (
+                    <div className={styles.bet} key={i}>
+                      <p className={styles.name}>{item.userName}</p>
                       <p className={styles.betValue}>{item.amount}</p>
                       <p className={styles.time}>
                         {formatDateString(item.date)}

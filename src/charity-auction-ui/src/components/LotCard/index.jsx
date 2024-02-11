@@ -79,7 +79,7 @@ const index = ({
                 </p>
                 <p>
                   <b>До закриття лоту:</b>
-                  <span>5 днів 4 години</span>
+                  <span>{calculateTimeRemaining(endTime)}</span>
                 </p>
                 <p>
                   <b>Найвища ставка:</b>
@@ -91,7 +91,9 @@ const index = ({
         </Link>
         <hr />
         <div className={styles.controls}>
-          <span className={styles.btn}>Редагувати</span>
+          <Link to={`/account/lot/${id}/edit`}>
+            <span className={styles.btn}>Редагувати</span>
+          </Link>
           <span className={styles.btn} onClick={deleteAuctionById}>
             Видалити
           </span>

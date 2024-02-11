@@ -10,6 +10,7 @@ import {
   Account,
   AccountCreateLot,
   AccountLots,
+  AccountEditLot,
 } from '@/pages';
 import ScrollToTop from '@/utils/helpers/scrollToTop';
 
@@ -27,6 +28,7 @@ const Routers = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/account/createLot" element={<AccountCreateLot />} />
         <Route path="/account/lots" element={<AccountLots />} />
+        <Route path="/account/lot/:lotId/edit" element={<AccountEditLot />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

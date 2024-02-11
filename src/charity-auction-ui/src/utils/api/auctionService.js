@@ -70,6 +70,33 @@ const auctionService = {
       throw new Error(error.message || 'Create Auction failed');
     }
   },
+  editAuction: async (id, formData) => {
+    try {
+      const accessToken = Cookies.get('accessToken');
+
+      console.log(accessToken);
+
+      const response = await fetch(`${API_BASE_URL}/Auction`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        return result;
+      } else {
+        const error = await response.json();
+        // console.error('Error during auction creation:', error);
+        throw new Error(error.message || 'Edit Auction failed');
+      }
+    } catch (error) {
+      // console.error('Error during auction creation:', error);
+      throw new Error(error.message || 'Edit Auction failed');
+    }
+  },
   getUserAuctions: async () => {
     try {
       const accessToken = Cookies.get('accessToken');

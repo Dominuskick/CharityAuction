@@ -17,7 +17,7 @@ const index = () => {
 
   const [lotCardData, setLotCardData] = useState([]);
 
-  const [bid, setBid] = useState(0);
+  const [bid, setBid] = useState('');
 
   const [bids, setBids] = useState([]);
 
