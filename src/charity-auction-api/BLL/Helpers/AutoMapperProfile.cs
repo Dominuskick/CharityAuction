@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BLL.Models;
 using BLL.Models.Responses;
+using DAL.Repositories.Implementation;
+using DAL.Repositories.Interfaces;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,6 @@ namespace BLL.Helpers
         public AutoMapperProfile()
         {
             CreateMap<Bid, BidDto>().ReverseMap();
-            CreateMap<Bid, BidDetailsDto>().ReverseMap().IgnoreAllPropertiesWithAnInaccessibleSetter();
             CreateMap<Bid, CreateBidDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategotyDetailsDto>().ReverseMap();
@@ -24,6 +25,9 @@ namespace BLL.Helpers
             CreateMap<Auction, AuctionDto>().ReverseMap();
             CreateMap<Auction, AuctionDetailsDto>()
                 .ForMember(dest => dest.Pictures, opt => opt.Ignore());
+            CreateMap<Bid, BidDetailsDto>()
+                .ForMember(dest => dest.UserName, opt => opt.Ignore());
+
 
 
             CreateMap<Picture, PictureDto>();

@@ -47,8 +47,6 @@ namespace BLL.Models
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
         public string CategoryName { get; set; }
-
         public ICollection<IFormFile> PicturesToAdd { get; set; }
-        public ICollection<Guid> PicturesToRemove { get; set; }
     }
 }

@@ -19,13 +19,15 @@ namespace BLL.Services.Implemantation
     {
         private readonly IBidRepository bidRepository;
         private readonly IAuctionRepository auctionRepository;
+        private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
 
-        public BidService(IBidRepository bidRepository, IMapper mapper, IAuctionRepository auctionRepository)
+        public BidService(IBidRepository bidRepository, IUserRepository userRepository, IMapper mapper, IAuctionRepository auctionRepository)
         {
             this.bidRepository = bidRepository;
             this.mapper = mapper;
             this.auctionRepository = auctionRepository;
+            this.userRepository = userRepository;
         }
 
         public async Task<Result> CreateBid(CreateBidDto bidDto, string userId)
@@ -77,7 +79,22 @@ namespace BLL.Services.Implemantation
         public async Task<Result<IEnumerable<BidDetailsDto>>> GetAllBids()
         {
             var bids = await bidRepository.GetAllAsync();
-            return Result<IEnumerable<BidDetailsDto>>.Success(mapper.Map<IEnumerable<BidDetailsDto>>(bids));
+            if (bids == null)
+            {
+                return Result<IEnumerable<BidDetailsDto>>.Failure(Messages.BidNotFound);
+            }
+            var bidDtos = mapper.Map<IEnumerable<BidDetailsDto>>(bids);
+            foreach (var bidDto in bidDtos)
+            {
+                var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
+                if(res.Any())
+                {
+                    var user = res.FirstOrDefault();
+                    bidDto.UserName = user.UserName;
+                }
+            }
+
+            return Result<IEnumerable<BidDetailsDto>>.Success(bidDtos);
         }
 
         public async Task<Result<BidDetailsDto>> GetBidById(Guid id)
@@ -87,7 +104,14 @@ namespace BLL.Services.Implemantation
             {
                 return Result<BidDetailsDto>.Failure("Bid not found");
             }
-            return Result<BidDetailsDto>.Success(mapper.Map<BidDetailsDto>(bid));
+            var bidDto = mapper.Map<BidDetailsDto>(bid);
+            var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
+            if (res.Any())
+            {
+                var user = res.FirstOrDefault();
+                bidDto.UserName = user.UserName;
+            }
+            return Result<BidDetailsDto>.Success(bidDto);
         }
 
         public async Task<Result<IEnumerable<BidDetailsDto>>> FindBids(Func<BidDetailsDto, bool> predicate)
@@ -99,6 +123,15 @@ namespace BLL.Services.Implemantation
             }
 
             var bidDtos = mapper.Map<IEnumerable<BidDetailsDto>>(bids);
+            foreach (var bidDto in bidDtos)
+            {
+                var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
+                if (res.Any())
+                {
+                    var user = res.FirstOrDefault();
+                    bidDto.UserName = user.UserName;
+                }
+            }
 
             var filteredBids = bidDtos.Where(predicate);
             return Result<IEnumerable<BidDetailsDto>>.Success(filteredBids);
@@ -112,8 +145,14 @@ namespace BLL.Services.Implemantation
                 return Result<BidDetailsDto>.Failure(Messages.BidNotFound);
             }
             var highestBid = bids.OrderByDescending(b => b.Amount).FirstOrDefault();
-            var result = mapper.Map<BidDetailsDto>(highestBid);
-            return Result<BidDetailsDto>.Success(result);
+            var bidDto = mapper.Map<BidDetailsDto>(highestBid);
+            var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
+            if (res.Any())
+            {
+                var user = res.FirstOrDefault();
+                bidDto.UserName = user.UserName;
+            }
+            return Result<BidDetailsDto>.Success(bidDto);
         }
     }
 }

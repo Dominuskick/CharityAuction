@@ -172,7 +172,7 @@ namespace BLL.Services.Implemantation
             await auctionRepository.UpdateAsync(auction);
             var auctionId = auction.Id;
 
-            var updatePictureDto = new UpdatePictureDto { PicturesToAdd = auctionDto.PicturesToAdd, PicturesToRemove = auctionDto.PicturesToRemove, AuctionId = auctionId };
+            var updatePictureDto = new UpdatePictureDto { PicturesToAdd = auctionDto.PicturesToAdd, AuctionId = auctionId };
 
             var result = await pictureService.UpdatePictures(updatePictureDto);
             if (!result.IsSuccess)
