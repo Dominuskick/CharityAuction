@@ -50,10 +50,6 @@ namespace BLL.Services.Implemantation
             if (result.Succeeded)
             {
                 var map = _mapper.Map<UserDetailsDto>(user);
-                if (map is null)
-                {
-                    return Result<UserDetailsDto>.Failure(Messages.MappingError);
-                }
                 return Result<UserDetailsDto>.Success(map);
             }
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -71,7 +67,7 @@ namespace BLL.Services.Implemantation
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if(!result)
             {
-                return Result<AuthSuccessResponse>.Failure(Messages.PasswordError);
+                return Result<AuthSuccessResponse>.Failure(Messages.Auth.PasswordError);
             }
             var map = _mapper.Map<UserDetailsDto>(user);
             return Result<AuthSuccessResponse>.Success(await tokenService.GenerateToken(map));
@@ -90,7 +86,7 @@ namespace BLL.Services.Implemantation
 
             if(refToken is null)
             {
-                return Result.Failure(Messages.RefreshTokenNotFound);
+                return Result.Failure(Messages.Auth.RefreshTokenNotFound);
             }
             refToken.Invalidated = true;
 

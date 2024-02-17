@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Configurations
+namespace DAL.Configurations
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

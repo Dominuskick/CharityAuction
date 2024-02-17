@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
 
-namespace BLL.Configurations
+namespace DAL.Configurations
 {
     public class BidConfiguration : IEntityTypeConfiguration<Bid>
     {
