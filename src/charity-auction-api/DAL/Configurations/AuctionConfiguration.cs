@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BLL.Configurations
+namespace DAL.Configurations
 {
     public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
     {

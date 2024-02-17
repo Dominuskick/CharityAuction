@@ -39,7 +39,7 @@ namespace BLL.Services.Implemantation
 
             if (!categoryExists.Any())
             {
-                return Result.Failure(Messages.CategoryNotFound);
+                return Result.Failure(Messages.Category.CategoryNotFound);
             }
             var category = categoryExists.FirstOrDefault();
             var auction = new AuctionDto
@@ -71,7 +71,7 @@ namespace BLL.Services.Implemantation
             var auctions = await auctionRepository.GetAllAsync();
             if (auctions == null)
             {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure("No auctions found");
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
@@ -93,14 +93,10 @@ namespace BLL.Services.Implemantation
             var auctions = await auctionRepository.GetAllAsync();
             if (auctions == null)
             {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure("No auctions found");
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
-            if (auctionDtos == null)
-            {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure("No auctions found");
-            }
 
             foreach (var auctionDto in auctionDtos)
             {
@@ -119,7 +115,7 @@ namespace BLL.Services.Implemantation
             var auction = await auctionRepository.GetAsync(id);
             if (auction == null)
             {
-                return Result<AuctionDetailsDto>.Failure("No auction found with the provided id");
+                return Result<AuctionDetailsDto>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             var auctionDto = mapper.Map<AuctionDetailsDto>(auction);
@@ -140,7 +136,7 @@ namespace BLL.Services.Implemantation
             }
             if (auction == null)
             {
-                return Result.Failure(Messages.AuctionNotFound);
+                return Result.Failure(Messages.Auction.AuctionNotFound);
             }
             await auctionRepository.DeleteAsync(id);
             return Result.Success();
@@ -150,15 +146,15 @@ namespace BLL.Services.Implemantation
         public async Task<Result> UpdateAuction(UpdateAuctionDto auctionDto)
         {
             var categories = await categoryRepository.FindAsync(c => c.Name == auctionDto.CategoryName);
-            if(!categories.Any()) return Result.Failure("No category found with the provided name");
+            if(!categories.Any()) return Result.Failure(Messages.Category.CategoryNotFound);
             var category = categories.FirstOrDefault();
             var auction = await auctionRepository.GetAsync(auctionDto.Id);
             if (auction == null)
             {
-                return Result.Failure("No auction found with the provided id");
+                return Result.Failure(Messages.Auction.AuctionNotFound);
             }
             if(auction.StartDate > DateTime.UtcNow)
-                return Result.Failure("Auction cannot be updated because it has already been started");
+                return Result.Failure(Messages.Auction.AuctionStarted);
 
             // Update the properties of the auction
             auction.Title = auctionDto.Title;
@@ -188,7 +184,7 @@ namespace BLL.Services.Implemantation
             var auctions = await auctionRepository.GetAllAsync();
             if (!auctions.Any())
             {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.AuctionNotFound);
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             // Filtering
@@ -200,7 +196,7 @@ namespace BLL.Services.Implemantation
             }
             else
             {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.CategoryNotFound);
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Category.CategoryNotFound);
             }
 
             // Sorting
