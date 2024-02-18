@@ -8,6 +8,7 @@ import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ACCOUNT_ROUTE } from '@/utils/constants/routes';
+import { categoryOptions, selectStyles } from '@/utils/constants/select';
 
 const index = () => {
   const { lotId } = useParams();
@@ -18,35 +19,6 @@ const index = () => {
   const [description, setDescription] = useState('');
   const [startPrice, setStartPrice] = useState(0);
   const [step, setStep] = useState(0);
-
-  const categoryOptions = [
-    { value: 'Антикваріат', label: 'Антикваріат' },
-    { value: 'Букіністика', label: 'Букіністика' },
-    { value: 'Живопис', label: 'Живопис' },
-    { value: 'Електроніка', label: 'Електроніка' },
-    { value: 'Пам’ятні предмети', label: 'Пам’ятні предмети' },
-    { value: 'Ручна робота', label: 'Ручна робота' },
-    { value: 'Інше', label: 'Інше' },
-  ];
-
-  const customStyles = {
-    menu: (provided, state) => ({
-      ...provided,
-      marginTop: 0, // Убираем верхний отступ между селектом и вариантами
-    }),
-    menuList: (provided, state) => ({
-      ...provided,
-      padding: 0, // Убираем внутренний отступ вокруг вариантов
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      color: '#131313', // Устанавливаем цвет текста в черный
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      borderColor: '#131313', // Устанавливаем цвет обводки в черный
-    }),
-  };
 
   const [images, setImages] = useState(Array(4).fill(null));
   const [imagesSend, setImagesSend] = useState(Array(4).fill(null));
@@ -157,7 +129,7 @@ const index = () => {
                   <Select
                     placeholder="Категорія"
                     options={categoryOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
                     isMulti
                   />
                 </div>

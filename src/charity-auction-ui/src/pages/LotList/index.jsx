@@ -5,44 +5,15 @@ import { LotCard } from '@/components';
 import Select from 'react-select';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
+import {
+  categoryOptions,
+  priceOptions,
+  noveltyOptions,
+  relevanceOptions,
+  selectStyles,
+} from '@/utils/constants/select';
 
 const index = () => {
-  const categoryOptions = [
-    { value: 'Антикваріат', label: 'Антикваріат' },
-    { value: 'Букіністика', label: 'Букіністика' },
-    { value: 'Живопис', label: 'Живопис' },
-    { value: 'Електроніка', label: 'Електроніка' },
-    { value: 'Пам’ятні предмети', label: 'Пам’ятні предмети' },
-    { value: 'Ручна робота', label: 'Ручна робота' },
-    { value: 'Інше', label: 'Інше' },
-  ];
-
-  const priceOptions = [
-    { value: 'В порядку зростання', label: 'В порядку зростання' },
-    { value: 'В порядку спадання', label: 'В порядку спадання' },
-  ];
-
-  const noveltyOptions = [
-    { value: 'Від більш нових', label: 'Від більш нових' },
-    { value: 'Від більш старих', label: 'Від більш старих' },
-  ];
-
-  const relevanceOptions = [
-    { value: 'Активні', label: 'Активні' },
-    { value: 'Продані', label: 'Продані' },
-  ];
-
-  const customStyles = {
-    menu: (provided, state) => ({
-      ...provided,
-      marginTop: 0, // Убираем верхний отступ между селектом и вариантами
-    }),
-    menuList: (provided, state) => ({
-      ...provided,
-      padding: 0, // Убираем внутренний отступ вокруг вариантов
-    }),
-  };
-
   const [lotCardsData, setLotCardsData] = useState([]);
   const itemsPerPage = 9; // Количество элементов на странице
   const [totalPages, setTotalPages] = useState(0);
@@ -156,7 +127,7 @@ const index = () => {
                 <Select
                   placeholder="Категорія"
                   options={categoryOptions}
-                  styles={customStyles}
+                  styles={selectStyles}
                   isMulti
                 />
               </div>
@@ -166,21 +137,21 @@ const index = () => {
                   <Select
                     placeholder="Ціною"
                     options={priceOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
                   />
                 </div>
                 <div className={styles.selectWrapper}>
                   <Select
                     placeholder="Новизною"
                     options={noveltyOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
                   />
                 </div>
                 <div className={styles.selectWrapper}>
                   <Select
                     placeholder="Актуальністю"
                     options={relevanceOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
                   />
                 </div>
               </div>
