@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
+import { ACCOUNT_CREATE_LOT_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
@@ -64,7 +65,7 @@ const index = () => {
                   <h4 className={styles.lotsArchive}>Архів лотів</h4>
                 </div>
                 <div className={styles.btnWrapper}>
-                  <Link to={'/account/createLot'}>
+                  <Link to={ACCOUNT_CREATE_LOT_ROUTE}>
                     <Button>Створити лот</Button>
                   </Link>
                 </div>

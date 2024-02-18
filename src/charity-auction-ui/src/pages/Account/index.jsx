@@ -4,6 +4,7 @@ import { Header, Footer } from '@/layout';
 import { AccountMenu, Button } from '@/components';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ACCOUNT_CREATE_LOT_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
@@ -28,7 +29,7 @@ const index = () => {
                   ваші лоти. Ми, в свою чергу, забезпечимо вам комфортне
                   перебування на нашій платформі
                 </p>
-                <Link to={'/account/createLot'}>
+                <Link to={ACCOUNT_CREATE_LOT_ROUTE}>
                   <Button>Створити лот</Button>
                 </Link>
               </div>

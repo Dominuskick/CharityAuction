@@ -11,6 +11,7 @@ import {
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
 import bidsService from '@/utils/api/bidsService';
+import { LOT_BETS_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const { lotId } = useParams();
@@ -143,7 +144,7 @@ const index = () => {
                   <div>
                     <div className={styles.column}>
                       <b>Поточна ціна</b>
-                      <Link to={`/lot/${lotCardData.id}/bets`}>
+                      <Link to={LOT_BETS_ROUTE}>
                         <span>({bids.length} ставок)</span>
                       </Link>
                     </div>

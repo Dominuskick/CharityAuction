@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from '@/slices/authSlice';
 import authService from '@/utils/api/authService';
+import { REGISTRATION_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const dispatch = useDispatch();
@@ -88,7 +89,7 @@ const index = () => {
               </div>
               <div className={styles.row}>
                 <span>Ще не зареєстровані?</span>
-                <Link to={'/registration'}>
+                <Link to={REGISTRATION_ROUTE}>
                   <span className={styles.underLine}>Зареєструватись</span>
                 </Link>
               </div>

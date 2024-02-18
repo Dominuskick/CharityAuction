@@ -1,12 +1,18 @@
 import React from 'react';
 import styles from './accountMenu.module.css';
 import { NavLink } from 'react-router-dom';
+import {
+  ACCOUNT_BETS_ROUTE,
+  ACCOUNT_LOTS_ROUTE,
+  ACCOUNT_NOTIFICATIONS_ROUTE,
+  ACCOUNT_ROUTE,
+} from '@/utils/constants/routes';
 
 const index = () => {
   return (
     <div className={styles.menu}>
       <NavLink
-        to={'/account'}
+        to={ACCOUNT_ROUTE}
         end
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
@@ -16,7 +22,7 @@ const index = () => {
         </div>
       </NavLink>
       <NavLink
-        to={'/account/lots'}
+        to={ACCOUNT_LOTS_ROUTE}
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         <div className={styles.menuItem}>
@@ -25,7 +31,7 @@ const index = () => {
         </div>
       </NavLink>
       <NavLink
-        to={'/account/bets'}
+        to={ACCOUNT_BETS_ROUTE}
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         <div className={styles.menuItem}>
@@ -34,7 +40,7 @@ const index = () => {
         </div>
       </NavLink>
       <NavLink
-        to={'/account/notifications'}
+        to={ACCOUNT_NOTIFICATIONS_ROUTE}
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         <div className={styles.menuItem}>

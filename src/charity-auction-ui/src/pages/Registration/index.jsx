@@ -4,6 +4,7 @@ import { Header, Footer } from '@/layout';
 import { Button, CheckBox } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '@/utils/api/authService';
+import { LOGIN_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const [name, setName] = useState('');
@@ -149,7 +150,7 @@ const index = () => {
               </Button>
               <div className={styles.row}>
                 <span>Вже маєте акаунт?</span>
-                <Link to={'/login'}>
+                <Link to={LOGIN_ROUTE}>
                   <span className={styles.underLine}>Увійти</span>
                 </Link>
               </div>

@@ -21,7 +21,7 @@ const index = ({
 }) => {
   if (!isEditable) {
     return (
-      <Link to={`/lot/${id}`}>
+      <Link to={`/lots/${id}`}>
         <div className={styles.lotCard}>
           <img
             src={pictures ? pictures[0] : defaultImg}
@@ -64,7 +64,7 @@ const index = ({
 
     return (
       <div className={`${styles.lotCard} ${styles.editable}`}>
-        <Link to={`/lot/${id}`}>
+        <Link to={`/lots/${id}`}>
           <div className={styles.row}>
             <img
               src={pictures ? pictures[0] : defaultImg}
@@ -91,7 +91,7 @@ const index = ({
         </Link>
         <hr />
         <div className={styles.controls}>
-          <Link to={`/account/lot/${id}/edit`}>
+          <Link to={`/account/lots/${id}/edit`}>
             <span className={styles.btn}>Редагувати</span>
           </Link>
           <span className={styles.btn} onClick={deleteAuctionById}>

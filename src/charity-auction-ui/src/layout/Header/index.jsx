@@ -3,6 +3,13 @@ import styles from './header.module.css';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo, ResponsiveWrapper } from '@/components';
 import { useSelector } from 'react-redux';
+import {
+  ACCOUNT_ROUTE,
+  FAQ_ANCHOR,
+  LOGIN_ROUTE,
+  LOTS_ROUTE,
+  SCOPE_ANCHOR,
+} from '@/utils/constants/routes';
 
 const index = () => {
   const location = useLocation();
@@ -30,20 +37,20 @@ const index = () => {
             <input type="text" placeholder="Що шукаєте" />
           </div>
           <div className={styles.links}>
-            <Link to={'/lots'}>Лоти</Link>
-            <Link to={'/#scope'}>Мета</Link>
-            <Link to={'/#faq'}>FAQ</Link>
+            <Link to={LOTS_ROUTE}>Лоти</Link>
+            <Link to={SCOPE_ANCHOR}>Мета</Link>
+            <Link to={FAQ_ANCHOR}>FAQ</Link>
           </div>
           <div className={styles.authWrapper}>
             {!login ? (
-              <Link to={'/login'}>
+              <Link to={LOGIN_ROUTE}>
                 <div className={styles.auth}>
                   <span></span>
                   <span>Увійти</span>
                 </div>
               </Link>
             ) : (
-              <Link to={'/account'}>
+              <Link to={ACCOUNT_ROUTE}>
                 <div className={styles.account}>
                   <span></span>
                   <span>Особистий кабінет</span>

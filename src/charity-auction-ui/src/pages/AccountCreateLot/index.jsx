@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
 import defaultImg from '../../assets/img/defaultLot.jpg';
+import { ACCOUNT_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const userName = useSelector((state) => state.auth.login);
@@ -202,7 +203,7 @@ const index = () => {
                 <h2>Дякуємо за участь в аукціоні!</h2>
                 <h3>Ваш лот стане доступним, після модерації</h3>
                 <div className={styles.btnWrapper}>
-                  <Link to={'/account'}>
+                  <Link to={ACCOUNT_ROUTE}>
                     <Button>Повернутись до особистого кабінету</Button>
                   </Link>
                 </div>

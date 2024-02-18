@@ -4,6 +4,8 @@ import './App.css';
 import authService from './utils/api/authService';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '@/slices/authSlice';
+import AppRouter from './Routers/AppRouter';
+import { authRoutes } from './Routers/routes';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,7 +32,8 @@ function App() {
 
   return (
     <div className="app">
-      <Routers />
+      {/* <Routers /> */}
+      <AppRouter />
     </div>
   );
 }

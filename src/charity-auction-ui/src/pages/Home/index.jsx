@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import styles from './home.module.css';
 import { Header, Footer } from '@/layout';
 import img from '../../assets/img/home.png';
-import defaultImg from '../../assets/img/defaultLot.jpg';
 import { Button, LotCard, ResponsiveWrapper } from '@/components';
 import Faq from 'react-faq-component';
 import { Link } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
+import {
+  ACCOUNT_CREATE_LOT_ROUTE,
+  FAQ_ID,
+  LOGIN_ROUTE,
+  LOTS_ROUTE,
+  SCOPE_ID,
+} from '@/utils/constants/routes';
 
 const index = () => {
   const login = useSelector((state) => state.auth.login);
@@ -82,10 +88,10 @@ const index = () => {
                   - зробимо світ краще разом!
                 </p>
                 <div className={styles.buttons}>
-                  <Link to={login ? 'lots' : '/login'}>
+                  <Link to={login ? LOTS_ROUTE : LOGIN_ROUTE}>
                     <Button>Зробити ставку</Button>
                   </Link>
-                  <Link to={login ? '/account/createLot' : '/login'}>
+                  <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
                     <Button>Розмістити лот</Button>
                   </Link>
                 </div>
@@ -94,7 +100,10 @@ const index = () => {
             </div>
           </ResponsiveWrapper>
         </section>
-        <section id="scope" className={`${styles.scopeSection} ${styles.dark}`}>
+        <section
+          id={SCOPE_ID}
+          className={`${styles.scopeSection} ${styles.dark}`}
+        >
           <ResponsiveWrapper>
             <div className={styles.scopeSectionContent}>
               <h2>Наша мета</h2>
@@ -105,7 +114,7 @@ const index = () => {
                 чи втратили рідних у цьому конфлікті. Кожна покупка на нашому
                 аукціоні стане кроком до покращення життя цих сімей
               </p>
-              <Link to={login ? '/account/createLot' : '/login'}>
+              <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
                 <Button isBlack={true}>Долучитись</Button>
               </Link>
             </div>
@@ -130,7 +139,7 @@ const index = () => {
                     )
                 )}
               </div>
-              <Link to={'/lots'}>
+              <Link to={LOTS_ROUTE}>
                 <Button isBlack={true} isWide={true}>
                   Перейти до всіх лотів
                 </Button>
@@ -138,7 +147,7 @@ const index = () => {
             </div>
           </ResponsiveWrapper>
         </section>
-        <section id="faq" className={`${styles.faqSection} ${styles.dark}`}>
+        <section id={FAQ_ID} className={`${styles.faqSection} ${styles.dark}`}>
           <ResponsiveWrapper>
             <div className={styles.faqSectionContent}>
               <h2>Питання-відповіді</h2>
