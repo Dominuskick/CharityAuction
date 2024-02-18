@@ -4,3 +4,4 @@ export { default as Logo } from './Logo';
 export { default as ResponsiveWrapper } from './ResponsiveWrapper';
 export { default as CheckBox } from './Checkbox';
 export { default as AccountMenu } from './AccountMenu';
+export { default as LabeledInput } from './LabeledInput';

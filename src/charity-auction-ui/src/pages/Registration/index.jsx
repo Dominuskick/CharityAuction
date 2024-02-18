@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './registration.module.css';
 import { Header, Footer } from '@/layout';
-import { Button, CheckBox } from '@/components';
+import { Button, CheckBox, LabeledInput } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '@/utils/api/authService';
 import { LOGIN_ROUTE } from '@/utils/constants/routes';
@@ -69,68 +69,54 @@ const index = () => {
               <h2>Реєстрація</h2>
               <hr />
               <div className={styles.inputListWrapper}>
-                <div className={styles.inputWrapper}>
-                  <label>Ім’я</label>
-                  <input
-                    type="text"
-                    placeholder="Петро"
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Прізвище</label>
-                  <input
-                    type="text"
-                    placeholder="Петренко"
-                    onChange={(e) => setSurname(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    placeholder="petro@gmail.com"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Номер телефону</label>
-                  <input
-                    type="tel"
-                    placeholder="+380 680 000 000"
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
+                <LabeledInput
+                  label={'Ім’я'}
+                  type={'text'}
+                  placeholder={'Петро'}
+                  setState={setName}
+                />
+                <LabeledInput
+                  label={'Прізвище'}
+                  type={'text'}
+                  placeholder={'Петренко'}
+                  setState={setSurname}
+                />
+                <LabeledInput
+                  label={'Email'}
+                  type={'email'}
+                  placeholder={'petro@gmail.com'}
+                  setState={setEmail}
+                />
+                <LabeledInput
+                  label={'Номер телефону'}
+                  type={'tel'}
+                  placeholder={'+380 680 000 000'}
+                  setState={setPhone}
+                />
                 <div className={styles.inputWrapperLine}>
                   <CheckBox setValue={setIsAdult} />
                   <label className={styles.text}>
                     Підтверджую, що мені є 18 років
                   </label>
                 </div>
-                <div className={styles.inputWrapper}>
-                  <label>Логін</label>
-                  <input
-                    type="text"
-                    placeholder="Ananas87"
-                    onChange={(e) => setUserName(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Пароль</label>
-                  <input
-                    type="password"
-                    placeholder="********"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Повторити пароль</label>
-                  <input
-                    type="password"
-                    placeholder="********"
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
-                  />
-                </div>
+                <LabeledInput
+                  label={'Логін'}
+                  type={'text'}
+                  placeholder={'Ananas87'}
+                  setState={setUserName}
+                />
+                <LabeledInput
+                  label={'Пароль'}
+                  type={'password'}
+                  placeholder={'********'}
+                  setState={setPassword}
+                />
+                <LabeledInput
+                  label={'Повторити пароль'}
+                  type={'password'}
+                  placeholder={'********'}
+                  setState={setPasswordConfirm}
+                />
                 <div className={styles.inputWrapperLine}>
                   <CheckBox setValue={setIsConfirm} />
                   <label className={styles.text}>

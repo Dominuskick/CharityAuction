@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import { Header, Footer } from '@/layout';
-import { Button, CheckBox } from '@/components';
+import { Button, CheckBox, LabeledInput } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from '@/slices/authSlice';
@@ -34,6 +34,9 @@ const index = () => {
 
         if (response) {
           dispatch(setLogin(response.data.userName));
+          if (login && email && password) {
+            navigate('/account');
+          }
         }
       } catch (error) {
         console.error('LogIn failed:', error);
@@ -45,12 +48,6 @@ const index = () => {
     }
   }, [btnClick]);
 
-  useEffect(() => {
-    if (login && email && password) {
-      navigate('/account');
-    }
-  }, [login]);
-
   return (
     <>
       <Header />
@@ -61,22 +58,18 @@ const index = () => {
               <h2>Для продовження увійдіть до особистого кабінету</h2>
               <hr />
               <div className={styles.inputListWrapper}>
-                <div className={styles.inputWrapper}>
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    placeholder="example@gmail.com"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Пароль</label>
-                  <input
-                    type="password"
-                    placeholder="********"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+                <LabeledInput
+                  label={'Email'}
+                  type={'email'}
+                  placeholder={'example@gmail.com'}
+                  setState={setEmail}
+                />
+                <LabeledInput
+                  label={'Пароль'}
+                  type={'password'}
+                  placeholder={'********'}
+                  setState={setPassword}
+                />
                 <div className={styles.inputWrapperLine}>
                   <CheckBox />
                   <label className={styles.text}>Запам’ятати мене</label>
