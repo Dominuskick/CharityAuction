@@ -5,5 +5,6 @@ namespace BLL.Models.Responses
         General,
         TokenExpired,
         AccountNotConfirmed,
+        Unauthorized,
     }
 }

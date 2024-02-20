@@ -15,9 +15,10 @@ namespace BLL.Services.Interfaces
         public Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions();
         public Task<Result<AuctionDetailsDto>> GetAuction(Guid id);
         public Task<Result<IEnumerable<AuctionDetailsDto>>> FindAuctions(Func<AuctionDetailsDto, bool> predicate);
-        public Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId, IEnumerable<IFormFile> pictures);
+        public Task<Result> CreateAuction(CreateAuctionDto auctionDto, IEnumerable<IFormFile> pictures);
         Task<Result> DeleteAuction(Guid id);
         public Task<Result> UpdateAuction(UpdateAuctionDto auctionDto);
         Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryNames, string sortOrder);
+        Task<Result<IEnumerable<AuctionDetailsDto>>> GetUsersAuction();
     }
 }

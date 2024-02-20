@@ -1,4 +1,5 @@
 ﻿using BLL.Models;
+using BLL.Models.Responses;
 using BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,14 +23,13 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAuction([FromForm] CreateAuctionDto auctionDto)
         {
-            string userId = User.FindFirstValue("id");
 
-
-            var result = await auctionService.CreateAuction(auctionDto, userId, auctionDto.Pictures);
+            var result = await auctionService.CreateAuction(auctionDto, auctionDto.Pictures);
             if (result.IsSuccess)
             {
                 return Ok(result);
             }
+            
             return BadRequest(result);
         }
 
@@ -59,8 +59,7 @@ namespace API.Controllers
         [HttpGet("auction-user")]
         public async Task<IActionResult> GetAuctionsCurrentUser()
         {
-            string userId = User.FindFirstValue("id");
-            var result = await auctionService.FindAuctions(a => a.UserId == userId);
+            var result = await auctionService.GetUsersAuction();
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -72,18 +71,14 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAuction([FromRoute] Guid id)
         {
-            string userId = User.FindFirstValue("id");
-            var auction = await auctionService.GetAuction(id);
-
-            if (auction.Data.UserId != userId)
-            {
-                return Unauthorized();
-            }
-
             var result = await auctionService.DeleteAuction(id);
             if (result.IsSuccess)
             {
                 return Ok(result);
+            }
+            if(result.ErrorType == ErrorType.Unauthorized)
+            {
+                return Unauthorized(result);
             }
             return NotFound(result);
         }
@@ -92,18 +87,14 @@ namespace API.Controllers
         [HttpPut()]
         public async Task<IActionResult> UpdateAuction([FromForm] UpdateAuctionDto auctionDto)
         {
-            string userId = User.FindFirstValue("id");
-            var auction = await auctionService.GetAuction(auctionDto.Id);
-
-            if (auction.Data.UserId != userId)
-            {
-                return Unauthorized();
-            }
-
             var result = await auctionService.UpdateAuction(auctionDto);
             if (result.IsSuccess)
             {
                 return Ok(result);
+            }
+            if(result.ErrorType == ErrorType.Unauthorized)
+            {
+                return Unauthorized(result);
             }
             return NotFound(result);
         }

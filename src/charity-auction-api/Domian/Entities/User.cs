@@ -10,7 +10,7 @@ namespace Domain.Entities
     public class User : IdentityUser
     {
         public string FullName { get; set; }
-        public virtual ICollection<Auction> Auctions { get; set; }
-        public virtual ICollection<Bid> Bids { get; set; }
+        public ICollection<Auction> Auctions { get; set; }
+        public ICollection<Bid> Bids { get; set; }
     }
 }

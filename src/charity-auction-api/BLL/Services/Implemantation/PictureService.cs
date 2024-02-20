@@ -17,6 +17,7 @@ using BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Azure.Core;
 using System.Threading;
+using BLL.Constants;
 
 namespace BLL.Services.Implemantation
 {
@@ -56,12 +57,12 @@ namespace BLL.Services.Implemantation
 
             if (item.UserId != currentUserService.UserId)
             {
-                return Result<IEnumerable<PictureDto>>.Failure("You are not the owner of this auction");
+                return Result<IEnumerable<PictureDto>>.Failure(Messages.Auction.AuctionOwnerError);
             }
 
             if (!pictureDto.Pictures.Any())
             {
-                return Result<IEnumerable<PictureDto>>.Failure("There aren`t pictures");
+                return Result<IEnumerable<PictureDto>>.Failure(Messages.Picture.PictureNotFound);
             }
 
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
@@ -72,7 +73,8 @@ namespace BLL.Services.Implemantation
                 {
                     PublicId = Guid.NewGuid().ToString(),
                     File = new FileDescription(guid, picture.OpenReadStream()),
-                    Folder = $"{pictureDto.AuctionId}"
+                    Folder = $"{pictureDto.AuctionId}",
+                    Timestamp = DateTime.UtcNow
                 };
                 var uploadResult = await this.cloudinary.UploadAsync(uploadParams);
                 uploadResults.Add(uploadResult);
@@ -98,7 +100,7 @@ namespace BLL.Services.Implemantation
             var pictures = await pictureRepository.FindAsync(p => p.AuctionId == auctionId);
             if (!pictures.Any())
             {
-                return Result<IEnumerable<PictureDto>>.Failure("No pictures found");
+                return Result<IEnumerable<PictureDto>>.Failure(Messages.Picture.PictureNotFound);
             }
 
             var result =
@@ -112,7 +114,7 @@ namespace BLL.Services.Implemantation
             var picture = await pictureRepository.GetAsync(id);
             if (picture == null)
             {
-                return Result<PictureDto>.Failure("No picture found with the provided id");
+                return Result<PictureDto>.Failure(Messages.Picture.PictureNotFound);
             }
 
             var result = Result<PictureDto>.Success(this.mapper.Map<PictureDto>(picture));
@@ -124,12 +126,12 @@ namespace BLL.Services.Implemantation
             var picture = await pictureRepository.GetAsync(id);
             if (picture == null)
             {
-                return Result.Failure("No picture found with the provided id");
+                return Result.Failure(Messages.Picture.PictureNotFound);
             }
             var auction = await auctionRepository.GetAsync(picture.AuctionId);
             if (auction.UserId != currentUserService.UserId)
             {
-                return Result.Failure("You are not the owner of this auction");
+                return Result.Failure(Messages.Picture.PictureNotFound);
             }
             await this.cloudinary.DeleteResourcesByPrefixAsync($"{auction.Id}/{picture.Id}");
 
@@ -143,7 +145,7 @@ namespace BLL.Services.Implemantation
 
             if (auction.UserId != this.currentUserService.UserId)
             { 
-                return Result.Failure("You are not the owner of this auction");
+                return Result.Failure(Messages.Picture.PictureNotFound);
             }
 
 

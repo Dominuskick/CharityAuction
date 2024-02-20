@@ -14,5 +14,26 @@ namespace DAL.Repositories.Implementation
         public BidRepository(DbContext context) : base(context)
         {
         }
+
+        public async Task<IQueryable<Bid>> GetBidsWithInfoAsync()
+        {
+            return _set
+                .Include(a => a.User);
+        }
+
+        public async Task<IEnumerable<Bid>> GetBidsWithInfoAsyncAsNoTracking()
+        {
+            return await _set
+                .Include(a => a.User)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<Bid> GetBidWithInfoAsync(Guid id)
+        {
+            return await _set
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }

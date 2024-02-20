@@ -17,10 +17,10 @@ namespace Domain.Entities
         public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
         public Guid CategoryId { get; set; }
-        public virtual Category Category { get; set; }
+        public Category Category { get; set; }
         public string UserId { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();
+        public User User { get; set; }
+        public ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();
         public ICollection<Picture> Pictures { get; set; } = new HashSet<Picture>();
     }
 }

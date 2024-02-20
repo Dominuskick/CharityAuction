@@ -26,16 +26,7 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result> AddCategory(CategoryDto categoryDto)
         {
-            if (categoryDto == null)
-            {
-                return Result.Failure("CategoryDto is null");
-            }
-
             var category = mapper.Map<Category>(categoryDto);
-            if (category == null)
-            {
-                return Result.Failure("Mapping failed");
-            }
 
             await categoryRepository.CreateAsync(category);
             return Result.Success();
@@ -46,7 +37,7 @@ namespace BLL.Services.Implemantation
             var result = await categoryRepository.GetAsync(id);
             if(result is null)
             {
-                return Result.Failure(Messages.CategoryNotFound);
+                return Result.Failure(Messages.Category.CategoryNotFound);
             }
             await categoryRepository.DeleteAsync(id);
             return Result.Success();
@@ -57,15 +48,11 @@ namespace BLL.Services.Implemantation
             var categories = await categoryRepository.GetAllAsync();
             if (categories == null)
             {
-                return Result<IEnumerable<CategotyDetailsDto>>.Failure("No categories found");
+                return Result<IEnumerable<CategotyDetailsDto>>.Failure(Messages.Category.CategoryNotFound);
             }
 
             var categoryDtos = mapper.Map<IEnumerable<CategotyDetailsDto>>(categories);
-            if (categoryDtos == null)
-            {
-                return Result<IEnumerable<CategotyDetailsDto>>.Failure("Mapping failed");
-            }
-
+            
             return Result<IEnumerable<CategotyDetailsDto>>.Success(categoryDtos);
         }
 
@@ -75,13 +62,11 @@ namespace BLL.Services.Implemantation
             if (result != null)
             {
                 var map = mapper.Map<CategotyDetailsDto>(result);
-                if(map != null)
-                    return Result<CategotyDetailsDto>.Success(map);
-                else return Result<CategotyDetailsDto>.Failure(Messages.MappingError);
+                return Result<CategotyDetailsDto>.Success(map);
             }
             else
             {
-                return Result<CategotyDetailsDto>.Failure(Messages.AuctionNotFound);
+                return Result<CategotyDetailsDto>.Failure(Messages.Auction.AuctionNotFound);
             }
         }
 
@@ -89,7 +74,7 @@ namespace BLL.Services.Implemantation
         {
             var result = await categoryRepository.FindAsync(s => s.Name == name);
             if(!result.Any())
-                Result<CategotyDetailsDto>.Failure(Messages.CategoryNotFound);
+                Result<CategotyDetailsDto>.Failure(Messages.Category.CategoryNotFound);
             return Result<CategotyDetailsDto>.Success(mapper.Map<CategotyDetailsDto>(result.FirstOrDefault()));
         }
     }

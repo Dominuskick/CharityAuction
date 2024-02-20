@@ -14,5 +14,33 @@ namespace DAL.Repositories.Implementation
         public AuctionRepository(DbContext context) : base(context)
         {
         }
+
+        public async Task<IQueryable<Auction>> GetAuctionsWithInfoAsync()
+        {
+            return _set
+                .Include(a => a.Pictures)
+                .Include(a => a.User)
+                .Include(a => a.Category);
+        }
+
+        public async Task<IEnumerable<Auction>> GetAuctionsWithInfoAsyncAsNoTracking()
+        {
+            return await _set
+                .Include(a => a.Pictures)
+                .Include(a => a.User)
+                .Include(a => a.Category)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+
+        public async Task<Auction> GetAuctionWithInfoAsync(Guid id)
+        {
+            return await _set
+                .Include(a => a.Pictures)
+                .Include(a => a.Category)
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }

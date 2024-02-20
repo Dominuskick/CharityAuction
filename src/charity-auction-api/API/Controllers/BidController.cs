@@ -45,8 +45,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBid([FromBody] CreateBidDto bidDto)
         {
-            string userId = User.FindFirstValue("id");
-            var result = await bidService.CreateBid(bidDto, userId);
+            var result = await bidService.CreateBid(bidDto);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -59,8 +58,7 @@ namespace API.Controllers
         [Route("bids-user")]
         public async Task<IActionResult> GetBidsCurrentUser()
         {
-            string UserName = User.FindFirstValue("UserName");
-            var result = await bidService.FindBids(b => b.UserName == UserName);
+            var result = await bidService.FindBidsUser();
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -72,7 +70,6 @@ namespace API.Controllers
         [Route("bids-auction")]
         public async Task<IActionResult> GetBidsAuction(Guid auctionId)
         {
-            string userId = User.FindFirstValue("id");
             var result = await bidService.FindBids(b => b.AuctionId == auctionId);
             if (result.IsSuccess)
             {

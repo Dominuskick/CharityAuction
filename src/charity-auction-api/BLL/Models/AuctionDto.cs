@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,8 @@ namespace BLL.Models
     {
         public Guid Id { get; set; }
         public IEnumerable<string> Pictures { get; set; }
+        public string CategoryName { get; set; }
+        public string UserName { get; set; }
     }
 
     public class AuctionDto
@@ -46,6 +49,7 @@ namespace BLL.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
+        public decimal MinIncrease { get; set; }
         public string CategoryName { get; set; }
         public ICollection<IFormFile> PicturesToAdd { get; set; }
     }

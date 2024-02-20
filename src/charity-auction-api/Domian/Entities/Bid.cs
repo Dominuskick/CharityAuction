@@ -13,7 +13,7 @@ namespace Domain.Entities
         public DateTime Date { get; set; }
         public string UserId { get; set; }
         public Guid AuctionId { get; set; }
-        public virtual User User { get; set; }
-        public virtual Auction Auction { get; set; }
+        public User User { get; set; }
+        public Auction Auction { get; set; }
     }
 }

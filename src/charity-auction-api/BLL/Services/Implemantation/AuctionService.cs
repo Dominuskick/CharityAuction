@@ -21,19 +21,23 @@ namespace BLL.Services.Implemantation
         private readonly IAuctionRepository auctionRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IPictureService pictureService;
-        private readonly IBidRepository bidRepository;
+        private readonly ICurrentUserService currentUserService;
         private readonly IMapper mapper;
 
-        public AuctionService(IAuctionRepository auctionRepository, IMapper mapper, UserManager<User> userManager, ICategoryRepository categoryRepository, IBidRepository bidRepository, IPictureService pictureService)
+        public AuctionService(IAuctionRepository auctionRepository, 
+            IMapper mapper, 
+            ICategoryRepository categoryRepository, 
+            IPictureService pictureService,
+            ICurrentUserService currentUserService)
         {
             this.auctionRepository = auctionRepository;
             this.mapper = mapper;
             this.categoryRepository = categoryRepository;
-            this.bidRepository = bidRepository;
             this.pictureService = pictureService;
+            this.currentUserService = currentUserService;
         }
 
-        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, string userId, IEnumerable<IFormFile> pictures)
+        public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, IEnumerable<IFormFile> pictures)
         {
             var categoryExists = await categoryRepository.FindAsync(a => a.Name == auctionDto.CategoryName);
 
@@ -42,19 +46,10 @@ namespace BLL.Services.Implemantation
                 return Result.Failure(Messages.Category.CategoryNotFound);
             }
             var category = categoryExists.FirstOrDefault();
-            var auction = new AuctionDto
-            {
-                Title = auctionDto.Title,
-                Description = auctionDto.Description,
-                StartPrice = auctionDto.StartPrice,
-                MinIncrease = auctionDto.MinIncrease,
-                CategoryId = category.Id,
-                CurrentPrice = auctionDto.StartPrice,
-                UserId = userId,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)
-            };
 
+            var auction = mapper.Map<AuctionDto>(auctionDto);
+            auction.CategoryId = category.Id;
+            auction.UserId = currentUserService.UserId;
 
             var createdAuction = mapper.Map<Auction>(auction);
             await auctionRepository.CreateAsync(createdAuction);
@@ -68,8 +63,8 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> FindAuctions(Func<AuctionDetailsDto, bool> predicate)
         {
-            var auctions = await auctionRepository.GetAllAsync();
-            if (auctions == null)
+            var auctions = await auctionRepository.GetAuctionsWithInfoAsync();
+            if (!auctions.Any())
             {
                 return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
@@ -78,61 +73,57 @@ namespace BLL.Services.Implemantation
 
             var filteredAuctions = auctionDtos.Where(predicate);
 
-            foreach (var auctionDto in filteredAuctions)
-            {
-                var pictures = await pictureService.GetPictures(auctionDto.Id);
-                if (pictures.IsSuccess)
-                    auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
-                else auctionDto.Pictures = null;
-            }
             return Result<IEnumerable<AuctionDetailsDto>>.Success(filteredAuctions);
         }
 
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions()
         {
-            var auctions = await auctionRepository.GetAllAsync();
-            if (auctions == null)
+            var auctions = await auctionRepository.GetAuctionsWithInfoAsyncAsNoTracking();
+            if (!auctions.Any())
             {
                 return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
 
-            var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
-
-            foreach (var auctionDto in auctionDtos)
-            {
-                var pictures = await pictureService.GetPictures(auctionDto.Id);
-                if(pictures.IsSuccess)
-                auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
-                else auctionDto.Pictures = null;
-            }
+            var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions.ToList());
 
 
             return Result<IEnumerable<AuctionDetailsDto>>.Success(auctionDtos);
         }
 
+        public async Task<Result<IEnumerable<AuctionDetailsDto>>> GetUsersAuction()
+        {
+            var auctions = await auctionRepository.GetAuctionsWithInfoAsync();
+            auctions = auctions.Where(a => a.UserId == currentUserService.UserId);
+            if (!auctions.Any())
+            {
+                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
+            }
+            return Result<IEnumerable<AuctionDetailsDto>>.Success(mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions));
+        }
+
         public async Task<Result<AuctionDetailsDto>> GetAuction(Guid id)
         {
-            var auction = await auctionRepository.GetAsync(id);
+            var auction = await auctionRepository.GetAuctionWithInfoAsync(id);
             if (auction == null)
             {
                 return Result<AuctionDetailsDto>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             var auctionDto = mapper.Map<AuctionDetailsDto>(auction);
-            var pictures = await pictureService.GetPictures(auctionDto.Id);
-            if(pictures.IsSuccess)
-                auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
-            else auctionDto.Pictures = null;
-
+            
             return Result<AuctionDetailsDto>.Success(auctionDto);
         }
 
         public async Task<Result> DeleteAuction(Guid id)
         {
-            var auction = await auctionRepository.GetAsync(id);
-            if(bidRepository.GetAllAsync().Result.Any(b => b.AuctionId == id))
+            var auction = await auctionRepository.GetAuctionWithInfoAsync(id);
+            if(auction.UserId != currentUserService.UserId)
             {
-                return Result.Failure("Auction cannot be deleted because it has already been bid on");
+                return Result.Failure(Messages.Auction.AuctionOwnerError, ErrorType.Unauthorized);
+            }
+            if(auction.Bids.Any())
+            {
+                return Result.Failure(Messages.Auction.AuctionDeleteError);
             }
             if (auction == null)
             {
@@ -145,24 +136,29 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result> UpdateAuction(UpdateAuctionDto auctionDto)
         {
-            var categories = await categoryRepository.FindAsync(c => c.Name == auctionDto.CategoryName);
-            if(!categories.Any()) return Result.Failure(Messages.Category.CategoryNotFound);
-            var category = categories.FirstOrDefault();
-            var auction = await auctionRepository.GetAsync(auctionDto.Id);
+
+            var auction = await auctionRepository.GetAuctionWithInfoAsync(auctionDto.Id);
             if (auction == null)
             {
                 return Result.Failure(Messages.Auction.AuctionNotFound);
             }
-            if(auction.StartDate > DateTime.UtcNow)
+            if (auction.StartDate > DateTime.UtcNow)
                 return Result.Failure(Messages.Auction.AuctionStarted);
+            if(auctionDto.CategoryName != auction.Category.Name)
+            {
+                var categoryExists = await categoryRepository.FindAsync(a => a.Name == auctionDto.CategoryName);
+                if (!categoryExists.Any())
+                {
+                    return Result.Failure(Messages.Category.CategoryNotFound);
+                }
+                var category = categoryExists.FirstOrDefault();
+                auction.CategoryId = category.Id;
+            }
 
-            // Update the properties of the auction
             auction.Title = auctionDto.Title;
             auction.Description = auctionDto.Description;
             auction.StartPrice = auctionDto.StartPrice;
-            auction.CurrentPrice = auctionDto.StartPrice;
-            auction.CategoryId = category.Id;
-            
+            auction.MinIncrease = auctionDto.MinIncrease;
 
             // Update the auction in the database
             await auctionRepository.UpdateAsync(auction);
@@ -181,7 +177,7 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> FilterAuctions(List<string> categoryNames, string sortOrder)
         {
-            var auctions = await auctionRepository.GetAllAsync();
+            var auctions = await auctionRepository.GetAuctionsWithInfoAsync();
             if (!auctions.Any())
             {
                 return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
@@ -190,9 +186,11 @@ namespace BLL.Services.Implemantation
             // Filtering
             if (categoryNames != null && categoryNames.Count > 0)
             {
-                var categories = await categoryRepository.FindAsync(c => categoryNames.Contains(c.Name));
-                var categoryIds = categories.Select(c => c.Id).ToList();
-                auctions = auctions.Where(a => categoryIds.Contains(a.CategoryId));
+                auctions = auctions.Where(auctions => categoryNames.Contains(auctions.Category.Name));
+                if (!auctions.Any())
+                {
+                    return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Category.CategoryNotFound);
+                }
             }
             else
             {
@@ -232,14 +230,6 @@ namespace BLL.Services.Implemantation
             }
 
             var auctionsDto = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
-
-            foreach (var auctionDto in auctionsDto)
-            {
-                var pictures = await pictureService.GetPictures(auctionDto.Id);
-                if (pictures.IsSuccess)
-                    auctionDto.Pictures = pictures.Data.Select(p => p.Url).ToList();
-                else auctionDto.Pictures = null;
-            }
 
             return Result<IEnumerable<AuctionDetailsDto>>.Success(auctionsDto);
         }

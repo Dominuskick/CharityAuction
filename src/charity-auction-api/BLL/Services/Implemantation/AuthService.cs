@@ -16,8 +16,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static BLL.Configurations.ModelConstants;
-using User = Domain.Entities.User;
 
 namespace BLL.Services.Implemantation
 {

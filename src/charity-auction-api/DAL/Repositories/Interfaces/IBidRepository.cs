@@ -9,5 +9,9 @@ namespace DAL.Repositories.Interfaces
 {
     public interface IBidRepository : IBaseRepository<Bid, Guid>
     {
+        Task<IQueryable<Bid>> GetBidsWithInfoAsync();
+
+        Task<Bid> GetBidWithInfoAsync(Guid id);
+        Task<IEnumerable<Bid>> GetBidsWithInfoAsyncAsNoTracking();
     }
 }

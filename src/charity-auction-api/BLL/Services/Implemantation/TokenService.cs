@@ -73,14 +73,14 @@ namespace BLL.Services.Implemantation
         public Task<Result<IEnumerable<RefreshToken>>> FindRefreshToken(string token)
         {
             var refreshToken = refreshTokenRepository.FindAsync(t => t.Token == token);
-            if (refreshToken == null) return Task.FromResult(Result<IEnumerable<RefreshToken>>.Failure(Messages.RefreshTokenNotFound));
+            if (refreshToken == null) return Task.FromResult(Result<IEnumerable<RefreshToken>>.Failure(Messages.Auth.RefreshTokenNotFound));
             return Task.FromResult(Result<IEnumerable<RefreshToken>>.Success(refreshToken.Result));
         }
 
         public Task<Result> UpdateRefreshToken(RefreshToken refreshToken)
         {
             var result = refreshTokenRepository.UpdateAsync(refreshToken);
-            if (result == null) return Task.FromResult(Result.Failure(Messages.RefreshTokenNotFound));
+            if (result == null) return Task.FromResult(Result.Failure(Messages.Auth.RefreshTokenNotFound));
             return Task.FromResult(Result.Success());
         }
 
@@ -116,7 +116,7 @@ namespace BLL.Services.Implemantation
                 .AddSeconds(expiryDateUnix);*/
 
             var storedRefreshToken = await refreshTokenRepository.GetAsync(token.RefreshToken);
-            if (storedRefreshToken == null) return Result<AuthSuccessResponse>.Failure(Messages.RefreshTokenNotFound);
+            if (storedRefreshToken == null) return Result<AuthSuccessResponse>.Failure(Messages.Auth.RefreshTokenNotFound);
             if (validatedToken == null
                 //|| expiryDateTimeUtc > DateTime.UtcNow
                 || storedRefreshToken == null
@@ -124,13 +124,13 @@ namespace BLL.Services.Implemantation
                 || storedRefreshToken.Invalidated
                 || storedRefreshToken.Used)
             {
-                return Result<AuthSuccessResponse>.Failure("Access token still can be used or refresh token is expired");
+                return Result<AuthSuccessResponse>.Failure(Messages.Auth.AccescTokenCanBeUsed);
             }
 
             await refreshTokenRepository.DeleteAsync(storedRefreshToken.Token);
 
             var userDto = await userService.GetUser(Guid.Parse(storedRefreshToken.UserId));
-            if (userDto == null) return Result<AuthSuccessResponse>.Failure(Messages.UserNotFound);
+            if (userDto == null) return Result<AuthSuccessResponse>.Failure(Messages.Auth.UserNotFound);
             var authResponse = await GenerateToken(userDto.Data);
 
             return Result<AuthSuccessResponse>.Success(authResponse);

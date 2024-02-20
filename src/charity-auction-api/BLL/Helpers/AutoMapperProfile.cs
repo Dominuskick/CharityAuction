@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using BLL.Constants;
 using BLL.Models;
 using BLL.Models.Responses;
 using DAL.Repositories.Implementation;
 using DAL.Repositories.Interfaces;
 using Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +19,29 @@ namespace BLL.Helpers
     {
         public AutoMapperProfile()
         {
+
             CreateMap<Bid, BidDto>().ReverseMap();
             CreateMap<Bid, CreateBidDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategotyDetailsDto>().ReverseMap();
 
             CreateMap<Auction, AuctionDto>().ReverseMap();
-            CreateMap<Auction, AuctionDetailsDto>()
-                .ForMember(dest => dest.Pictures, opt => opt.Ignore());
             CreateMap<Bid, BidDetailsDto>()
-                .ForMember(dest => dest.UserName, opt => opt.Ignore());
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+
+
+            CreateMap<Auction, AuctionDetailsDto>()
+                .ForMember(dest => dest.Pictures, opt => opt.MapFrom(src => src.Pictures.Select(p => p.Url)))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            .ReverseMap().IgnoreAllSourcePropertiesWithAnInaccessibleSetter();
+
+            CreateMap<CreateAuctionDto, AuctionDto>()
+               .ForMember(dest => dest.CurrentPrice, opt => opt.MapFrom(src => src.StartPrice))
+               .ForMember(dest => dest.UserId, opt => opt.Ignore()) // We'll set this manually
+               .ForMember(dest => dest.CategoryId, opt => opt.Ignore()) // We'll set this manually
+               .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.UtcNow))
+               .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)));
 
 
 

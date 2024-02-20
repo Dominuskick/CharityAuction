@@ -35,7 +35,7 @@ namespace BLL.Services.Implemantation
                 return Result.Success();
             }
 
-            return Result.Failure(Messages.UserNotFound);
+            return Result.Failure(Messages.Auth.UserNotFound);
         }
 
         public async Task<Result<IEnumerable<UserDetailsDto>>> GetAllUsers()
@@ -49,7 +49,7 @@ namespace BLL.Services.Implemantation
         public async Task<Result<UserDetailsDto>> GetUser(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user is null) return Result<UserDetailsDto>.Failure(Messages.UserNotFound);
+            if (user is null) return Result<UserDetailsDto>.Failure(Messages.Auth.UserNotFound);
             return Result<UserDetailsDto>.Success(_mapper.Map<UserDetailsDto>(user));
         }
 
@@ -65,9 +65,9 @@ namespace BLL.Services.Implemantation
                 {
                     return Result<UserDetailsDto>.Success(_mapper.Map<UserDetailsDto>(user));
                 }
-                return Result<UserDetailsDto>.Failure(Messages.UserUpdateError);
+                return Result<UserDetailsDto>.Failure(Messages.Auth.UserUpdateError);
             }
-            return Result<UserDetailsDto>.Failure(Messages.UserNotFound);
+            return Result<UserDetailsDto>.Failure(Messages.Auth.UserNotFound);
         }
     }
 }

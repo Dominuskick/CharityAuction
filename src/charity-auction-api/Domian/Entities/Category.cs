@@ -10,6 +10,6 @@ namespace Domain.Entities
     public class Category : Entity
     {
         public string Name { get; set; }
-        public virtual ICollection<Auction> Auctions { get; set; }
+        public ICollection<Auction> Auctions { get; set; }
     }
 }

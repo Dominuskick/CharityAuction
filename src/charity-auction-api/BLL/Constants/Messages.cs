@@ -17,6 +17,10 @@ namespace BLL.Constants
             public static string AuctionsListed = "Auctions has listed.";
             public static string AuctionsListedByCategory = "Auctions has listed by category.";
             public static string AuctionStarted = "Auction cannot be updated because it has already been started";
+            public static string AuctionEnded = "The auction has already ended.";
+            public static string AuctionNotStarted = "The auction has not started yet.";
+            public static string AuctionOwnerError = "You are not the owner of this auction";
+            public static string AuctionDeleteError = "Auction cannot be deleted because it has already been bid on";
         }
         public static class Auth
         {
@@ -29,10 +33,9 @@ namespace BLL.Constants
             public static string UserAlreadyExists = "The user already exists.";
             public static string AccessTokenCreated = "Access token has created.";
             public static string UserUpdateError = "User update error.";
-            public const string AuctionEnded = "The auction has already ended.";
-            public const string AuctionNotStarted = "The auction has not started yet.";
             public static string RefreshTokenInvalid = "Refresh token is invalid.";
             public static string RefreshTokenNotFound = "Refresh token not found.";
+            public static string AccescTokenCanBeUsed = "Access token still can be used or refresh token is expired";
         }
         public static class Bid
         {
@@ -53,6 +56,10 @@ namespace BLL.Constants
             public static string CategoriesListed = "Categories has listed.";
         }
 
+        public static class Picture
+        {
+            public static string PictureNotFound = "Picture not found.";
+        }
 
         public static class SortOrder
         {

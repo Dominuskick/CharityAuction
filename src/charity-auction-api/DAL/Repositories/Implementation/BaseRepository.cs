@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Implementation
 {
+
     public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class
     {
-        private readonly DbSet<TEntity> _set;
-        private readonly DbContext _context;
+        protected readonly DbSet<TEntity> _set;
+        protected readonly DbContext _context;
         protected BaseRepository(DbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -45,15 +46,26 @@ namespace DAL.Repositories.Implementation
             return await Task.Run(() => _set.Where(predicate).ToList());
         }
 
+        public virtual async Task<IEnumerable<TEntity>> FindAsyncNoTracking(Func<TEntity, bool> predicate)
+        {
+            return await Task.Run(() => _set.AsNoTracking().Where(predicate).ToList());
+        }
+
         public virtual async Task<TEntity> GetAsync(TKey id)
         {
             return await _set.FindAsync(id);
         }
 
+
         public virtual IQueryable<TEntity> GetAllAsQueryable()
         {
             var query = _set.AsQueryable();
             return query;
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsyncNoTracking()
+        {
+            return await _set.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()

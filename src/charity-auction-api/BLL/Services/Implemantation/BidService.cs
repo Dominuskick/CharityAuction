@@ -19,35 +19,38 @@ namespace BLL.Services.Implemantation
     {
         private readonly IBidRepository bidRepository;
         private readonly IAuctionRepository auctionRepository;
-        private readonly IUserRepository userRepository;
+        private readonly ICurrentUserService currentUserService;
         private readonly IMapper mapper;
 
-        public BidService(IBidRepository bidRepository, IUserRepository userRepository, IMapper mapper, IAuctionRepository auctionRepository)
+        public BidService(IBidRepository bidRepository, 
+            IMapper mapper, 
+            IAuctionRepository auctionRepository,
+            ICurrentUserService currentUserService)
         {
             this.bidRepository = bidRepository;
             this.mapper = mapper;
             this.auctionRepository = auctionRepository;
-            this.userRepository = userRepository;
+            this.currentUserService = currentUserService;
         }
 
-        public async Task<Result> CreateBid(CreateBidDto bidDto, string userId)
+        public async Task<Result> CreateBid(CreateBidDto bidDto)
         {
             var auction = await auctionRepository.GetAsync(bidDto.AuctionId);
             if(auction is null)
             {
-                return Result.Failure(Messages.AuctionNotFound);
+                return Result.Failure(Messages.Auction.AuctionNotFound);
             }
             if(auction.EndDate < DateTime.UtcNow)
             {
-                return Result.Failure(Messages.AuctionEnded);
+                return Result.Failure(Messages.Auction.AuctionEnded);
             }
             if(auction.StartDate > DateTime.UtcNow)
             {
-                return Result.Failure(Messages.AuctionNotStarted);
+                return Result.Failure(Messages.Auction.AuctionNotStarted);
             }
             if (auction.StartPrice > bidDto.Amount)
             {
-                return Result.Failure(Messages.BidTooLow);
+                return Result.Failure(Messages.Bid.BidTooLow);
             }
 
             var highestBid = await GetHighestBid(bidDto.AuctionId);
@@ -55,18 +58,18 @@ namespace BLL.Services.Implemantation
             {
                 if(highestBid.Data.Amount > bidDto.Amount)
                 {
-                    return Result.Failure(Messages.BidTooLow);
+                    return Result.Failure(Messages.Bid.BidTooLow);
                 }
                 if (highestBid.Data.Amount - auction.MinIncrease > bidDto.Amount)
                 {
-                    return Result.Failure(Messages.BidTooLow);
+                    return Result.Failure(Messages.Bid.BidTooLow);
                 }
             }
             var bid = new Bid
             {
                 Amount = bidDto.Amount,
                 AuctionId = bidDto.AuctionId,
-                UserId = userId,
+                UserId = currentUserService.UserId,
                 Date = DateTime.UtcNow
             };
 
@@ -78,80 +81,59 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result<IEnumerable<BidDetailsDto>>> GetAllBids()
         {
-            var bids = await bidRepository.GetAllAsync();
+            var bids = await bidRepository.GetBidsWithInfoAsync();
             if (bids == null)
             {
-                return Result<IEnumerable<BidDetailsDto>>.Failure(Messages.BidNotFound);
+                return Result<IEnumerable<BidDetailsDto>>.Failure(Messages.Bid.BidNotFound);
             }
             var bidDtos = mapper.Map<IEnumerable<BidDetailsDto>>(bids);
-            foreach (var bidDto in bidDtos)
-            {
-                var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
-                if(res.Any())
-                {
-                    var user = res.FirstOrDefault();
-                    bidDto.UserName = user.UserName;
-                }
-            }
 
             return Result<IEnumerable<BidDetailsDto>>.Success(bidDtos);
         }
 
         public async Task<Result<BidDetailsDto>> GetBidById(Guid id)
         {
-            var bid = await bidRepository.GetAsync(id);
+            var bid = await bidRepository.GetBidWithInfoAsync(id);
             if (bid is null)
             {
-                return Result<BidDetailsDto>.Failure("Bid not found");
+                return Result<BidDetailsDto>.Failure(Messages.Bid.BidNotFound);
             }
             var bidDto = mapper.Map<BidDetailsDto>(bid);
-            var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
-            if (res.Any())
-            {
-                var user = res.FirstOrDefault();
-                bidDto.UserName = user.UserName;
-            }
+
             return Result<BidDetailsDto>.Success(bidDto);
         }
 
         public async Task<Result<IEnumerable<BidDetailsDto>>> FindBids(Func<BidDetailsDto, bool> predicate)
         {
-            var bids = await bidRepository.GetAllAsync();
+            var bids = await bidRepository.GetBidsWithInfoAsync();
             if (bids == null)
             {
-                return Result<IEnumerable<BidDetailsDto>>.Failure(Messages.AuctionNotFound);
+                return Result<IEnumerable<BidDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
             }
 
             var bidDtos = mapper.Map<IEnumerable<BidDetailsDto>>(bids);
-            foreach (var bidDto in bidDtos)
-            {
-                var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
-                if (res.Any())
-                {
-                    var user = res.FirstOrDefault();
-                    bidDto.UserName = user.UserName;
-                }
-            }
+            
 
             var filteredBids = bidDtos.Where(predicate);
             return Result<IEnumerable<BidDetailsDto>>.Success(filteredBids);
         }
 
+        public async Task<Result<IEnumerable<BidDetailsDto>>> FindBidsUser()
+        {
+            return await FindBids(b => b.UserId == currentUserService.UserId);
+        }
+
         public async Task<Result<BidDetailsDto>> GetHighestBid(Guid auctionId)
         {
-            var bids = await bidRepository.FindAsync(b => b.AuctionId == auctionId);
+            var bids = await bidRepository.GetBidsWithInfoAsync();
+            bids = bids.Where(bids => bids.AuctionId == auctionId);
             if (!bids.Any())
             {
-                return Result<BidDetailsDto>.Failure(Messages.BidNotFound);
+                return Result<BidDetailsDto>.Failure(Messages.Bid.BidNotFound);
             }
             var highestBid = bids.OrderByDescending(b => b.Amount).FirstOrDefault();
             var bidDto = mapper.Map<BidDetailsDto>(highestBid);
-            var res = await userRepository.FindAsync(u => u.Id == bidDto.UserId);
-            if (res.Any())
-            {
-                var user = res.FirstOrDefault();
-                bidDto.UserName = user.UserName;
-            }
+
             return Result<BidDetailsDto>.Success(bidDto);
         }
     }
