@@ -135,7 +135,7 @@ const index = () => {
           userName
         );
 
-        if (response.status == 200) {
+        if (response.isSuccess) {
           localStorage.setItem('BetOnGoodness-remembered-email', email);
           localStorage.setItem('BetOnGoodness-remembered-password', password);
           navigate(LOGIN_ROUTE);

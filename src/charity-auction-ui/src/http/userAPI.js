@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import { $host, $authHost } from '.';
 
 export const registration = async (
@@ -7,7 +8,7 @@ export const registration = async (
   phoneNumber,
   userName
 ) => {
-  const response = await $host.post('/Auth/register', {
+  const { data } = await $host.post('/Auth/register', {
     email,
     password,
     fullName,
@@ -15,11 +16,11 @@ export const registration = async (
     userName,
   });
 
-  return response;
+  return data;
 };
 
 export const login = async (email, password) => {
-  const response = await $host.post(
+  const { data } = await $host.post(
     '/Auth/login',
     {
       email,
@@ -28,5 +29,19 @@ export const login = async (email, password) => {
     { withCredentials: true }
   );
 
-  return response;
+  localStorage.setItem('BetOnGoodness-token', data.data.token);
+
+  return data;
+};
+
+export const refreshTokens = async () => {
+  const { data } = await $host.post(
+    '/Auth/refresh',
+    {},
+    { withCredentials: true }
+  );
+
+  localStorage.setItem('BetOnGoodness-token', data.data.token);
+
+  return jwtDecode(data.data.token);
 };

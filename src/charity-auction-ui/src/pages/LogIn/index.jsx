@@ -8,6 +8,7 @@ import { setLogin } from '@/slices/authSlice';
 import { ACCOUNT_ROUTE, REGISTRATION_ROUTE } from '@/utils/constants/routes';
 import { login } from '@/http/userAPI';
 import authService from '@/utils/api/authService';
+import { jwtDecode } from 'jwt-decode';
 
 const index = () => {
   const dispatch = useDispatch();
@@ -76,15 +77,19 @@ const index = () => {
       try {
         const response = await login(email, password);
 
-        if (response.status == 200) {
-          dispatch(setLogin(response.data.data.userName));
+        if (response.isSuccess) {
+          dispatch(setLogin(response.data.userName));
           rememberMe();
           navigate(ACCOUNT_ROUTE);
         }
       } catch (e) {
         console.error(e.response.data.error || e);
-        setEmailValidationError('Недійсні облікові дані');
-        setPasswordValidationError('Недійсні облікові дані');
+        if (e.response.data.error === 'Bad password.') {
+          setPasswordValidationError('Невірний пароль');
+        } else {
+          setEmailValidationError('Недійсні облікові дані');
+          setPasswordValidationError('Недійсні облікові дані');
+        }
       }
     }
   };
@@ -118,7 +123,7 @@ const index = () => {
                   error={passwordValidationError}
                 />
                 <div className={styles.inputWrapperLine}>
-                  <CheckBox setValue={setIsRememberMe} />
+                  <CheckBox value={isRememberMe} setValue={setIsRememberMe} />
                   <label className={styles.text}>Запам’ятати мене</label>
                 </div>
               </div>
