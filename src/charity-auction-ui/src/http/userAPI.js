@@ -17,3 +17,16 @@ export const registration = async (
 
   return response;
 };
+
+export const login = async (email, password) => {
+  const response = await $host.post(
+    '/Auth/login',
+    {
+      email,
+      password,
+    },
+    { withCredentials: true }
+  );
+
+  return response;
+};

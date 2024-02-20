@@ -3,7 +3,6 @@ import styles from './registration.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox, LabeledInput } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
-import authService from '@/utils/api/authService';
 import { LOGIN_ROUTE } from '@/utils/constants/routes';
 import { registration } from '@/http/userAPI';
 
@@ -137,7 +136,9 @@ const index = () => {
         );
 
         if (response.status == 200) {
-          navigate('/login');
+          localStorage.setItem('BetOnGoodness-remembered-email', email);
+          localStorage.setItem('BetOnGoodness-remembered-password', password);
+          navigate(LOGIN_ROUTE);
         }
       } catch (e) {
         console.error(e.response.data.error || e);
