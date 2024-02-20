@@ -26,3 +26,11 @@
 .btn__wide {
   width: 416px;
 }
+
+.btn__disabled {
+  color: gray;
+  border-color: gray;
+  outline-color: gray;
+  cursor: default;
+  pointer-events: none;
+}

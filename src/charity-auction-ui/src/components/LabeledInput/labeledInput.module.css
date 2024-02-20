@@ -4,12 +4,29 @@
   gap: 8px;
 }
 
-.inputWrapper > label {
+.inputWrapper label {
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0.2px;
+}
+
+.inputWrapper label.error {
+  color: #c62828;
+  font-size: 20px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputWrapper.error > input {
+  border-color: #c62828;
+  outline: none;
+  border-width: 2px;
+  animation: shake 0.5s ease-in-out;
 }
 
 .inputWrapper > input {
@@ -28,4 +45,28 @@
 
 .inputWrapper > input::placeholder {
   color: #a5a5a5;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  90% {
+    transform: translateX(-3px);
+  }
+  20%,
+  80% {
+    transform: translateX(3px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-2px);
+  }
+  40%,
+  60% {
+    transform: translateX(2px);
+  }
 }
