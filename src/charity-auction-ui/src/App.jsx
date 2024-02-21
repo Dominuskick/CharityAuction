@@ -14,9 +14,9 @@ function App() {
   useEffect(() => {
     refreshTokens()
       .then((data) => {
-        console.log(data);
         dispatch(setLogin(data.UserName));
       })
+      .catch()
       .finally(() => setLoading(false));
   }, []);
 

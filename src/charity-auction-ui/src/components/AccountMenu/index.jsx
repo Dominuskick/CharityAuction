@@ -7,10 +7,24 @@ import {
   ACCOUNT_NOTIFICATIONS_ROUTE,
   ACCOUNT_ROUTE,
 } from '@/utils/constants/routes';
+import { logout } from '@/http/userAPI';
+import { useDispatch } from 'react-redux';
+import { setLogin } from '@/slices/authSlice';
 
 const index = () => {
+  const dispatch = useDispatch();
+
+  const logOutHandle = () => {
+    try {
+      logout();
+      dispatch(setLogin(null));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
-    <div className={styles.menu}>
+    <nav className={styles.menu}>
       <NavLink
         to={ACCOUNT_ROUTE}
         end
@@ -48,7 +62,11 @@ const index = () => {
           Сповіщення
         </div>
       </NavLink>
-    </div>
+      <div className={styles.menuItem} onClick={logOutHandle}>
+        <span className={styles.menuLogout}></span>
+        Вийти з кабінету
+      </div>
+    </nav>
   );
 };
 

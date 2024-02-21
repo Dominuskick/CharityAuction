@@ -35,7 +35,7 @@ export const login = async (email, password) => {
 };
 
 export const refreshTokens = async () => {
-  const { data } = await $host.post(
+  const { data } = await $authHost.post(
     '/Auth/refresh',
     {},
     { withCredentials: true }
@@ -44,4 +44,10 @@ export const refreshTokens = async () => {
   localStorage.setItem('BetOnGoodness-token', data.data.token);
 
   return jwtDecode(data.data.token);
+};
+
+export const logout = async () => {
+  await $authHost.post('/Auth/logout', {}, { withCredentials: true });
+
+  localStorage.removeItem('BetOnGoodness-token');
 };
