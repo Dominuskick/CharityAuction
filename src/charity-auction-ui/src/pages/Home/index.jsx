@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './home.module.css';
 import { Header, Footer } from '@/layout';
 import img from '../../assets/img/home.png';
-import { Button, LotCard, ResponsiveWrapper } from '@/components';
+import { Button, Loader, LotCard, ResponsiveWrapper } from '@/components';
 import Faq from 'react-faq-component';
 import { Link } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
@@ -14,26 +14,20 @@ import {
   LOTS_ROUTE,
   SCOPE_ID,
 } from '@/utils/constants/routes';
+import { getAuctionList } from '@/http/auctionAPI';
 
 const index = () => {
   const login = useSelector((state) => state.auth.login);
   const [lotCardsData, setLotCardsData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getAuctionList = async () => {
-      try {
-        const response = await auctionService.getAuctionList();
-        console.log('Receive auction list successful:', response.data);
-
-        if (response) {
-          setLotCardsData(response.data);
-        }
-      } catch (error) {
-        console.error('Receive auction list failed:', error);
-      }
-    };
-
-    getAuctionList();
+    getAuctionList()
+      .then((response) => {
+        setLotCardsData(response.data);
+      })
+      .catch()
+      .finally(setLoading(false));
   }, []);
 
   const FAQdata = {
@@ -125,18 +119,22 @@ const index = () => {
             <div className={styles.popularSectionContent}>
               <h2>Популярні лоти</h2>
               <div className={styles.lotList}>
-                {lotCardsData.map(
-                  (lotCardData, i) =>
-                    i < 3 && (
-                      <LotCard
-                        name={lotCardData.title}
-                        endTime={lotCardData.endDate}
-                        highestBid={lotCardData.currentPrice}
-                        pictures={lotCardData.pictures}
-                        id={lotCardData.id}
-                        key={`Lot card ${i}`}
-                      />
-                    )
+                {loading ? (
+                  <Loader />
+                ) : (
+                  lotCardsData.map(
+                    (lotCardData, i) =>
+                      i < 3 && (
+                        <LotCard
+                          name={lotCardData.title}
+                          endTime={lotCardData.endDate}
+                          highestBid={lotCardData.currentPrice}
+                          pictures={lotCardData.pictures}
+                          id={lotCardData.id}
+                          key={`Lot card ${i}`}
+                        />
+                      )
+                  )
                 )}
               </div>
               <Link to={LOTS_ROUTE}>
