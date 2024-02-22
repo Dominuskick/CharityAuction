@@ -70,11 +70,14 @@ const index = () => {
     }
   };
 
+  const [loading, setLoading] = useState(false);
+
   const loginUser = async () => {
     const isValid = validate();
 
     if (isValid) {
       try {
+        setLoading(true);
         const response = await login(email, password);
 
         if (response.isSuccess) {
@@ -90,6 +93,8 @@ const index = () => {
           setEmailValidationError('Недійсні облікові дані');
           setPasswordValidationError('Недійсні облікові дані');
         }
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -128,7 +133,11 @@ const index = () => {
                 </div>
               </div>
               <div className={styles.btnWrapper}>
-                <Button onClick={loginUser} disabled={!(email && password)}>
+                <Button
+                  onClick={loginUser}
+                  disabled={!(email && password)}
+                  loading={loading}
+                >
                   Увійти до кабінету
                 </Button>
               </div>

@@ -121,12 +121,15 @@ const index = () => {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const registerUser = async () => {
     const isValid = validate();
 
     if (isValid) {
       const fullName = `${name} ${surname}`;
       try {
+        setLoading(true);
         const response = await registration(
           email,
           password,
@@ -146,6 +149,8 @@ const index = () => {
         if (e.response.data.error && regex.test(e.response.data.error)) {
           setUserNameValidationError('Логін зайнятий');
         }
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -260,6 +265,7 @@ const index = () => {
                     isConfirm
                   )
                 }
+                loading={loading}
               >
                 Зареєструватись
               </Button>
