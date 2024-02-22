@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './lot.module.css';
 import { Header, Footer } from '@/layout';
-import { Button, CheckBox } from '@/components';
+import { Button, CheckBox, Loader, LoaderInline } from '@/components';
 import { Link } from 'react-router-dom';
 import defaultLotImg from '../../assets/img/defaultLot.jpg';
 import { useParams } from 'react-router-dom';
@@ -12,51 +12,39 @@ import {
 } from '@/utils/helpers/dateManipulation';
 import bidsService from '@/utils/api/bidsService';
 import { LOT_BETS_ROUTE } from '@/utils/constants/routes';
+import { getAuctionById } from '@/http/auctionAPI';
 
 const index = () => {
   const { lotId } = useParams();
-
   const [lotCardData, setLotCardData] = useState([]);
-
   const [bid, setBid] = useState('');
-
   const [bids, setBids] = useState([]);
-
-  const [btnTrigger, setBtnTrigger] = useState(false);
+  const [selectedImg, setSelectedImg] = useState(defaultLotImg);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getAuction = async () => {
-      try {
-        const response = await auctionService.getAuction(lotId);
-        console.log('Receive auction successful:', response.data);
-
-        if (response) {
-          setLotCardData(response.data);
+    getAuctionById(lotId)
+      .then((response) => {
+        setLotCardData(response.data);
+        if (response.data.pictures) {
           setSelectedImg(response.data.pictures[0]);
         }
-      } catch (error) {
-        console.error('Receive auction failed:', error);
+      })
+      .catch()
+      .finally(setLoading(false));
+  }, []);
+
+  const getBids = async () => {
+    try {
+      const bidsResponse = await bidsService.getBids(lotId);
+
+      if (bidsResponse) {
+        setBids(bidsResponse.data);
       }
-    };
-
-    getAuction();
-  }, [btnTrigger]);
-
-  useEffect(() => {
-    const getBids = async () => {
-      try {
-        const bidsResponse = await bidsService.getBids(lotId);
-
-        if (bidsResponse) {
-          setBids(bidsResponse.data);
-        }
-      } catch (error) {
-        console.error('Receive bids failed:', error);
-      }
-    };
-
-    getBids();
-  }, [btnTrigger]);
+    } catch (error) {
+      console.error('Receive bids failed:', error);
+    }
+  };
 
   const createBid = async () => {
     const data = {
@@ -72,14 +60,12 @@ const index = () => {
 
       if (response) {
         setBid(0);
-        setBtnTrigger((val) => !val);
+        getBids();
       }
     } catch (error) {
       console.error('Create auction failed:', error);
     }
   };
-
-  const [selectedImg, setSelectedImg] = useState(defaultLotImg);
 
   return (
     <>
@@ -87,7 +73,11 @@ const index = () => {
       <main className={styles.darkMain}>
         <div className={styles.mainContent}>
           <div className="responsiveWrapper">
-            <h2 className={styles.name}>{lotCardData.title}</h2>
+            {loading ? (
+              <LoaderInline height="46px" width="100px" color="#fff" />
+            ) : (
+              <h2 className={styles.name}>{lotCardData.title}</h2>
+            )}
             <div className={styles.line}>
               <div className={styles.images}>
                 <div className={styles.imageSelected}>
@@ -133,26 +123,44 @@ const index = () => {
               </div>
               <div className={styles.infoCard}>
                 <div className={styles.infoCardContent}>
-                  <p>
+                  <div className={styles.infoCardContentDate}>
                     <b>Закінчення</b>
-                    <span>{formatDateString(lotCardData.endDate)}</span>
-                  </p>
-                  <p>
+                    <span>
+                      {loading ? (
+                        <LoaderInline size="28" />
+                      ) : (
+                        formatDateString(lotCardData.endDate)
+                      )}
+                    </span>
+                  </div>
+                  <div>
                     <b>До закінчення</b>
-                    <span>{calculateTimeRemaining(lotCardData.endDate)}</span>
-                  </p>
+                    <span>
+                      {loading ? (
+                        <LoaderInline size="28" />
+                      ) : (
+                        calculateTimeRemaining(lotCardData.endDate)
+                      )}
+                    </span>
+                  </div>
                   <div>
                     <div className={styles.column}>
                       <b>Поточна ціна</b>
                       <Link to={LOT_BETS_ROUTE}>
-                        <span>({bids.length} ставок)</span>
+                        <span style={{ display: 'flex', gap: '5px' }}>
+                          ({loading ? <LoaderInline size="21" /> : bids.length}{' '}
+                          ставок)
+                        </span>
                       </Link>
                     </div>
                     <span>
-                      {lotCardData.currentPrice !== undefined
-                        ? lotCardData.currentPrice.toLocaleString()
-                        : 'Нема ціни...'}{' '}
-                      грн
+                      {loading ? (
+                        <LoaderInline size="28" />
+                      ) : lotCardData.currentPrice !== undefined ? (
+                        lotCardData.currentPrice.toLocaleString() + ' грн'
+                      ) : (
+                        'Нема ціни... '
+                      )}
                     </span>
                   </div>
                   <div className={styles.makeBid}>
@@ -175,7 +183,13 @@ const index = () => {
                 </div>
               </div>
             </div>
-            <p className={styles.description}>{lotCardData.description}</p>
+            <div className={styles.description}>
+              {loading ? (
+                <LoaderInline height="36px" width="100px" color="#fff" />
+              ) : (
+                <p>{lotCardData.description}</p>
+              )}
+            </div>
             <div className={styles.comments}>
               <h3>
                 Коментарі <span>2</span>
