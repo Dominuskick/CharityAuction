@@ -1,15 +1,16 @@
 import React from 'react';
 import styles from './button.module.css';
+import { LoaderInline } from '..';
 
-const index = ({ children, isBlack, isWide, onClick, disabled }) => {
+const index = ({ children, isBlack, isWide, onClick, disabled, loading }) => {
   return (
     <button
       className={`${styles.btn} ${isBlack && styles.btn__black} ${
         isWide && styles.btn__wide
-      } ${disabled && styles.btn__disabled}`}
+      } ${(disabled || loading) && styles.btn__disabled}`}
       onClick={onClick}
     >
-      {children}
+      {loading ? <LoaderInline height={30} width={50} /> : children}
     </button>
   );
 };

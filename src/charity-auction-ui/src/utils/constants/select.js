@@ -33,3 +33,22 @@ export const selectStyles = {
     padding: 0,
   }),
 };
+
+export const selectStylesDarkColor = {
+  menu: (provided, state) => ({
+    ...provided,
+    marginTop: 0, // Убираем верхний отступ между селектом и вариантами
+  }),
+  menuList: (provided, state) => ({
+    ...provided,
+    padding: 0, // Убираем внутренний отступ вокруг вариантов
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    color: '#131313', // Устанавливаем цвет текста в черный
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    borderColor: '#131313', // Устанавливаем цвет обводки в черный
+  }),
+};

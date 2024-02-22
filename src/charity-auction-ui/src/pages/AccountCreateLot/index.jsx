@@ -3,71 +3,69 @@ import styles from './accountCreateLot.module.css';
 import { Header, Footer } from '@/layout';
 import Select from 'react-select';
 import { Button } from '@/components';
-import { Link, useNavigate } from 'react-router-dom';
-import auctionService from '@/utils/api/auctionService';
-import { useSelector } from 'react-redux';
-import defaultImg from '../../assets/img/defaultLot.jpg';
+import { Link } from 'react-router-dom';
 import { ACCOUNT_ROUTE } from '@/utils/constants/routes';
-import { categoryOptions, selectStyles } from '@/utils/constants/select';
+import {
+  categoryOptions,
+  selectStylesDarkColor,
+} from '@/utils/constants/select';
+import { createAuction } from '@/http/auctionAPI';
+import { refreshTokens } from '@/http/userAPI';
 
 const index = () => {
-  const userName = useSelector((state) => state.auth.login);
-
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [startPrice, setStartPrice] = useState(0);
   const [step, setStep] = useState(0);
 
-  const [images, setImages] = useState(Array(4).fill(null));
-  const [imagesSend, setImagesSend] = useState(Array(4).fill(null));
+  const [imagesBlob, setImagesBlob] = useState(Array(4).fill(null));
 
-  const onImageChange = (index, event) => {
-    onImageSendChange(index, event);
+  const onImageBlobChange = (index, event) => {
     if (event.target.files && event.target.files[0]) {
-      const newImages = [...images];
-      newImages[index] = URL.createObjectURL(event.target.files[0]);
-      setImages(newImages);
-    }
-  };
-
-  const onImageSendChange = (index, event) => {
-    if (event.target.files && event.target.files[0]) {
-      const newImages = [...imagesSend];
+      const newImages = [...imagesBlob];
       newImages[index] = event.target.files[0];
-      setImagesSend(newImages);
+      setImagesBlob(newImages);
     }
-    console.log(event.target.files[0]);
   };
 
-  const createAuction = async () => {
-    const formData = new FormData();
+  const [loading, setLoading] = useState(false);
 
-    // Append auction data to the FormData
+  const createAuctionHandle = async () => {
+    const formData = new FormData();
     formData.append('Title', name);
     formData.append('Description', description);
     formData.append('StartPrice', startPrice);
     formData.append('MinIncrease', step);
     formData.append('CategoryName', 'string');
-
-    imagesSend.forEach((image) => {
+    imagesBlob.forEach((image) => {
       if (image) {
         formData.append(`Pictures`, image);
       }
     });
 
-    console.log(formData);
-
     try {
-      const response = await auctionService.createAuction(formData);
-      console.log('Create auction successful:', response);
-
-      if (response) {
-        console.log('ДА ЕСТЬ ЖЕ!!!!!!!!!!    ЧИНАЗЕС!!!!!!!!!!');
-        setIsPublished(true);
+      setLoading(true);
+      await createAuction(formData);
+      setIsPublished(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      if (e.response.status === 401) {
+        try {
+          await refreshTokens();
+          await createAuction(formData);
+          setIsPublished(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+          // тут редирект на страницу ошибки
+          console.error(e);
+        }
+      } else {
+        // тут редирект на страницу ошибки
+        console.error(e);
       }
-    } catch (error) {
-      console.error('Create auction failed:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,6 +84,7 @@ const index = () => {
                     type="text"
                     placeholder="Наприклад, картина з котами"
                     onChange={(e) => setName(e.target.value)}
+                    maxLength={50}
                   />
                 </div>
                 <div
@@ -95,23 +94,30 @@ const index = () => {
                   <Select
                     placeholder="Категорія"
                     options={categoryOptions}
-                    styles={selectStyles}
+                    styles={selectStylesDarkColor}
                     isMulti
                   />
                 </div>
                 <div className={styles.inputWrapper}>
                   <label>Додайте щонайменше 1 фото</label>
                   <div className={styles.photosWrapper}>
-                    {images.map((image, index) => (
-                      <div key={index} className={styles.photoInputWrapper}>
+                    {imagesBlob.map((image, index) => (
+                      <div
+                        key={index}
+                        className={styles.photoInputWrapper}
+                        style={image ? { border: 'none' } : {}}
+                      >
                         <input
                           type="file"
                           accept="image/*"
                           style={{ opacity: '0' }}
-                          onChange={(event) => onImageChange(index, event)}
+                          onChange={(event) => onImageBlobChange(index, event)}
                         />
                         {image ? (
-                          <img alt={`Картинка лота ${index + 1}`} src={image} />
+                          <img
+                            alt={`Картинка лота ${index + 1}`}
+                            src={URL.createObjectURL(image)}
+                          />
                         ) : index === 0 ? (
                           <span>Додати фото</span>
                         ) : (
@@ -126,6 +132,7 @@ const index = () => {
                   <textarea
                     placeholder="Опис"
                     onChange={(e) => setDescription(e.target.value)}
+                    maxLength={500}
                   />
                 </div>
                 <div className={styles.row}>
@@ -153,7 +160,19 @@ const index = () => {
                   </div>
                 </div>
                 <div className={styles.btnWrapper}>
-                  <Button onClick={() => createAuction(true)}>
+                  <Button
+                    onClick={createAuctionHandle}
+                    disabled={
+                      !(
+                        name &&
+                        description &&
+                        startPrice &&
+                        step &&
+                        imagesBlob.find((blob) => blob)
+                      )
+                    }
+                    loading={loading}
+                  >
                     Виставити лот на аукціон
                   </Button>
                 </div>

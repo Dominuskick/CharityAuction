@@ -98,19 +98,20 @@
   cursor: pointer;
 }
 
+.photoInputWrapper * {
+  cursor: pointer;
+}
+
 .photoInputWrapper input {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  cursor: pointer;
 }
 
 .photoInputWrapper > img {
   width: 100%;
-  height: 100%;
-  cursor: pointer;
 }
 
 .photoInputWrapper span {
@@ -120,7 +121,6 @@
   font-weight: 600;
   line-height: 28px;
   text-decoration-line: underline;
-  cursor: pointer;
 }
 
 .photoIcon {
@@ -133,11 +133,11 @@
 }
 
 .inputWrapper > textarea {
+  display: flex;
   width: 100%;
-  height: 116px;
+  min-height: 126px;
   border-radius: 32px;
   padding: 12px 32px;
-  border: none;
   outline: none;
   resize: none;
 

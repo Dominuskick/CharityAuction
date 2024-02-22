@@ -14,3 +14,8 @@ export const getUserAuctionList = async () => {
   const { data } = await $authHost.get('/Auction/auction-user');
   return data;
 };
+
+export const createAuction = async (formData) => {
+  const { data } = await $authHost.post('/Auction', formData);
+  return data;
+};

@@ -1,6 +1,9 @@
 .btn {
   width: 306px;
   height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
   font-style: normal;
