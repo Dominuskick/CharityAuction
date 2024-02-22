@@ -9,3 +9,8 @@ export const getAuctionById = async (auctionId) => {
   const { data } = await $host.get(`/Auction/${auctionId}`);
   return data;
 };
+
+export const getUserAuctionList = async () => {
+  const { data } = await $authHost.get('/Auction/auction-user');
+  return data;
+};
