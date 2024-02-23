@@ -18,7 +18,7 @@ const index = ({
   btnDisable,
   pictures,
   isEditable,
-  setDeleteToggle,
+  onDelete,
 }) => {
   if (!isEditable) {
     return (
@@ -53,7 +53,7 @@ const index = ({
     const deleteAuctionById = async () => {
       try {
         deleteAuction(id);
-        setDeleteToggle((cur) => !cur);
+        onDelete(id);
       } catch (error) {
         console.error('Delete auction failed:', error);
       }

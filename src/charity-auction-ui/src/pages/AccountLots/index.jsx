@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
 import { AccountMenu, Button, Loader, LotCard } from '@/components';
@@ -9,10 +9,14 @@ import defaultImg from '../../assets/img/defaultLot.jpg';
 import { ACCOUNT_CREATE_LOT_ROUTE } from '@/utils/constants/routes';
 import { getUserAuctionList } from '@/http/auctionAPI';
 import { refreshTokens } from '@/http/userAPI';
+import {
+  CSSTransition,
+  SwitchTransition,
+  TransitionGroup,
+} from 'react-transition-group';
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
-  const [deleteToggle, setDeleteToggle] = useState(false);
 
   const [lotCardsData, setLotCardsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +46,13 @@ const index = () => {
     };
 
     getLotListHandle();
-  }, [deleteToggle]);
+  }, []);
+
+  const deleteHandle = (id) => {
+    const arrayCopy = lotCardsData.slice();
+    const filteredArray = arrayCopy.filter((el) => el.id !== id);
+    setLotCardsData(filteredArray);
+  };
 
   return (
     <>
@@ -60,21 +70,26 @@ const index = () => {
                 <div className={styles.lotList}>
                   {loading ? (
                     <Loader />
-                  ) : lotCardsData.length === 0 ? (
-                    <p>На даний момент у вас немає активних лотів :(</p>
                   ) : (
-                    lotCardsData.map((lotCardData, i) => (
-                      <LotCard
-                        name={lotCardData.title}
-                        endTime={lotCardData.endDate}
-                        highestBid={lotCardData.currentPrice}
-                        pictures={lotCardData.pictures}
-                        id={lotCardData.id}
-                        isEditable={true}
-                        setDeleteToggle={setDeleteToggle}
-                        key={`Lot ${i}`}
-                      />
-                    ))
+                    <TransitionGroup className={styles.lotList}>
+                      {lotCardsData.map((lotCardData) => (
+                        <CSSTransition
+                          key={lotCardData.id} // Assuming 'id' is a unique identifier
+                          timeout={300}
+                          classNames="lot-card"
+                        >
+                          <LotCard
+                            name={lotCardData.title}
+                            endTime={lotCardData.endDate}
+                            highestBid={lotCardData.currentPrice}
+                            pictures={lotCardData.pictures}
+                            id={lotCardData.id}
+                            isEditable={true}
+                            onDelete={deleteHandle}
+                          />
+                        </CSSTransition>
+                      ))}
+                    </TransitionGroup>
                   )}
                 </div>
                 <div className={styles.rowBtns}>
