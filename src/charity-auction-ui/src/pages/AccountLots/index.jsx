@@ -8,6 +8,7 @@ import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
 import { ACCOUNT_CREATE_LOT_ROUTE } from '@/utils/constants/routes';
 import { getUserAuctionList } from '@/http/auctionAPI';
+import { refreshTokens } from '@/http/userAPI';
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
@@ -17,30 +18,31 @@ const index = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUserAuctionList()
-      .then((response) => {
+    const getLotListHandle = async () => {
+      try {
+        const response = await getUserAuctionList();
         setLotCardsData(response.data);
-      })
-      .catch()
-      .finally(setLoading(false));
-  }, []);
+      } catch (e) {
+        if (e.response.status === 401) {
+          try {
+            await refreshTokens();
+            const response = await getUserAuctionList();
+            setLotCardsData(response.data);
+          } catch (e) {
+            // тут редирект на страницу ошибки
+            console.error(e);
+          }
+        } else {
+          // тут редирект на страницу ошибки
+          console.error(e);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // useEffect(() => {
-  //   const getUserAuctions = async () => {
-  //     try {
-  //       const response = await auctionService.getUserAuctions();
-  //       console.log('Receive auction list successful:', response.data);
-
-  //       if (response) {
-  //         setLotCardsData(response.data);
-  //       }
-  //     } catch (error) {
-  //       console.error('Receive auction list failed:', error);
-  //     }
-  //   };
-
-  //   getUserAuctions();
-  // }, [deleteToggle]);
+    getLotListHandle();
+  }, [deleteToggle]);
 
   return (
     <>

@@ -8,6 +8,7 @@ import {
 } from '@/utils/helpers/dateManipulation';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
+import { deleteAuction } from '@/http/auctionAPI';
 
 const index = ({
   name,
@@ -51,12 +52,8 @@ const index = ({
   } else {
     const deleteAuctionById = async () => {
       try {
-        const response = await auctionService.deleteAuctionById(id);
-        console.log('Delete auction successful:', response.data);
-
-        if (response) {
-          setDeleteToggle((cur) => !cur);
-        }
+        deleteAuction(id);
+        setDeleteToggle((cur) => !cur);
       } catch (error) {
         console.error('Delete auction failed:', error);
       }

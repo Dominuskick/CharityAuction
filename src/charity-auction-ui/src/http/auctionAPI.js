@@ -19,3 +19,8 @@ export const createAuction = async (formData) => {
   const { data } = await $authHost.post('/Auction', formData);
   return data;
 };
+
+export const deleteAuction = async (auctionId) => {
+  const { data } = await $authHost.delete(`/Auction/${auctionId}`);
+  return data;
+};
