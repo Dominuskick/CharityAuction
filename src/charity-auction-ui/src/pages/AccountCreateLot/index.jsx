@@ -143,6 +143,7 @@ const index = () => {
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStartPrice(e.target.value)}
+                        max={1000000000}
                       />
                       <span>грн</span>
                     </div>
@@ -154,6 +155,7 @@ const index = () => {
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStep(e.target.value)}
+                        max={1000000000}
                       />
                       <span>грн</span>
                     </div>

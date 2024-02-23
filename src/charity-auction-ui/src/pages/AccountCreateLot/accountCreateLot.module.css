@@ -173,6 +173,10 @@
   outline: none;
   z-index: 1;
   -moz-appearance: textfield;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .bidInput > input::-webkit-outer-spin-button,

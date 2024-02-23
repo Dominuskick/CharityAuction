@@ -24,3 +24,8 @@ export const deleteAuction = async (auctionId) => {
   const { data } = await $authHost.delete(`/Auction/${auctionId}`);
   return data;
 };
+
+export const editAuction = async (formData) => {
+  const { data } = await $authHost.put('/Auction', formData);
+  return data;
+};
