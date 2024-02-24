@@ -3,8 +3,8 @@ import styles from './accountCreateLot.module.css';
 import { Header, Footer } from '@/layout';
 import Select from 'react-select';
 import { Button } from '@/components';
-import { Link } from 'react-router-dom';
-import { ACCOUNT_ROUTE } from '@/utils/constants/routes';
+import { Link, useNavigate } from 'react-router-dom';
+import { ACCOUNT_ROUTE, ERROR_ROUTE } from '@/utils/constants/routes';
 import {
   categoryOptions,
   selectStylesDarkColor,
@@ -13,6 +13,7 @@ import { createAuction } from '@/http/auctionAPI';
 import { refreshTokens } from '@/http/userAPI';
 
 const index = () => {
+  const navigate = useNavigate();
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -57,12 +58,12 @@ const index = () => {
           setIsPublished(true);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (e) {
-          // тут редирект на страницу ошибки
           console.error(e);
+          navigate(ERROR_ROUTE);
         }
       } else {
-        // тут редирект на страницу ошибки
         console.error(e);
+        navigate(ERROR_ROUTE);
       }
     } finally {
       setLoading(false);

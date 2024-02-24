@@ -14,6 +14,7 @@ import {
   selectStylesDarkColor,
 } from '@/utils/constants/select';
 import { editAuction, getAuctionById } from '@/http/auctionAPI';
+import { ERROR_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const { lotId } = useParams();
@@ -66,12 +67,12 @@ const index = () => {
           setIsPublished(true);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (e) {
-          // тут редирект на страницу ошибки
           console.error(e);
+          navigate(ERROR_ROUTE);
         }
       } else {
-        // тут редирект на страницу ошибки
         console.error(e);
+        navigate(ERROR_ROUTE);
       }
     } finally {
       setLoading(false);

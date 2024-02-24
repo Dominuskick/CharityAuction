@@ -15,6 +15,7 @@ export const REGISTRATION_ROUTE = '/registration';
 export const LOTS_ROUTE = '/lots';
 export const LOT_ROUTE = '/lots/:lotId';
 export const LOT_BETS_ROUTE = '/lots/:lotId/bets';
+export const ERROR_ROUTE = '/error';
 
 // anchors routes:
 export const SCOPE_ID = 'scope';

@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
-import { ACCOUNT_CREATE_LOT_ROUTE } from '@/utils/constants/routes';
+import {
+  ACCOUNT_CREATE_LOT_ROUTE,
+  ERROR_ROUTE,
+} from '@/utils/constants/routes';
 import { getUserAuctionList } from '@/http/auctionAPI';
 import { refreshTokens } from '@/http/userAPI';
 import {
@@ -33,12 +36,12 @@ const index = () => {
             const response = await getUserAuctionList();
             setLotCardsData(response.data);
           } catch (e) {
-            // тут редирект на страницу ошибки
             console.error(e);
+            navigate(ERROR_ROUTE);
           }
         } else {
-          // тут редирект на страницу ошибки
           console.error(e);
+          navigate(ERROR_ROUTE);
         }
       } finally {
         setLoading(false);
