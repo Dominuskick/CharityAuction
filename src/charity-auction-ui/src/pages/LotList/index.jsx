@@ -1,90 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
-import { LotCard } from '@/components';
+import { Loader, LotCard } from '@/components';
 import Select from 'react-select';
-import auctionService from '@/utils/api/auctionService';
-import defaultImg from '../../assets/img/defaultLot.jpg';
+import {
+  categoryOptions,
+  priceOptions,
+  noveltyOptions,
+  relevanceOptions,
+  selectStyles,
+} from '@/utils/constants/select';
+import { getAuctionList } from '@/http/auctionAPI';
+import { useSortLotList } from '@/utils/hooks/useSortLotList';
 
 const index = () => {
-  const categoryOptions = [
-    { value: 'Антикваріат', label: 'Антикваріат' },
-    { value: 'Букіністика', label: 'Букіністика' },
-    { value: 'Живопис', label: 'Живопис' },
-    { value: 'Електроніка', label: 'Електроніка' },
-    { value: 'Пам’ятні предмети', label: 'Пам’ятні предмети' },
-    { value: 'Ручна робота', label: 'Ручна робота' },
-    { value: 'Інше', label: 'Інше' },
-  ];
-
-  const priceOptions = [
-    { value: 'В порядку зростання', label: 'В порядку зростання' },
-    { value: 'В порядку спадання', label: 'В порядку спадання' },
-  ];
-
-  const noveltyOptions = [
-    { value: 'Від більш нових', label: 'Від більш нових' },
-    { value: 'Від більш старих', label: 'Від більш старих' },
-  ];
-
-  const relevanceOptions = [
-    { value: 'Активні', label: 'Активні' },
-    { value: 'Продані', label: 'Продані' },
-  ];
-
-  const customStyles = {
-    menu: (provided, state) => ({
-      ...provided,
-      marginTop: 0, // Убираем верхний отступ между селектом и вариантами
-    }),
-    menuList: (provided, state) => ({
-      ...provided,
-      padding: 0, // Убираем внутренний отступ вокруг вариантов
-    }),
-  };
-
   const [lotCardsData, setLotCardsData] = useState([]);
   const itemsPerPage = 9; // Количество элементов на странице
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(itemsPerPage);
   const [visibleLotCardsData, setVisibleLotCardsData] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
+  const [sortByPriceValue, setSortByPriceValue] = useState(null);
+  const [sortByNoveltyValue, setSortByNoveltyValue] = useState(null);
+
+  const sortedLotList = useSortLotList(
+    lotCardsData,
+    sortByPriceValue ? sortByPriceValue.value : null,
+    sortByNoveltyValue ? sortByNoveltyValue.value : null
+  );
+
   useEffect(() => {
-    const getAuctionList = async () => {
-      try {
-        const response = await auctionService.getAuctionList();
-        console.log('Receive auction list successful:', response.data);
-
-        if (response) {
-          setLotCardsData(response.data);
-          setTotalPages(Math.ceil(response.data.length / 9));
-        }
-      } catch (error) {
-        console.error('Receive auction list failed:', error);
-      }
-    };
-
-    getAuctionList();
+    getAuctionList()
+      .then((response) => {
+        setLotCardsData(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+      })
+      .catch()
+      .finally(setLoading(false));
   }, []);
 
   useEffect(() => {
-    const newStartIndex = (currentPage - 1) * itemsPerPage;
-    const newEndIndex = newStartIndex + itemsPerPage;
-    const newVisibleLotCardsData = lotCardsData.slice(
-      newStartIndex,
-      newEndIndex
-    );
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const newVisibleLotCardsData = sortedLotList.slice(startIndex, endIndex);
 
-    setStartIndex(newStartIndex);
-    setEndIndex(newEndIndex);
     setVisibleLotCardsData(newVisibleLotCardsData);
-  }, [currentPage, lotCardsData]);
+  }, [currentPage, sortedLotList]);
 
   const handlePageClick = (page) => {
-    console.log(page);
     setCurrentPage(page);
     // Здесь можно добавить логику для загрузки данных по выбранной странице
   };
@@ -156,7 +122,7 @@ const index = () => {
                 <Select
                   placeholder="Категорія"
                   options={categoryOptions}
-                  styles={customStyles}
+                  styles={selectStyles}
                   isMulti
                 />
               </div>
@@ -166,38 +132,51 @@ const index = () => {
                   <Select
                     placeholder="Ціною"
                     options={priceOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
+                    value={sortByPriceValue}
+                    onChange={(selected) => {
+                      setSortByPriceValue(selected);
+                      setSortByNoveltyValue(null);
+                    }}
                   />
                 </div>
                 <div className={styles.selectWrapper}>
                   <Select
                     placeholder="Новизною"
                     options={noveltyOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
+                    value={sortByNoveltyValue}
+                    onChange={(selected) => {
+                      setSortByNoveltyValue(selected);
+                      setSortByPriceValue(null);
+                    }}
                   />
                 </div>
                 <div className={styles.selectWrapper}>
                   <Select
                     placeholder="Актуальністю"
                     options={relevanceOptions}
-                    styles={customStyles}
+                    styles={selectStyles}
                   />
                 </div>
               </div>
             </div>
             <div className={styles.lotList}>
-              {visibleLotCardsData.map((lotCardData, i) => (
-                <LotCard
-                  name={lotCardData.title}
-                  endTime={lotCardData.endDate}
-                  highestBid={lotCardData.currentPrice}
-                  src={defaultImg}
-                  id={lotCardData.id}
-                  pictures={lotCardData.pictures}
-                  btnDisable={true}
-                  key={`Lot ${i}`}
-                />
-              ))}
+              {loading ? (
+                <Loader />
+              ) : (
+                visibleLotCardsData.map((lotCardData, i) => (
+                  <LotCard
+                    name={lotCardData.title}
+                    endTime={lotCardData.endDate}
+                    highestBid={lotCardData.currentPrice}
+                    id={lotCardData.id}
+                    pictures={lotCardData.pictures}
+                    btnDisable={true}
+                    key={`Lot ${i}`}
+                  />
+                ))
+              )}
             </div>
             {renderPagination()}
           </div>

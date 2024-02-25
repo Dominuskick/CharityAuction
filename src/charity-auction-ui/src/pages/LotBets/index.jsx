@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import bidsService from '@/utils/api/bidsService';
 import { formatDateString } from '@/utils/helpers/dateManipulation';
+import { LOTS_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const { lotId } = useParams();
@@ -62,7 +63,7 @@ const index = () => {
                 </div>
               </div>
               <div className={styles.btnContainer}>
-                <Link to={`/lot/${lotId}`}>
+                <Link to={LOTS_ROUTE}>
                   <Button>Повернутись до лоту</Button>
                 </Link>
               </div>

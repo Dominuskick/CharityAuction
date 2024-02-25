@@ -1,0 +1,10 @@
+.lot-card-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.lot-card-exit-active {
+  opacity: 0.01;
+  transform: translateX(300px);
+  transition: opacity 300ms, transform 300ms;
+}

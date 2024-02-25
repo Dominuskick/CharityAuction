@@ -19,12 +19,12 @@
   height: 46px;
   display: flex;
   align-items: center;
-  margin-bottom: 24px;
 }
 
 .line {
   display: flex;
   gap: 24px;
+  margin-top: 24px;
 }
 
 .images {
@@ -63,6 +63,10 @@
   border-radius: 32px;
   background: #fff;
   padding: 56px 110px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .infoCardContent {

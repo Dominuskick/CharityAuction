@@ -1,4 +1,5 @@
 @import url(./styles/typography.css);
+@import url(./styles/react-transition-group.css);
 
 * {
   box-sizing: border-box;

@@ -8,6 +8,7 @@ import {
 } from '@/utils/helpers/dateManipulation';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
+import { deleteAuction } from '@/http/auctionAPI';
 
 const index = ({
   name,
@@ -17,11 +18,11 @@ const index = ({
   btnDisable,
   pictures,
   isEditable,
-  setDeleteToggle,
+  onDelete,
 }) => {
   if (!isEditable) {
     return (
-      <Link to={`/lot/${id}`}>
+      <Link to={`/lots/${id}`}>
         <div className={styles.lotCard}>
           <img
             src={pictures ? pictures[0] : defaultImg}
@@ -51,12 +52,8 @@ const index = ({
   } else {
     const deleteAuctionById = async () => {
       try {
-        const response = await auctionService.deleteAuctionById(id);
-        console.log('Delete auction successful:', response.data);
-
-        if (response) {
-          setDeleteToggle((cur) => !cur);
-        }
+        deleteAuction(id);
+        onDelete(id);
       } catch (error) {
         console.error('Delete auction failed:', error);
       }
@@ -64,7 +61,7 @@ const index = ({
 
     return (
       <div className={`${styles.lotCard} ${styles.editable}`}>
-        <Link to={`/lot/${id}`}>
+        <Link to={`/lots/${id}`}>
           <div className={styles.row}>
             <img
               src={pictures ? pictures[0] : defaultImg}
@@ -91,7 +88,7 @@ const index = ({
         </Link>
         <hr />
         <div className={styles.controls}>
-          <Link to={`/account/lot/${id}/edit`}>
+          <Link to={`/account/lots/${id}/edit`}>
             <span className={styles.btn}>Редагувати</span>
           </Link>
           <span className={styles.btn} onClick={deleteAuctionById}>

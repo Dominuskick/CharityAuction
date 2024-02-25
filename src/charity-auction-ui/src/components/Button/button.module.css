@@ -1,6 +1,9 @@
 .btn {
   width: 306px;
   height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -25,4 +28,12 @@
 
 .btn__wide {
   width: 416px;
+}
+
+.btn__disabled {
+  color: gray;
+  border-color: gray;
+  outline-color: gray;
+  cursor: default;
+  pointer-events: none;
 }

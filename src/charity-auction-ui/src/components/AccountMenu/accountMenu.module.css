@@ -1,6 +1,6 @@
 .menu {
   width: 306px;
-  height: 200px;
+  height: 244px;
   padding: 12px 0px;
   border-radius: 32px;
   background-color: #fff;
@@ -8,8 +8,9 @@
 
 .menuItem {
   display: flex;
+  align-items: center;
   height: 44px;
-  padding: 12px 10px 6px 40px;
+  padding: 6px 10px 6px 40px;
   gap: 6px;
 
   border-radius: 32px;
@@ -64,4 +65,13 @@
 
 .menuNotifications {
   background-image: url('../../assets/icons/alert.svg');
+}
+
+.menuItem .menuLogout {
+  background-image: url('../../assets/icons/auth.svg');
+  width: 15px;
+  height: 15px;
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+  transform: rotate(180deg);
 }
