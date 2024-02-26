@@ -30,7 +30,7 @@ const index = () => {
                   </a>
                 </div>
               </div>
-              <div className={styles.line}>
+              <div className={`${styles.line} ${styles.email}`}>
                 <span>E-mail:</span>
                 <a href="mailto:betongoodness@gmail.com">
                   <span>betongoodness@gmail.com</span>
