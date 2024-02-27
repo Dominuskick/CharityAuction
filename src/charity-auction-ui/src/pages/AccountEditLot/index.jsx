@@ -18,9 +18,11 @@ import { ERROR_ROUTE } from '@/utils/constants/routes';
 
 const index = () => {
   const { lotId } = useParams();
+  const navigate = useNavigate();
 
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
+  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
   const [startPrice, setStartPrice] = useState(0);
   const [step, setStep] = useState(0);
@@ -47,7 +49,10 @@ const index = () => {
     formData.append('Title', name);
     formData.append('Description', description);
     formData.append('StartPrice', startPrice);
-    formData.append('CategoryName', 'string');
+    formData.append('MinIncrease', step);
+    categories.forEach((category) => {
+      formData.append('CategoryNames', category.value);
+    });
     imagesBlob.forEach((image) => {
       if (image) {
         formData.append(`PicturesToAdd`, image);
@@ -85,15 +90,21 @@ const index = () => {
         const response = await getAuctionById(lotId);
 
         if (response) {
-          setName(response.data.title);
-          setDescription(response.data.description);
-          setStartPrice(response.data.startPrice);
-          setStep(response.data.minIncrease);
+          const auctionData = response.data;
+          setName(auctionData.title);
+          setCategories(
+            auctionData.categoryNames.map((val) => {
+              return { value: val, label: val };
+            })
+          );
+          setDescription(auctionData.description);
+          setStartPrice(auctionData.startPrice);
+          setStep(auctionData.minIncrease);
 
           const imgArr = [];
           for (let i = 0; i < 4; i++) {
-            if (i < response.data.pictures.length) {
-              const imageUrl = response.data.pictures[i];
+            if (i < auctionData.pictures.length) {
+              const imageUrl = auctionData.pictures[i];
               try {
                 const imageResponse = await fetch(imageUrl);
                 const imageBlob = await imageResponse.blob();
@@ -144,6 +155,8 @@ const index = () => {
                     options={categoryOptions}
                     styles={selectStylesDarkColor}
                     isMulti
+                    value={categories}
+                    onChange={(value) => setCategories(value)}
                   />
                 </div>
                 <div className={styles.inputWrapper}>
@@ -192,7 +205,7 @@ const index = () => {
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStartPrice(e.target.value)}
-                        value={startPrice || ''}
+                        value={startPrice}
                         max={1000000000}
                       />
                       <span>грн</span>
@@ -205,7 +218,7 @@ const index = () => {
                         type="number"
                         placeholder="Ваша ставка"
                         onChange={(e) => setStep(e.target.value)}
-                        value={step || ''}
+                        value={step}
                         max={1000000000}
                       />
                       <span>грн</span>
