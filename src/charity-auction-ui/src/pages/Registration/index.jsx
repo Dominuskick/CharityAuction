@@ -5,6 +5,10 @@ import { Button, CheckBox, LabeledInput } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import { LOGIN_ROUTE } from '@/utils/constants/routes';
 import { registration } from '@/http/userAPI';
+import {
+  EMAIL_TAKEN_ERROR,
+  USERNAME_TAKEN_ERROR_REGEX,
+} from '@/utils/constants/backend';
 
 const index = () => {
   const [name, setName] = useState('');
@@ -13,7 +17,7 @@ const index = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [confirmedPassword, setConfirmedPassword] = useState('');
 
   const [isAdult, setIsAdult] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
@@ -25,8 +29,10 @@ const index = () => {
     useState('');
   const [userNameValidationError, setUserNameValidationError] = useState('');
   const [passwordValidationError, setPasswordValidationError] = useState('');
-  const [passwordConfirmValidationError, setPasswordConfirmValidationError] =
-    useState('');
+  const [
+    confirmedPasswordValidationError,
+    setConfirmedPasswordValidationError,
+  ] = useState('');
 
   const validate = () => {
     let isValid = true;
@@ -79,12 +85,12 @@ const index = () => {
       setPasswordValidationError('Занадто коротко');
       isValid = false;
     }
-    // passwordConfirm
-    if (!passwordConfirm) {
-      setPasswordConfirmValidationError("Обов'язково");
+    // confirmedPassword
+    if (!confirmedPassword) {
+      setConfirmedPasswordValidationError("Обов'язково");
       isValid = false;
-    } else if (passwordConfirm !== password) {
-      setPasswordConfirmValidationError('Паролі не збігаються');
+    } else if (confirmedPassword !== password) {
+      setConfirmedPasswordValidationError('Паролі не збігаються');
       isValid = false;
     }
 
@@ -116,8 +122,8 @@ const index = () => {
   }, [password]);
 
   useEffect(() => {
-    setPasswordConfirmValidationError('');
-  }, [passwordConfirm]);
+    setConfirmedPasswordValidationError('');
+  }, [confirmedPassword]);
 
   const navigate = useNavigate();
 
@@ -144,9 +150,11 @@ const index = () => {
           navigate(LOGIN_ROUTE);
         }
       } catch (e) {
-        console.error(e.response.data.error || e);
-        const regex = /Username \'[^]+\' is already taken./;
-        if (e.response.data.error && regex.test(e.response.data.error)) {
+        const errorData = e.response.data.error;
+        if (errorData && errorData === EMAIL_TAKEN_ERROR) {
+          setEmailValidationError('Пошта зайнята');
+        }
+        if (errorData && USERNAME_TAKEN_ERROR_REGEX.test(errorData)) {
           setUserNameValidationError('Логін зайнятий');
         }
       } finally {
@@ -231,10 +239,10 @@ const index = () => {
                   label={'Повторити пароль'}
                   type={'password'}
                   placeholder={'********'}
-                  value={passwordConfirm}
-                  setValue={setPasswordConfirm}
+                  value={confirmedPassword}
+                  setValue={setConfirmedPassword}
                   maxLength={20}
-                  error={passwordConfirmValidationError}
+                  error={confirmedPasswordValidationError}
                 />
                 <div className={styles.inputWrapperLine}>
                   <CheckBox setValue={setIsConfirm} />
@@ -261,7 +269,7 @@ const index = () => {
                     isAdult &&
                     userName &&
                     password &&
-                    passwordConfirm &&
+                    confirmedPassword &&
                     isConfirm
                   )
                 }
