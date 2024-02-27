@@ -16,6 +16,7 @@ const index = () => {
   const navigate = useNavigate();
   const [isPublished, setIsPublished] = useState(false);
   const [name, setName] = useState('');
+  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
   const [startPrice, setStartPrice] = useState(0);
   const [step, setStep] = useState(0);
@@ -38,7 +39,9 @@ const index = () => {
     formData.append('Description', description);
     formData.append('StartPrice', startPrice);
     formData.append('MinIncrease', step);
-    formData.append('CategoryName', 'string');
+    categories.forEach((category) => {
+      formData.append('CategoryNames', category.value);
+    });
     imagesBlob.forEach((image) => {
       if (image) {
         formData.append(`Pictures`, image);
@@ -97,6 +100,8 @@ const index = () => {
                     options={categoryOptions}
                     styles={selectStylesDarkColor}
                     isMulti
+                    value={categories}
+                    onChange={(value) => setCategories(value)}
                   />
                 </div>
                 <div className={styles.inputWrapper}>
@@ -168,6 +173,7 @@ const index = () => {
                     disabled={
                       !(
                         name &&
+                        categories &&
                         description &&
                         startPrice &&
                         step &&

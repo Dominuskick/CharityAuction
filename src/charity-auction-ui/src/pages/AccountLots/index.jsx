@@ -2,7 +2,7 @@ import React, { useState, useEffect, createRef } from 'react';
 import styles from './lotlist.module.css';
 import { Header, Footer } from '@/layout';
 import { AccountMenu, Button, Loader, LotCard } from '@/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
@@ -20,6 +20,7 @@ import {
 
 const index = () => {
   const name = useSelector((state) => state.auth.login);
+  const navigate = useNavigate();
 
   const [lotCardsData, setLotCardsData] = useState([]);
   const [loading, setLoading] = useState(true);
