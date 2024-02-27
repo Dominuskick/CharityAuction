@@ -8,13 +8,6 @@
   color: #131313;
 }
 
-.lotCard > img,
-.row > img {
-  width: 306px;
-  height: 281px;
-  border-radius: 32px;
-}
-
 .lotCardDescription {
   width: 100%;
   display: flex;
@@ -70,11 +63,6 @@
   width: 313px;
 }
 
-.row > img {
-  width: 176px;
-  height: 148px;
-}
-
 .row > .lotCardDescription {
   align-items: flex-start;
 }
@@ -104,4 +92,23 @@
   line-height: normal;
   text-decoration-line: underline;
   cursor: pointer;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 306px;
+  height: 281px;
+  overflow: hidden;
+  border-radius: 32px;
+}
+
+.imgContainerEditable {
+  width: 176px;
+  height: 148px;
+}
+
+.imgContainer > img {
+  width: 100%;
 }

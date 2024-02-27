@@ -24,10 +24,12 @@ const index = ({
     return (
       <Link to={`/lots/${id}`}>
         <div className={styles.lotCard}>
-          <img
-            src={pictures ? pictures[0] : defaultImg}
-            alt={`Картинка лоту під назвою ${name}`}
-          ></img>
+          <div className={styles.imgContainer}>
+            <img
+              src={pictures ? pictures[0] : defaultImg}
+              alt={`Картинка лоту під назвою ${name}`}
+            />
+          </div>
           <div className={styles.lotCardDescription}>
             <h3>{name}</h3>
             <div className={styles.lotCardDescriptionPoints}>
@@ -63,10 +65,14 @@ const index = ({
       <div className={`${styles.lotCard} ${styles.editable}`}>
         <Link to={`/lots/${id}`}>
           <div className={styles.row}>
-            <img
-              src={pictures ? pictures[0] : defaultImg}
-              alt={`Картинка лоту під назвою ${name}`}
-            ></img>
+            <div
+              className={`${styles.imgContainer} ${styles.imgContainerEditable}`}
+            >
+              <img
+                src={pictures ? pictures[0] : defaultImg}
+                alt={`Картинка лоту під назвою ${name}`}
+              />
+            </div>
             <div className={styles.lotCardDescription}>
               <h3>{name}</h3>
               <div className={styles.lotCardDescriptionPoints}>
