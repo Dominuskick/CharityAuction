@@ -26,12 +26,12 @@ const index = ({
         <div className={styles.lotCard}>
           <div className={styles.imgContainer}>
             <img
-              src={pictures ? pictures[0] : defaultImg}
+              src={pictures?.length > 0 ? pictures[0] : defaultImg}
               alt={`Картинка лоту під назвою ${name}`}
             />
           </div>
           <div className={styles.lotCardDescription}>
-            <h3>{name}</h3>
+            <h3 className={styles.lotCardName}>{name}</h3>
             <div className={styles.lotCardDescriptionPoints}>
               <p>
                 <b>Закінчення:</b>

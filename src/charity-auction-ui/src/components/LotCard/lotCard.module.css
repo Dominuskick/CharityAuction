@@ -1,4 +1,5 @@
 .lotCard {
+  width: 306px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,6 +7,14 @@
 
   background-color: #fff;
   color: #131313;
+}
+
+.lotCardName {
+  width: 100%;
+  white-space: nowrap; /* Запрет переноса текста на новую строку */
+  overflow: hidden; /* Скрытие текста, который не помещается в контейнере */
+  text-overflow: ellipsis; /* Замена не видимого текста на многоточие */
+  text-align: center;
 }
 
 .lotCardDescription {
@@ -98,7 +107,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 306px;
+  width: 100%;
   height: 281px;
   overflow: hidden;
   border-radius: 32px;
