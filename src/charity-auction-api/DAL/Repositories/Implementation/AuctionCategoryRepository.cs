@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Implementation
 {
-    public class CategoryRepository : BaseRepository<Category, string>, ICategoryRepository
+    public class AuctionCategoryRepository : BaseRepository<AuctionCategory, Guid>, IAuctionCategoryRepository
     {
-        public CategoryRepository(DbContext context) : base(context)
+        public AuctionCategoryRepository(DbContext context) : base(context)
         {
         }
     }

@@ -10,10 +10,9 @@ namespace BLL.Services.Interfaces
 {
     public interface ICategoryService
     {
-        public Task<Result<CategotyDetailsDto>> GetById(Guid id);
-        public Task<Result<IEnumerable<CategotyDetailsDto>>> GetAll();
+        public Task<Result<CategoryDto>> GetById(string name);
+        public Task<Result<IEnumerable<CategoryDto>>> GetAll();
         public Task<Result> AddCategory(CategoryDto categoryDto);
-        public Task<Result> DeleteCategory(Guid id);
-        Task<Result<CategotyDetailsDto>> GetByName(string name);
+        public Task<Result> DeleteCategory(string name);
     }
 }

@@ -43,6 +43,11 @@ namespace BLL.Services.Implemantation
                 FullName = userDto.FullName
             };
 
+            var email = await _userManager.FindByEmailAsync(user.Email);
+            if(email != null)
+            {
+                return Result<UserDetailsDto>.Failure(Messages.Auth.EmailInUse);
+            }
 
             var result = await _userManager.CreateAsync(user, userDto.Password);
             if (result.Succeeded)

@@ -15,7 +15,7 @@ namespace BLL.Models
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
         public decimal MinIncrease { get; set; }
-        public string CategoryName { get; set; }
+        public IEnumerable<string> CategoryNames { get; set; }
 
         [FromForm]
         public IEnumerable<IFormFile> Pictures { get; set; }
@@ -25,7 +25,7 @@ namespace BLL.Models
     {
         public Guid Id { get; set; }
         public IEnumerable<string> Pictures { get; set; }
-        public string CategoryName { get; set; }
+        public IEnumerable<string> CategoryNames { get; set; }
         public string UserName { get; set; }
     }
 
@@ -38,7 +38,6 @@ namespace BLL.Models
         public decimal StartPrice { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
-        public Guid CategoryId { get; set; }
         public string UserId { get; set; }
 
     }
@@ -50,7 +49,7 @@ namespace BLL.Models
         public string Description { get; set; }
         public decimal StartPrice { get; set; }
         public decimal MinIncrease { get; set; }
-        public string CategoryName { get; set; }
-        public ICollection<IFormFile> PicturesToAdd { get; set; }
+        public IEnumerable<string> CategoryNames { get; set; }
+        public IEnumerable<IFormFile> PicturesToAdd { get; set; }
     }
 }

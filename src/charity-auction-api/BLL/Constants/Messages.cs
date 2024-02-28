@@ -36,6 +36,8 @@ namespace BLL.Constants
             public static string RefreshTokenInvalid = "Refresh token is invalid.";
             public static string RefreshTokenNotFound = "Refresh token not found.";
             public static string AccescTokenCanBeUsed = "Access token still can be used or refresh token is expired";
+
+            public static string EmailInUse = "Email already in use.";
         }
         public static class Bid
         {

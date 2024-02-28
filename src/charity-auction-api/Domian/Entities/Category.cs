@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Category : Entity
+    public class Category
     {
         public string Name { get; set; }
-        public ICollection<Auction> Auctions { get; set; }
+        public ICollection<AuctionCategory> AuctionCategories { get; set; } = new HashSet<AuctionCategory>();
+
     }
 }

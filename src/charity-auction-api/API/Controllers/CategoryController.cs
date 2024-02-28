@@ -28,9 +28,9 @@ namespace API.Controllers
         }
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeleteCategory([FromBody] Guid id)
+        public async Task<IActionResult> DeleteCategory([FromBody] string name)
         {
-            var result = await _categoryService.DeleteCategory(id);
+            var result = await _categoryService.DeleteCategory(name);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -49,10 +49,10 @@ namespace API.Controllers
             return NotFound(result);
         }
 
-        [HttpGet("id/{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetById(string name)
         {
-            var result = await _categoryService.GetById(id);
+            var result = await _categoryService.GetById(name);
             if (result.IsSuccess)
             {
                 return Ok(result.Data);
@@ -60,15 +60,5 @@ namespace API.Controllers
             return NotFound(result);
         }
 
-        [HttpGet("name/{name}")]
-        public async Task<IActionResult> GetByName(string name)
-        {
-            var result = await _categoryService.GetByName(name);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Data);
-            }
-            return NotFound(result);
-        }
     }
 }

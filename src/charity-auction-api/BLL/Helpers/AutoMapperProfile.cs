@@ -23,7 +23,6 @@ namespace BLL.Helpers
             CreateMap<Bid, BidDto>().ReverseMap();
             CreateMap<Bid, CreateBidDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<Category, CategotyDetailsDto>().ReverseMap();
 
             CreateMap<Auction, AuctionDto>().ReverseMap();
             CreateMap<Bid, BidDetailsDto>()
@@ -32,17 +31,20 @@ namespace BLL.Helpers
 
             CreateMap<Auction, AuctionDetailsDto>()
                 .ForMember(dest => dest.Pictures, opt => opt.MapFrom(src => src.Pictures.Select(p => p.Url)))
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.AuctionCategories.Select(a => a.Category.Name)))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
             .ReverseMap().IgnoreAllSourcePropertiesWithAnInaccessibleSetter();
 
-            CreateMap<CreateAuctionDto, AuctionDto>()
-               .ForMember(dest => dest.CurrentPrice, opt => opt.MapFrom(src => src.StartPrice))
-               .ForMember(dest => dest.UserId, opt => opt.Ignore()) // We'll set this manually
-               .ForMember(dest => dest.CategoryId, opt => opt.Ignore()) // We'll set this manually
-               .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.UtcNow))
-               .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)));
-
+            CreateMap<CreateAuctionDto, Auction>()
+                .ForMember(dest => dest.CurrentPrice, opt => opt.MapFrom(src => src.StartPrice))
+                .ForMember(dest => dest.UserId, opt => opt.Ignore()) // We'll set this manually
+                .ForMember(dest => dest.AuctionCategories, opt => opt.Ignore()) // We'll set this manually
+                .ForMember(dest => dest.Pictures, opt => opt.Ignore()) // We'll set this manually
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => DateTime.UtcNow.AddDays(ApplicationConstants.AuctionExpirationTimeInDays)))
+                .ForMember(dest => dest.User, opt => opt.Ignore()) // Ignore this
+                .ForMember(dest => dest.Bids, opt => opt.Ignore()) // Ignore this
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid())); // Ignore this
 
 
             CreateMap<Picture, PictureDto>();

@@ -20,7 +20,8 @@ namespace DAL.Repositories.Implementation
             return _set
                 .Include(a => a.Pictures)
                 .Include(a => a.User)
-                .Include(a => a.Category);
+                .Include(a => a.AuctionCategories)
+                    .ThenInclude(ac => ac.Category);
         }
 
         public async Task<IEnumerable<Auction>> GetAuctionsWithInfoAsyncAsNoTracking()
@@ -28,7 +29,8 @@ namespace DAL.Repositories.Implementation
             return await _set
                 .Include(a => a.Pictures)
                 .Include(a => a.User)
-                .Include(a => a.Category)
+                .Include(a => a.AuctionCategories)
+                    .ThenInclude(ac => ac.Category)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -38,7 +40,8 @@ namespace DAL.Repositories.Implementation
         {
             return await _set
                 .Include(a => a.Pictures)
-                .Include(a => a.Category)
+                .Include(a => a.AuctionCategories)
+                    .ThenInclude(ac => ac.Category)
                 .Include(a => a.User)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }

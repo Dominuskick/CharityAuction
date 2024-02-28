@@ -16,10 +16,9 @@ namespace Domain.Entities
         public decimal StartPrice { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal MinIncrease { get; set; }
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
+        public ICollection<AuctionCategory> AuctionCategories { get; set; } = new HashSet<AuctionCategory>();
         public ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();
         public ICollection<Picture> Pictures { get; set; } = new HashSet<Picture>();
     }

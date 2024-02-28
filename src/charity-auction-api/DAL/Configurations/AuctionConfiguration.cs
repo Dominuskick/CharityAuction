@@ -68,9 +68,6 @@ namespace DAL.Configurations
                 .WithOne(i => i.Auction)
                 .HasForeignKey(i => i.AuctionId);
 
-            builder
-                .Property(p => p.CategoryId)
-                .IsRequired();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BLL.Models
     {
         public Guid AuctionId { get; set; }
 
-        public ICollection<IFormFile> PicturesToAdd { get; set; }
+        public IEnumerable<IFormFile> PicturesToAdd { get; set; }
 
     }
 }

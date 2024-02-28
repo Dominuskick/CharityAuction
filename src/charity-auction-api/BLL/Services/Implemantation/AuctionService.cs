@@ -19,56 +19,64 @@ namespace BLL.Services.Implemantation
     public class AuctionService : IAuctionService
     {
         private readonly IAuctionRepository auctionRepository;
+        private readonly IAuctionCategoryRepository auctionCategoryRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IPictureService pictureService;
         private readonly ICurrentUserService currentUserService;
         private readonly IMapper mapper;
 
         public AuctionService(IAuctionRepository auctionRepository, 
-            IMapper mapper, 
-            ICategoryRepository categoryRepository, 
+            IMapper mapper,
+            IAuctionCategoryRepository auctionCategoryRepository, 
             IPictureService pictureService,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            ICategoryRepository categoryRepository)
         {
             this.auctionRepository = auctionRepository;
             this.mapper = mapper;
-            this.categoryRepository = categoryRepository;
+            this.auctionCategoryRepository = auctionCategoryRepository;
             this.pictureService = pictureService;
             this.currentUserService = currentUserService;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<Result> CreateAuction(CreateAuctionDto auctionDto, IEnumerable<IFormFile> pictures)
         {
-            var categoryExists = await categoryRepository.FindAsync(a => a.Name == auctionDto.CategoryName);
+            var categories = await categoryRepository.GetAllAsync();
+            var categoryNames = categories.Select(c => c.Name);
 
-            if (!categoryExists.Any())
+            if (!auctionDto.CategoryNames.All(name => categoryNames.Contains(name)))
             {
                 return Result.Failure(Messages.Category.CategoryNotFound);
             }
-            var category = categoryExists.FirstOrDefault();
 
-            var auction = mapper.Map<AuctionDto>(auctionDto);
-            auction.CategoryId = category.Id;
+            var auction = mapper.Map<Auction>(auctionDto);
             auction.UserId = currentUserService.UserId;
+            var auctionId = auction.Id;
+            await auctionRepository.CreateAsync(auction);
 
-            var createdAuction = mapper.Map<Auction>(auction);
-            await auctionRepository.CreateAsync(createdAuction);
-
-            var auctionId = createdAuction.Id;
-
-            var picturesDto = new CreatePictureDto { Pictures = pictures, AuctionId = auctionId };
+            var picturesDto = new CreatePictureDto { Pictures = pictures.Reverse(), AuctionId = auctionId };
             await pictureService.AddPictures(picturesDto);
+
+            // Create AuctionCategory for each category
+            foreach (var categoryName in auctionDto.CategoryNames)
+            {
+                var category = categories.First(c => c.Name == categoryName);
+                var auctionCategory = new AuctionCategory
+                {
+                    AuctionId = auctionId,
+                    CategoryName = category.Name
+                };
+                await auctionCategoryRepository.CreateAsync(auctionCategory);
+            }
+
+
             return Result.Success();
         }
 
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> FindAuctions(Func<AuctionDetailsDto, bool> predicate)
         {
             var auctions = await auctionRepository.GetAuctionsWithInfoAsync();
-            if (!auctions.Any())
-            {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
-            }
-
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions);
 
             var filteredAuctions = auctionDtos.Where(predicate);
@@ -79,10 +87,6 @@ namespace BLL.Services.Implemantation
         public async Task<Result<IEnumerable<AuctionDetailsDto>>> GetAllAuctions()
         {
             var auctions = await auctionRepository.GetAuctionsWithInfoAsyncAsNoTracking();
-            if (!auctions.Any())
-            {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
-            }
 
             var auctionDtos = mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions.ToList());
 
@@ -94,21 +98,12 @@ namespace BLL.Services.Implemantation
         {
             var auctions = await auctionRepository.GetAuctionsWithInfoAsync();
             auctions = auctions.Where(a => a.UserId == currentUserService.UserId);
-            if (!auctions.Any())
-            {
-                return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Auction.AuctionNotFound);
-            }
             return Result<IEnumerable<AuctionDetailsDto>>.Success(mapper.Map<IEnumerable<AuctionDetailsDto>>(auctions));
         }
 
         public async Task<Result<AuctionDetailsDto>> GetAuction(Guid id)
         {
             var auction = await auctionRepository.GetAuctionWithInfoAsync(id);
-            if (auction == null)
-            {
-                return Result<AuctionDetailsDto>.Failure(Messages.Auction.AuctionNotFound);
-            }
-
             var auctionDto = mapper.Map<AuctionDetailsDto>(auction);
             
             return Result<AuctionDetailsDto>.Success(auctionDto);
@@ -136,7 +131,6 @@ namespace BLL.Services.Implemantation
 
         public async Task<Result> UpdateAuction(UpdateAuctionDto auctionDto)
         {
-
             var auction = await auctionRepository.GetAuctionWithInfoAsync(auctionDto.Id);
             if (auction == null)
             {
@@ -144,15 +138,32 @@ namespace BLL.Services.Implemantation
             }
             if (auction.StartDate > DateTime.UtcNow)
                 return Result.Failure(Messages.Auction.AuctionStarted);
-            if(auctionDto.CategoryName != auction.Category.Name)
+
+            var categories = await categoryRepository.GetAllAsync();
+            var categoryNames = categories.Select(c => c.Name);
+
+            if (!auctionDto.CategoryNames.All(name => categoryNames.Contains(name)))
             {
-                var categoryExists = await categoryRepository.FindAsync(a => a.Name == auctionDto.CategoryName);
-                if (!categoryExists.Any())
+                return Result.Failure(Messages.Category.CategoryNotFound);
+            }
+
+            // Remove old AuctionCategories
+            var oldAuctionCategories = auction.AuctionCategories;
+            foreach (var oldAuctionCategory in oldAuctionCategories)
+            {
+                await auctionCategoryRepository.DeleteAsync(oldAuctionCategory.Id);
+            }
+
+            // Add new AuctionCategories
+            foreach (var categoryName in auctionDto.CategoryNames)
+            {
+                var category = categories.First(c => c.Name == categoryName);
+                var auctionCategory = new AuctionCategory
                 {
-                    return Result.Failure(Messages.Category.CategoryNotFound);
-                }
-                var category = categoryExists.FirstOrDefault();
-                auction.CategoryId = category.Id;
+                    AuctionId = auction.Id,
+                    CategoryName = category.Name
+                };
+                await auctionCategoryRepository.CreateAsync(auctionCategory);
             }
 
             auction.Title = auctionDto.Title;
@@ -162,9 +173,8 @@ namespace BLL.Services.Implemantation
 
             // Update the auction in the database
             await auctionRepository.UpdateAsync(auction);
-            var auctionId = auction.Id;
 
-            var updatePictureDto = new UpdatePictureDto { PicturesToAdd = auctionDto.PicturesToAdd, AuctionId = auctionId };
+            var updatePictureDto = new UpdatePictureDto { PicturesToAdd = auctionDto.PicturesToAdd.Reverse(), AuctionId = auction.Id };
 
             var result = await pictureService.UpdatePictures(updatePictureDto);
             if (!result.IsSuccess)
@@ -186,7 +196,7 @@ namespace BLL.Services.Implemantation
             // Filtering
             if (categoryNames != null && categoryNames.Count > 0)
             {
-                auctions = auctions.Where(auctions => categoryNames.Contains(auctions.Category.Name));
+                auctions = auctions.Where(auction => auction.AuctionCategories.Any(category => categoryNames.Contains(category.Category.Name)));
                 if (!auctions.Any())
                 {
                     return Result<IEnumerable<AuctionDetailsDto>>.Failure(Messages.Category.CategoryNotFound);

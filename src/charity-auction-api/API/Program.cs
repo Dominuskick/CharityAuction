@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Microsoft.Extensions.Hosting;
+using API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,13 +64,14 @@ builder.Services.AddSwaggerGen(opt =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseCustomExceptionHandler();
+app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.DisplayRequestDuration();
 });
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -16,13 +16,14 @@ namespace DAL.Configurations
             builder
                 .ToTable("Categories");
 
+
             builder
-                .HasKey(p => p.Id);
+                .HasKey(p => p.Name);
 
             builder
                 .Property(p => p.Name)
-                .IsRequired()
                 .HasMaxLength(ModelConstants.Category.NameMaxLength);
+
         }
     }
 }

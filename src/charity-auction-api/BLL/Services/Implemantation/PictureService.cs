@@ -160,14 +160,14 @@ namespace BLL.Services.Implemantation
                     }
                 }
             }*/
-            var picturesToRemove = await pictureRepository.GetAllAsync();
-            foreach (var pictureToRemove in picturesToRemove)
-            {
-                await DeletePicture(pictureToRemove.Id);
-            }
 
             if (pictureDto.PicturesToAdd.Any())
             {
+                var picturesToRemove = await pictureRepository.FindAsync(p => p.AuctionId == pictureDto.AuctionId);
+                foreach (var pictureToRemove in picturesToRemove)
+                {
+                    await DeletePicture(pictureToRemove.Id);
+                }
                 var result = await AddPictures(new CreatePictureDto { Pictures = pictureDto.PicturesToAdd, AuctionId = pictureDto.AuctionId });
                 if (!result.IsSuccess)
                 {

@@ -40,6 +40,7 @@ namespace BLL.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IAuctionCategoryRepository, AuctionCategoryRepository>();
             return services;
         }
     }
