@@ -24,6 +24,10 @@
   margin: 40px 0;
 }
 
+.btnWrapper > button {
+  width: 100%;
+}
+
 .login {
   display: flex;
   flex-direction: column;
