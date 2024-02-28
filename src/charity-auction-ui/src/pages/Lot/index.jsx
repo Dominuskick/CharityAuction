@@ -13,6 +13,7 @@ import {
 import bidsService from '@/utils/api/bidsService';
 import { LOT_BETS_ROUTE } from '@/utils/constants/routes';
 import { getAuctionById } from '@/http/auctionAPI';
+import { createBid, getAuctionBidsById } from '@/http/bidAPI';
 
 const index = () => {
   const { lotId } = useParams();
@@ -23,48 +24,42 @@ const index = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAuctionById(lotId)
-      .then((response) => {
+    const getAuctionAndBidsData = async () => {
+      try {
+        const response = await getAuctionById(lotId);
         console.log(response.data);
         setLotCardData(response.data);
         if (response.data.pictures.length > 0) {
           setSelectedImg(response.data.pictures[0]);
         }
-      })
-      .catch()
-      .finally(setLoading(false));
-  }, []);
-
-  const getBids = async () => {
-    try {
-      const bidsResponse = await bidsService.getBids(lotId);
-
-      if (bidsResponse) {
-        setBids(bidsResponse.data);
+        await getAndSetBids(lotId);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Receive bids failed:', error);
-    }
-  };
-
-  const createBid = async () => {
-    const data = {
-      amount: bid,
-      auctionId: lotId,
     };
 
-    console.log(data);
+    getAuctionAndBidsData();
+  }, []);
 
+  const getAndSetBids = async (id) => {
+    getAuctionBidsById(id)
+      .then((response) => {
+        console.log(response.data);
+        setBids(response.data);
+      })
+      .catch();
+  };
+
+  const createBidHandle = async () => {
     try {
-      const response = await bidsService.createBid(data);
+      const response = await createBid(bid, lotId);
       console.log('Create bid successful:', response);
-
-      if (response) {
-        setBid(0);
-        getBids();
-      }
+      setBid('');
+      getAndSetBids(lotCardData.id);
     } catch (error) {
-      console.error('Create auction failed:', error);
+      console.error('Create bid failed:', error);
     }
   };
 
@@ -188,7 +183,9 @@ const index = () => {
                     </div>
                   </div>
                   <div className={styles.btnContainer}>
-                    <Button onClick={createBid}>Підтвердити ставку</Button>
+                    <Button onClick={createBidHandle}>
+                      Підтвердити ставку
+                    </Button>
                   </div>
                 </div>
               </div>
