@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import styles from './lotbets.module.css';
 import { Header, Footer } from '@/layout';
 import { Button } from '@/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
 import bidsService from '@/utils/api/bidsService';
 import { formatDateString } from '@/utils/helpers/dateManipulation';
-import { LOTS_ROUTE } from '@/utils/constants/routes';
+import { ERROR_ROUTE, LOTS_ROUTE } from '@/utils/constants/routes';
+import { getAuctionById } from '@/http/auctionAPI';
+import { getAuctionBidsById } from '@/http/bidAPI';
 
 const index = () => {
   const { lotId } = useParams();
+  const navigate = useNavigate();
 
   const [lotCardData, setLotCardData] = useState([]);
   const [bidsData, setBidsData] = useState([]);
@@ -18,18 +21,12 @@ const index = () => {
   useEffect(() => {
     const getAuction = async () => {
       try {
-        const response = await auctionService.getAuction(lotId);
-        console.log('Receive bids successful:', response.data);
-        const response2 = await bidsService.getBids(lotId);
-
-        if (response && response2) {
-          setLotCardData(response.data);
-          setBidsData(response2.data);
-          console.log(lotId);
-          console.log(response2.data);
-        }
-      } catch (error) {
-        console.error('Receive bids failed:', error);
+        const auctionResponse = await getAuctionById(lotId);
+        const bidsResponse = await getAuctionBidsById(lotId);
+        setLotCardData(auctionResponse.data);
+        setBidsData(bidsResponse.data);
+      } catch (e) {
+        navigate(ERROR_ROUTE);
       }
     };
 

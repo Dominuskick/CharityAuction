@@ -151,7 +151,7 @@ const index = () => {
                   <div>
                     <div className={styles.column}>
                       <b>Поточна ціна</b>
-                      <Link to={LOT_BETS_ROUTE}>
+                      <Link to={`/lots/${lotId}/bets`}>
                         <span style={{ display: 'flex', gap: '5px' }}>
                           ({loading ? <LoaderInline size="21" /> : bids.length}{' '}
                           ставок)
