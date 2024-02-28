@@ -67,6 +67,14 @@
 .links > a {
   font-size: 20px;
   font-weight: 700;
+  background: linear-gradient(currentColor, currentColor) bottom / 0 0.1em
+    no-repeat;
+  background-position: left bottom;
+  transition: 0.3s background-size;
+}
+
+.links > a:hover {
+  background-size: 100% 0.1em;
 }
 
 .auth {
@@ -77,9 +85,14 @@
   align-items: center;
   gap: 8px;
 
+  background-color: #fff;
   border-radius: 20px;
   border: 1px solid #131313;
   cursor: pointer;
+}
+
+.auth:hover {
+  background-color: #edeeef;
 }
 
 .auth > span:first-child {

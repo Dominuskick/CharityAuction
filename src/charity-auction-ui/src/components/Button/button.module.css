@@ -20,20 +20,33 @@
   cursor: pointer;
 }
 
-.btn__black {
-  background-color: #131313;
-  border-color: #fff;
-  color: #fff;
+.btn:hover {
+  background-color: #edeeef;
 }
 
 .btn__wide {
   width: 416px;
 }
 
-.btn__disabled {
-  color: gray;
-  border-color: gray;
-  outline-color: gray;
+.btn:disabled {
+  background-color: #dadada;
+  border: none;
+  color: #8a8f92;
   cursor: default;
   pointer-events: none;
+}
+
+.btn__black {
+  background-color: #131313;
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn__black:hover {
+  background-color: #1a1a1a;
+}
+
+.btn__black:disabled {
+  background-color: #515151;
+  color: #7b7b7b;
 }

@@ -13,20 +13,13 @@
 }
 
 .inputWrapper label.error {
-  color: #c62828;
+  color: #ff785a;
   font-size: 20px;
 }
 
 .line {
   display: flex;
   justify-content: space-between;
-}
-
-.inputWrapper.error > input {
-  border-color: #c62828;
-  outline: none;
-  border-width: 2px;
-  animation: shake 0.5s ease-in-out;
 }
 
 .inputWrapper > input {
@@ -45,6 +38,17 @@
 
 .inputWrapper > input::placeholder {
   color: #a5a5a5;
+}
+
+.inputWrapper.error > input {
+  border: 1px solid #ff785a;
+  outline: none;
+  border-width: 2px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.inputWrapper > input:focus {
+  outline: 1px solid #131313;
 }
 
 @keyframes shake {
