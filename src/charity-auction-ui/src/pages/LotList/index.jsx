@@ -163,7 +163,9 @@ const index = () => {
             </div>
             <div className={styles.lotList}>
               {loading ? (
-                <Loader />
+                <div style={{ margin: '0 auto' }}>
+                  <Loader />
+                </div>
               ) : (
                 visibleLotCardsData.map((lotCardData, i) => (
                   <LotCard
