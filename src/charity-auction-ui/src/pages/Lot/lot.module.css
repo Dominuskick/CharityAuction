@@ -134,8 +134,6 @@
 .bidInput {
   width: 306px;
   height: 32px;
-  border-radius: 4px;
-  border: 1px solid #131313;
   position: relative;
 }
 
@@ -150,6 +148,16 @@
   outline: none;
   z-index: 1;
   -moz-appearance: textfield;
+  border-radius: 4px;
+  border: 1px solid #131313;
+}
+
+.bidInput > input:disabled {
+  border: 1px solid #d1d1d1;
+}
+
+.bidInput > input:disabled::placeholder {
+  color: #ccc;
 }
 
 .bidInput > input::-webkit-outer-spin-button,

@@ -14,9 +14,12 @@ import bidsService from '@/utils/api/bidsService';
 import { LOT_BETS_ROUTE } from '@/utils/constants/routes';
 import { getAuctionById } from '@/http/auctionAPI';
 import { createBid, getAuctionBidsById } from '@/http/bidAPI';
+import { useSelector } from 'react-redux';
 
 const index = () => {
   const { lotId } = useParams();
+  const login = useSelector((state) => state.auth.login);
+
   const [lotCardData, setLotCardData] = useState([]);
   const [bid, setBid] = useState('');
   const [bids, setBids] = useState([]);
@@ -178,12 +181,13 @@ const index = () => {
                           setBid(e.target.value);
                         }}
                         value={bid}
+                        disabled={!login}
                       />
                       <span>грн</span>
                     </div>
                   </div>
                   <div className={styles.btnContainer}>
-                    <Button onClick={createBidHandle}>
+                    <Button onClick={createBidHandle} disabled={!login}>
                       Підтвердити ставку
                     </Button>
                   </div>
