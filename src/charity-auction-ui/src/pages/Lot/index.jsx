@@ -25,8 +25,9 @@ const index = () => {
   useEffect(() => {
     getAuctionById(lotId)
       .then((response) => {
+        console.log(response.data);
         setLotCardData(response.data);
-        if (response.data.pictures) {
+        if (response.data.pictures.length > 0) {
           setSelectedImg(response.data.pictures[0]);
         }
       })
@@ -89,35 +90,44 @@ const index = () => {
                   />
                 </div>
                 <div className={styles.imgRow}>
-                  {lotCardData && lotCardData.pictures ? (
+                  {lotCardData && lotCardData.pictures?.length > 0 ? (
                     lotCardData.pictures.map(
                       (pic, i) =>
                         i < 4 && (
-                          <img
-                            src={pic}
-                            alt={`Зображення лоту з назвою ${
-                              lotCardData && lotCardData.title
-                            } під номером ${i}`}
-                            className={`${styles.microImg} ${
+                          <div
+                            className={`${styles.imageWrapper} ${
                               selectedImg === lotCardData.pictures[i] &&
                               styles.microImgSelected
                             }`}
-                            onClick={() =>
-                              setSelectedImg(lotCardData.pictures[i])
-                            }
                             key={`Зображення лоту з назвою ${
                               lotCardData && lotCardData.title
                             } під номером ${i}`}
-                          />
+                          >
+                            <img
+                              src={pic}
+                              alt={`Зображення лоту з назвою ${
+                                lotCardData && lotCardData.title
+                              } під номером ${i}`}
+                              className={`${styles.microImg}`}
+                              onClick={() =>
+                                setSelectedImg(lotCardData.pictures[i])
+                              }
+                            />
+                          </div>
                         )
                     )
                   ) : (
-                    <img
-                      src={defaultLotImg}
-                      alt={`Зображення лоту з назвою ${
-                        lotCardData && lotCardData.title
-                      }`}
-                    />
+                    <div
+                      className={`${styles.imageWrapper} ${styles.microImgSelected}`}
+                    >
+                      <img
+                        src={defaultLotImg}
+                        alt={`Зображення лоту з назвою ${
+                          lotCardData && lotCardData.title
+                        }`}
+                        className={`${styles.microImg}`}
+                      />
+                    </div>
                   )}
                 </div>
               </div>
