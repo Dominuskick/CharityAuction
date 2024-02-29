@@ -69,7 +69,7 @@ const index = ({
               className={`${styles.imgContainer} ${styles.imgContainerEditable}`}
             >
               <img
-                src={pictures ? pictures[0] : defaultImg}
+                src={pictures?.length > 0 ? pictures[0] : defaultImg}
                 alt={`Картинка лоту під назвою ${name}`}
               />
             </div>
