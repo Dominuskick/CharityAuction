@@ -21,6 +21,17 @@
   align-items: center;
 }
 
+.category {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+.category > div {
+  margin-left: 10px;
+}
+
 .line {
   display: flex;
   gap: 24px;
@@ -72,7 +83,7 @@
   height: 378px;
   border-radius: 32px;
   background: #fff;
-  padding: 56px 110px;
+  padding: 40px 110px;
 
   display: flex;
   justify-content: center;
@@ -154,6 +165,10 @@
 
 .bidInput > input:disabled {
   border: 1px solid #d1d1d1;
+}
+
+.bidInput > input:focus {
+  outline: 1px solid #131313;
 }
 
 .bidInput > input:disabled::placeholder {

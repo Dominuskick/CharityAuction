@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './lot.module.css';
 import { Header, Footer } from '@/layout';
 import { Button, CheckBox, Loader, LoaderInline } from '@/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import defaultLotImg from '../../assets/img/defaultLot.jpg';
 import { useParams } from 'react-router-dom';
 import auctionService from '@/utils/api/auctionService';
@@ -11,7 +11,7 @@ import {
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
 import bidsService from '@/utils/api/bidsService';
-import { LOT_BETS_ROUTE } from '@/utils/constants/routes';
+import { ERROR_ROUTE, LOT_BETS_ROUTE } from '@/utils/constants/routes';
 import { getAuctionById } from '@/http/auctionAPI';
 import { createBid, getAuctionBidsById } from '@/http/bidAPI';
 import { useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 const index = () => {
   const { lotId } = useParams();
   const login = useSelector((state) => state.auth.login);
+  const navigate = useNavigate();
 
   const [lotCardData, setLotCardData] = useState([]);
   const [bid, setBid] = useState('');
@@ -30,7 +31,6 @@ const index = () => {
     const getAuctionAndBidsData = async () => {
       try {
         const response = await getAuctionById(lotId);
-        console.log(response.data);
         setLotCardData(response.data);
         if (response.data.pictures.length > 0) {
           setSelectedImg(response.data.pictures[0]);
@@ -38,6 +38,7 @@ const index = () => {
         await getAndSetBids(lotId);
       } catch (e) {
         console.error(e);
+        navigate(ERROR_ROUTE);
       } finally {
         setLoading(false);
       }
@@ -49,20 +50,22 @@ const index = () => {
   const getAndSetBids = async (id) => {
     getAuctionBidsById(id)
       .then((response) => {
-        console.log(response.data);
         setBids(response.data);
       })
-      .catch();
+      .catch((e) => {
+        console.error(e);
+        navigate(ERROR_ROUTE);
+      });
   };
 
   const createBidHandle = async () => {
     try {
       const response = await createBid(bid, lotId);
-      console.log('Create bid successful:', response);
       setBid('');
       getAndSetBids(lotCardData.id);
-    } catch (error) {
-      console.error('Create bid failed:', error);
+    } catch (e) {
+      console.error(e);
+      navigate(ERROR_ROUTE);
     }
   };
 
@@ -77,6 +80,14 @@ const index = () => {
             ) : (
               <h2 className={styles.name}>{lotCardData.title}</h2>
             )}
+            <div className={styles.category}>
+              Категорія:{' '}
+              {loading ? (
+                <LoaderInline size="28" color="#fff" />
+              ) : (
+                lotCardData?.categoryNames?.join(', ')
+              )}
+            </div>
             <div className={styles.line}>
               <div className={styles.images}>
                 <div className={styles.imageSelected}>
@@ -171,6 +182,16 @@ const index = () => {
                       )}
                     </span>
                   </div>
+                  <div>
+                    <b>Мін. крок ставки</b>
+                    <span>
+                      {loading ? (
+                        <LoaderInline size="28" />
+                      ) : (
+                        lotCardData.minIncrease + ' грн'
+                      )}
+                    </span>
+                  </div>
                   <div className={styles.makeBid}>
                     <label>Зробити ставку</label>
                     <div className={styles.bidInput}>
@@ -187,7 +208,17 @@ const index = () => {
                     </div>
                   </div>
                   <div className={styles.btnContainer}>
-                    <Button onClick={createBidHandle} disabled={!login}>
+                    <Button
+                      onClick={createBidHandle}
+                      disabled={
+                        !login ||
+                        (bids.length == 0
+                          ? bid < lotCardData?.currentPrice
+                          : bid <
+                            lotCardData?.currentPrice +
+                              lotCardData?.minIncrease)
+                      }
+                    >
                       Підтвердити ставку
                     </Button>
                   </div>
