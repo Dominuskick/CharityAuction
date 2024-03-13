@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './home.module.css';
 import { Header, Footer } from '@/layout';
 import img from '../../assets/img/home.png';
-import { Button, Loader, LotCard, ResponsiveWrapper } from '@/components';
+import { Button, Loader, LotCard } from '@/components';
 import Faq from 'react-faq-component';
 import { Link } from 'react-router-dom';
-import auctionService from '@/utils/api/auctionService';
 import { useSelector } from 'react-redux';
 import {
   ACCOUNT_CREATE_LOT_ROUTE,
@@ -16,7 +15,7 @@ import {
 } from '@/utils/constants/routes';
 import { getAuctionList } from '@/http/auctionAPI';
 
-const index = () => {
+const Home = () => {
   const login = useSelector((state) => state.auth.login);
   const [lotCardsData, setLotCardsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,104 +70,96 @@ const index = () => {
       <Header />
       <main>
         <section className={styles.aucSection}>
-          <ResponsiveWrapper>
-            <div className={styles.aucSectionContent}>
-              <div className={styles.left}>
-                <h2>Благодійний аукціон</h2>
-                <p>
-                  Придбавши лот на нашому аукціоні, ви не лише отримуєте обрану
-                  річ, але й робите внесок у благодійні програми, допомагаючи
-                  тим, хто потребує вашої допомоги найбільше. Долучайтесь до нас
-                  - зробимо світ краще разом!
-                </p>
-                <div className={styles.buttons}>
-                  <Link to={login ? LOTS_ROUTE : LOGIN_ROUTE}>
-                    <Button>Зробити ставку</Button>
-                  </Link>
-                  <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
-                    <Button>Розмістити лот</Button>
-                  </Link>
-                </div>
+          <div className={styles.aucSectionContent}>
+            <div className={styles.left}>
+              <h2>Благодійний аукціон</h2>
+              <p>
+                Придбавши лот на нашому аукціоні, ви не лише отримуєте обрану
+                річ, але й робите внесок у благодійні програми, допомагаючи тим,
+                хто потребує вашої допомоги найбільше. Долучайтесь до нас -
+                зробимо світ краще разом!
+              </p>
+              <div className={styles.buttons}>
+                <Link to={login ? LOTS_ROUTE : LOGIN_ROUTE}>
+                  <Button>Зробити ставку</Button>
+                </Link>
+                <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
+                  <Button>Розмістити лот</Button>
+                </Link>
               </div>
-              <img src={img} alt="Благодійний аукціон" />
             </div>
-          </ResponsiveWrapper>
+            <img src={img} alt="Благодійний аукціон" />
+          </div>
         </section>
         <section
           id={SCOPE_ID}
           className={`${styles.scopeSection} ${styles.dark}`}
         >
-          <ResponsiveWrapper>
-            <div className={styles.scopeSectionContent}>
-              <h2>Наша мета</h2>
-              <p>
-                Мета нашого благодійного аукціону - зібрати фінансову допомогу
-                для сімей, які постраждали від війни з країною-агресором. Ваші
-                пожертви підтримають людей, які втратили домівки, зазнали травм
-                чи втратили рідних у цьому конфлікті. Кожна покупка на нашому
-                аукціоні стане кроком до покращення життя цих сімей
-              </p>
-              <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
-                <Button isBlack={true}>Долучитись</Button>
-              </Link>
-            </div>
-          </ResponsiveWrapper>
+          <div className={styles.scopeSectionContent}>
+            <h2>Наша мета</h2>
+            <p>
+              Мета нашого благодійного аукціону - зібрати фінансову допомогу для
+              сімей, які постраждали від війни з країною-агресором. Ваші
+              пожертви підтримають людей, які втратили домівки, зазнали травм чи
+              втратили рідних у цьому конфлікті. Кожна покупка на нашому
+              аукціоні стане кроком до покращення життя цих сімей
+            </p>
+            <Link to={login ? ACCOUNT_CREATE_LOT_ROUTE : LOGIN_ROUTE}>
+              <Button isBlack={true}>Долучитись</Button>
+            </Link>
+          </div>
         </section>
         <section className={styles.popularSection}>
-          <ResponsiveWrapper>
-            <div className={styles.popularSectionContent}>
-              <h2>Популярні лоти</h2>
-              <div className={styles.lotList}>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  lotCardsData.map(
-                    (lotCardData, i) =>
-                      i < 3 && (
-                        <LotCard
-                          name={lotCardData.title}
-                          endTime={lotCardData.endDate}
-                          highestBid={lotCardData.currentPrice}
-                          pictures={lotCardData.pictures}
-                          id={lotCardData.id}
-                          key={`Lot card ${i}`}
-                        />
-                      )
-                  )
-                )}
-              </div>
-              <Link to={LOTS_ROUTE}>
-                <Button isBlack={true} isWide={true}>
-                  Перейти до всіх лотів
-                </Button>
-              </Link>
+          <div className={styles.popularSectionContent}>
+            <h2>Популярні лоти</h2>
+            <div className={styles.lotList}>
+              {loading ? (
+                <Loader />
+              ) : (
+                lotCardsData.map(
+                  (lotCardData, i) =>
+                    i < 3 && (
+                      <LotCard
+                        name={lotCardData.title}
+                        endTime={lotCardData.endDate}
+                        highestBid={lotCardData.currentPrice}
+                        pictures={lotCardData.pictures}
+                        id={lotCardData.id}
+                        key={`Lot card ${i}`}
+                      />
+                    )
+                )
+              )}
             </div>
-          </ResponsiveWrapper>
+            <Link to={LOTS_ROUTE}>
+              <Button isBlack={true} isWide={true}>
+                Перейти до всіх лотів
+              </Button>
+            </Link>
+          </div>
         </section>
         <section id={FAQ_ID} className={`${styles.faqSection} ${styles.dark}`}>
-          <ResponsiveWrapper>
-            <div className={styles.faqSectionContent}>
-              <h2>Питання-відповіді</h2>
-              <div className={styles.faqWrapper}>
-                <Faq
-                  data={FAQdata}
-                  styles={{
-                    bgColor: 'transparent',
-                    rowTitleColor: '#131313',
-                    rowTitleTextSize: '22px',
-                    rowTitleTextWeight: '700',
-                    rowContentColor: '#131313',
-                    rowContentTextSize: '20px',
-                    // rowContentPaddingTop: '10px',
-                    rowContentPaddingBottom: '10px',
-                    // rowContentPaddingLeft: '50px',
-                    // rowContentPaddingRight: '150px',
-                    arrowColor: '#131313',
-                  }}
-                />
-              </div>
+          <div className={styles.faqSectionContent}>
+            <h2>Питання-відповіді</h2>
+            <div className={styles.faqWrapper}>
+              <Faq
+                data={FAQdata}
+                styles={{
+                  bgColor: 'transparent',
+                  rowTitleColor: '#131313',
+                  rowTitleTextSize: '22px',
+                  rowTitleTextWeight: '700',
+                  rowContentColor: '#131313',
+                  rowContentTextSize: '20px',
+                  // rowContentPaddingTop: '10px',
+                  rowContentPaddingBottom: '10px',
+                  // rowContentPaddingLeft: '50px',
+                  // rowContentPaddingRight: '150px',
+                  arrowColor: '#131313',
+                }}
+              />
             </div>
-          </ResponsiveWrapper>
+          </div>
         </section>
       </main>
       <Footer />
@@ -176,4 +167,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Home;

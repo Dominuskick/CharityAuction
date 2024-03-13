@@ -1,7 +1,6 @@
-import React from 'react';
 import styles from './checkbox.module.css';
 
-const index = ({ children, isBlack, isWide, value, setValue }) => {
+const index = ({ value, setValue }) => {
   return (
     <label className={styles.container}>
       <input

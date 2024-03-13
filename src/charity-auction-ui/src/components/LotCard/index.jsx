@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './lotCard.module.css';
 import { Button } from '..';
 import { Link } from 'react-router-dom';
@@ -6,7 +5,6 @@ import {
   formatDateString,
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
-import auctionService from '@/utils/api/auctionService';
 import defaultImg from '../../assets/img/defaultLot.jpg';
 import { deleteAuction } from '@/http/auctionAPI';
 

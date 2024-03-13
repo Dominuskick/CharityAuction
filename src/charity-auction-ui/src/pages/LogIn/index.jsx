@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './login.module.css';
-import { Header, Footer } from '@/layout';
-import { Button, CheckBox, LabeledInput } from '@/components';
+import { Button, CheckBox, LabeledInput, PageStructure } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '@/slices/authSlice';
 import { ACCOUNT_ROUTE, REGISTRATION_ROUTE } from '@/utils/constants/routes';
 import { login } from '@/http/userAPI';
-import authService from '@/utils/api/authService';
-import { jwtDecode } from 'jwt-decode';
 
-const index = () => {
+const LogIn = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState(
@@ -100,60 +97,54 @@ const index = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main className={styles.darkMain}>
-        <div className={styles.mainContent}>
-          <div className={styles.loginWrapper}>
-            <div className={styles.login}>
-              <h2>Для продовження увійдіть до особистого кабінету</h2>
-              <hr />
-              <div className={styles.inputListWrapper}>
-                <LabeledInput
-                  label={'Email'}
-                  type={'email'}
-                  placeholder={'example@gmail.com'}
-                  value={email}
-                  setValue={setEmail}
-                  maxLength={35}
-                  error={emailValidationError}
-                />
-                <LabeledInput
-                  label={'Пароль'}
-                  type={'password'}
-                  placeholder={'********'}
-                  value={password}
-                  setValue={setPassword}
-                  maxLength={20}
-                  error={passwordValidationError}
-                />
-                <div className={styles.inputWrapperLine}>
-                  <CheckBox value={isRememberMe} setValue={setIsRememberMe} />
-                  <label className={styles.text}>Запам’ятати мене</label>
-                </div>
-              </div>
-              <div className={styles.btnWrapper}>
-                <Button
-                  onClick={loginUser}
-                  disabled={!(email && password)}
-                  loading={loading}
-                >
-                  Увійти до кабінету
-                </Button>
-              </div>
-              <div className={styles.row}>
-                <span>Ще не зареєстровані?</span>
-                <Link to={REGISTRATION_ROUTE}>
-                  <span className={styles.underLine}>Зареєструватись</span>
-                </Link>
-              </div>
+    <PageStructure>
+      <div className={styles.loginWrapper}>
+        <div className={styles.login}>
+          <h2>Для продовження увійдіть до особистого кабінету</h2>
+          <hr />
+          <div className={styles.inputListWrapper}>
+            <LabeledInput
+              label={'Email'}
+              type={'email'}
+              placeholder={'example@gmail.com'}
+              value={email}
+              setValue={setEmail}
+              maxLength={35}
+              error={emailValidationError}
+            />
+            <LabeledInput
+              label={'Пароль'}
+              type={'password'}
+              placeholder={'********'}
+              value={password}
+              setValue={setPassword}
+              maxLength={20}
+              error={passwordValidationError}
+            />
+            <div className={styles.inputWrapperLine}>
+              <CheckBox value={isRememberMe} setValue={setIsRememberMe} />
+              <label className={styles.text}>Запам’ятати мене</label>
             </div>
           </div>
+          <div className={styles.btnWrapper}>
+            <Button
+              onClick={loginUser}
+              disabled={!(email && password)}
+              loading={loading}
+            >
+              Увійти до кабінету
+            </Button>
+          </div>
+          <div className={styles.row}>
+            <span>Ще не зареєстровані?</span>
+            <Link to={REGISTRATION_ROUTE}>
+              <span className={styles.underLine}>Зареєструватись</span>
+            </Link>
+          </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </PageStructure>
   );
 };
 
-export default index;
+export default LogIn;

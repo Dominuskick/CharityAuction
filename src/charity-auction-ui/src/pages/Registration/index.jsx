@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './registration.module.css';
-import { Header, Footer } from '@/layout';
-import { Button, CheckBox, LabeledInput } from '@/components';
+import { Button, CheckBox, LabeledInput, PageStructure } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
 import { LOGIN_ROUTE } from '@/utils/constants/routes';
 import { registration } from '@/http/userAPI';
@@ -10,7 +9,7 @@ import {
   USERNAME_TAKEN_ERROR_REGEX,
 } from '@/utils/constants/backend';
 
-const index = () => {
+const Registration = () => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
@@ -164,132 +163,121 @@ const index = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main className={styles.darkMain}>
-        <div className={styles.mainContent}>
-          <div className={styles.registrationWrapper}>
-            <div className={styles.registration}>
-              <h2>Реєстрація</h2>
-              <hr />
-              <div className={styles.inputListWrapper}>
-                <LabeledInput
-                  label={'Ім’я'}
-                  type={'text'}
-                  placeholder={'Петро'}
-                  value={name}
-                  setValue={setName}
-                  onlyLetters={true}
-                  maxLength={20}
-                  error={nameValidationError}
-                />
-                <LabeledInput
-                  label={'Прізвище'}
-                  type={'text'}
-                  placeholder={'Петренко'}
-                  value={surname}
-                  setValue={setSurname}
-                  onlyLetters={true}
-                  maxLength={20}
-                  error={surnameValidationError}
-                />
-                <LabeledInput
-                  label={'Email'}
-                  type={'email'}
-                  placeholder={'petro@gmail.com'}
-                  value={email}
-                  setValue={setEmail}
-                  maxLength={35}
-                  error={emailValidationError}
-                />
-                <LabeledInput
-                  label={'Номер телефону'}
-                  type={'tel'}
-                  placeholder={'+380 680 000 000'}
-                  value={phoneNumber}
-                  setValue={setPhoneNumber}
-                  error={phoneNumberValidationError}
-                />
-                <div className={styles.inputWrapperLine}>
-                  <CheckBox setValue={setIsAdult} />
-                  <label className={styles.text}>
-                    Підтверджую, що мені є 18 років
-                  </label>
-                </div>
-                <LabeledInput
-                  label={'Логін'}
-                  type={'text'}
-                  placeholder={'Ananas87'}
-                  value={userName}
-                  setValue={setUserName}
-                  onlyLatinAndNumbers={true}
-                  maxLength={20}
-                  error={userNameValidationError}
-                />
-                <LabeledInput
-                  label={'Пароль'}
-                  type={'password'}
-                  placeholder={'********'}
-                  value={password}
-                  setValue={setPassword}
-                  maxLength={20}
-                  error={passwordValidationError}
-                />
-                <LabeledInput
-                  label={'Повторити пароль'}
-                  type={'password'}
-                  placeholder={'********'}
-                  value={confirmedPassword}
-                  setValue={setConfirmedPassword}
-                  maxLength={20}
-                  error={confirmedPasswordValidationError}
-                />
-                <div className={styles.inputWrapperLine}>
-                  <CheckBox setValue={setIsConfirm} />
-                  <label className={styles.text}>
-                    Я приймаю умови{' '}
-                    <a className={styles.underLine}>
-                      політики конфіденційності
-                    </a>{' '}
-                    та{' '}
-                    <a className={styles.underLine}>
-                      обробки персональних даних
-                    </a>
-                  </label>
-                </div>
-              </div>
-              <Button
-                onClick={registerUser}
-                disabled={
-                  !(
-                    name &&
-                    surname &&
-                    email &&
-                    phoneNumber &&
-                    isAdult &&
-                    userName &&
-                    password &&
-                    confirmedPassword &&
-                    isConfirm
-                  )
-                }
-                loading={loading}
-              >
-                Зареєструватись
-              </Button>
-              <div className={styles.row}>
-                <span>Вже маєте акаунт?</span>
-                <Link to={LOGIN_ROUTE}>
-                  <span className={styles.underLine}>Увійти</span>
-                </Link>
-              </div>
+    <PageStructure>
+      <div className={styles.registrationWrapper}>
+        <div className={styles.registration}>
+          <h2>Реєстрація</h2>
+          <hr />
+          <div className={styles.inputListWrapper}>
+            <LabeledInput
+              label={'Ім’я'}
+              type={'text'}
+              placeholder={'Петро'}
+              value={name}
+              setValue={setName}
+              onlyLetters={true}
+              maxLength={20}
+              error={nameValidationError}
+            />
+            <LabeledInput
+              label={'Прізвище'}
+              type={'text'}
+              placeholder={'Петренко'}
+              value={surname}
+              setValue={setSurname}
+              onlyLetters={true}
+              maxLength={20}
+              error={surnameValidationError}
+            />
+            <LabeledInput
+              label={'Email'}
+              type={'email'}
+              placeholder={'petro@gmail.com'}
+              value={email}
+              setValue={setEmail}
+              maxLength={35}
+              error={emailValidationError}
+            />
+            <LabeledInput
+              label={'Номер телефону'}
+              type={'tel'}
+              placeholder={'+380 680 000 000'}
+              value={phoneNumber}
+              setValue={setPhoneNumber}
+              error={phoneNumberValidationError}
+            />
+            <div className={styles.inputWrapperLine}>
+              <CheckBox setValue={setIsAdult} />
+              <label className={styles.text}>
+                Підтверджую, що мені є 18 років
+              </label>
+            </div>
+            <LabeledInput
+              label={'Логін'}
+              type={'text'}
+              placeholder={'Ananas87'}
+              value={userName}
+              setValue={setUserName}
+              onlyLatinAndNumbers={true}
+              maxLength={20}
+              error={userNameValidationError}
+            />
+            <LabeledInput
+              label={'Пароль'}
+              type={'password'}
+              placeholder={'********'}
+              value={password}
+              setValue={setPassword}
+              maxLength={20}
+              error={passwordValidationError}
+            />
+            <LabeledInput
+              label={'Повторити пароль'}
+              type={'password'}
+              placeholder={'********'}
+              value={confirmedPassword}
+              setValue={setConfirmedPassword}
+              maxLength={20}
+              error={confirmedPasswordValidationError}
+            />
+            <div className={styles.inputWrapperLine}>
+              <CheckBox setValue={setIsConfirm} />
+              <label className={styles.text}>
+                Я приймаю умови{' '}
+                <a className={styles.underLine}>політики конфіденційності</a> та{' '}
+                <a className={styles.underLine}>обробки персональних даних</a>
+              </label>
             </div>
           </div>
+          <Button
+            onClick={registerUser}
+            disabled={
+              !(
+                name &&
+                surname &&
+                email &&
+                phoneNumber &&
+                isAdult &&
+                userName &&
+                password &&
+                confirmedPassword &&
+                isConfirm
+              )
+            }
+            loading={loading}
+          >
+            Зареєструватись
+          </Button>
+          <div className={styles.row}>
+            <span>Вже маєте акаунт?</span>
+            <Link to={LOGIN_ROUTE}>
+              <span className={styles.underLine}>Увійти</span>
+            </Link>
+          </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </PageStructure>
   );
 };
 
-export default index;
+export default Registration;

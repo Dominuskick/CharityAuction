@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './labeledInput.module.css';
 import InputMask from 'react-input-mask';
 

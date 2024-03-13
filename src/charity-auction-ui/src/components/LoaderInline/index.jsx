@@ -1,6 +1,4 @@
-import React from 'react';
-import styles from './index.module.css';
-import { Oval, ThreeDots } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 
 const index = ({ size = '80', color = '#131313', height, width }) => {
   return (

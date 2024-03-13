@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './accountMenu.module.css';
 import { NavLink } from 'react-router-dom';
 import {

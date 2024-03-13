@@ -1,9 +1,8 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes, authRoutes } from './routes';
 import ScrollToTop from '@/utils/helpers/scrollToTop';
 import { useSelector } from 'react-redux';
-import { Error, Home } from '@/pages';
+import { Home } from '@/pages';
 
 export default function AppRouter() {
   const isAuth = useSelector((state) => state.auth.login);

@@ -1,20 +1,8 @@
-.darkMain {
-  background-color: #131313;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  padding-top: 128px;
-}
-
-.mainContent {
-  padding: 80px 0;
-}
-
 .name {
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
-  line-height: 46px; /* 143.75% */
+  line-height: 46px;
 
   height: 46px;
   display: flex;

@@ -9,6 +9,7 @@ import {
   LotList,
   Lot,
   LotBets,
+  Error,
 } from '@/pages';
 import {
   ACCOUNT_ROUTE,
@@ -21,6 +22,7 @@ import {
   LOTS_ROUTE,
   LOT_ROUTE,
   LOT_BETS_ROUTE,
+  ERROR_ROUTE,
 } from '@/utils/constants/routes';
 
 export const authRoutes = [
@@ -66,5 +68,9 @@ export const publicRoutes = [
   {
     path: LOT_BETS_ROUTE,
     component: LotBets,
+  },
+  {
+    path: ERROR_ROUTE,
+    component: Error,
   },
 ];

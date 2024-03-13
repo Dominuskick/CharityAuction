@@ -9,10 +9,15 @@ section.dark {
   justify-content: center;
 }
 
-.aucSectionContent {
+.aucSection {
+  display: flex;
+  justify-content: center;
   padding-top: 92px;
   padding-bottom: 118px;
-  padding-right: 26px;
+}
+
+.aucSectionContent {
+  width: calc(1440px - 72px * 2);
   display: flex;
   align-items: center;
   gap: 24px;
@@ -40,14 +45,21 @@ section.dark {
   gap: 24px;
 }
 
+.scopeSection,
+.popularSection,
+.faqSection {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+
 .scopeSectionContent,
 .popularSectionContent,
 .faqSectionContent {
-  padding: 80px 0;
+  width: calc(1440px - 72px * 2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 40px;
 }
 

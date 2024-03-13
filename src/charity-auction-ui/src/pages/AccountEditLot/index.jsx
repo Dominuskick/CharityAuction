@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './accountEditLot.module.css';
-import { Header, Footer } from '@/layout';
 import Select from 'react-select';
-import { Button } from '@/components';
+import { Button, PageStructure } from '@/components';
 import { Link, useNavigate } from 'react-router-dom';
-import auctionService from '@/utils/api/auctionService';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ACCOUNT_ROUTE } from '@/utils/constants/routes';
 import {
   categoryOptions,
-  selectStyles,
   selectStylesDarkColor,
 } from '@/utils/constants/select';
 import { editAuction, getAuctionById } from '@/http/auctionAPI';
+import { refreshTokens } from '@/http/userAPI';
 import { ERROR_ROUTE } from '@/utils/constants/routes';
 
-const index = () => {
+const AccountEditLot = () => {
   const { lotId } = useParams();
   const navigate = useNavigate();
 
@@ -129,149 +126,131 @@ const index = () => {
 
   if (!isPublished) {
     return (
-      <>
-        <Header />
-        <main className={styles.darkMain}>
-          <div className={styles.mainContent}>
-            <div className="responsiveWrapper">
-              <div className={styles.newLot}>
-                <h2 className={styles.header}>Редагування аукціону</h2>
-                <div className={`${styles.inputWrapper} ${styles.inputName}`}>
-                  <label>Назва</label>
-                  <input
-                    type="text"
-                    placeholder="Наприклад, картина з котами"
-                    onChange={(e) => setName(e.target.value)}
-                    value={name || ''}
-                    maxLength={50}
-                  />
-                </div>
+      <PageStructure>
+        <div className={styles.newLot}>
+          <h2 className={styles.header}>Редагування аукціону</h2>
+          <div className={`${styles.inputWrapper} ${styles.inputName}`}>
+            <label>Назва</label>
+            <input
+              type="text"
+              placeholder="Наприклад, картина з котами"
+              onChange={(e) => setName(e.target.value)}
+              value={name || ''}
+              maxLength={50}
+            />
+          </div>
+          <div className={`${styles.inputWrapper} ${styles.inputCategory}`}>
+            <label>Категорії</label>
+            <Select
+              placeholder="Категорія"
+              options={categoryOptions}
+              styles={selectStylesDarkColor}
+              isMulti
+              value={categories}
+              onChange={(value) => setCategories(value)}
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <label>Зображення</label>
+            <div className={styles.photosWrapper}>
+              {imagesBlob.map((image, index) => (
                 <div
-                  className={`${styles.inputWrapper} ${styles.inputCategory}`}
+                  key={index}
+                  className={styles.photoInputWrapper}
+                  style={image ? { border: 'none' } : {}}
                 >
-                  <label>Категорії</label>
-                  <Select
-                    placeholder="Категорія"
-                    options={categoryOptions}
-                    styles={selectStylesDarkColor}
-                    isMulti
-                    value={categories}
-                    onChange={(value) => setCategories(value)}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ opacity: '0' }}
+                    onChange={(event) => onImageBlobChange(index, event)}
                   />
+                  {image ? (
+                    <img
+                      alt={`Картинка лота ${index + 1}`}
+                      src={URL.createObjectURL(image)}
+                    />
+                  ) : index === 0 ? (
+                    <span>Додати фото</span>
+                  ) : (
+                    <span className={styles.photoIcon}></span>
+                  )}
                 </div>
-                <div className={styles.inputWrapper}>
-                  <label>Зображення</label>
-                  <div className={styles.photosWrapper}>
-                    {imagesBlob.map((image, index) => (
-                      <div
-                        key={index}
-                        className={styles.photoInputWrapper}
-                        style={image ? { border: 'none' } : {}}
-                      >
-                        <input
-                          type="file"
-                          accept="image/*"
-                          style={{ opacity: '0' }}
-                          onChange={(event) => onImageBlobChange(index, event)}
-                        />
-                        {image ? (
-                          <img
-                            alt={`Картинка лота ${index + 1}`}
-                            src={URL.createObjectURL(image)}
-                          />
-                        ) : index === 0 ? (
-                          <span>Додати фото</span>
-                        ) : (
-                          <span className={styles.photoIcon}></span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.inputWrapper}>
-                  <label>Опис</label>
-                  <textarea
-                    placeholder="Опис"
-                    onChange={(e) => setDescription(e.target.value)}
-                    value={description || ''}
-                    maxLength={500}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <div className={styles.inputWrapper}>
-                    <label>Ціна</label>
-                    <div className={styles.bidInput}>
-                      <input
-                        type="number"
-                        placeholder="Ваша ставка"
-                        onChange={(e) => setStartPrice(e.target.value)}
-                        value={startPrice}
-                        max={1000000000}
-                      />
-                      <span>грн</span>
-                    </div>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <label>Мінімальний крок ставки</label>
-                    <div className={styles.bidInput}>
-                      <input
-                        type="number"
-                        placeholder="Ваша ставка"
-                        onChange={(e) => setStep(e.target.value)}
-                        value={step}
-                        max={1000000000}
-                      />
-                      <span>грн</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.btnWrapper}>
-                  <Button
-                    onClick={editAuctionHandle}
-                    disabled={
-                      !(
-                        name &&
-                        description &&
-                        startPrice &&
-                        step &&
-                        imagesBlob.find((blob) => blob)
-                      )
-                    }
-                    loading={loading}
-                  >
-                    Зберегти зміни
-                  </Button>
-                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.inputWrapper}>
+            <label>Опис</label>
+            <textarea
+              placeholder="Опис"
+              onChange={(e) => setDescription(e.target.value)}
+              value={description || ''}
+              maxLength={500}
+            />
+          </div>
+          <div className={styles.row}>
+            <div className={styles.inputWrapper}>
+              <label>Ціна</label>
+              <div className={styles.bidInput}>
+                <input
+                  type="number"
+                  placeholder="Ваша ставка"
+                  onChange={(e) => setStartPrice(e.target.value)}
+                  value={startPrice}
+                  max={1000000000}
+                />
+                <span>грн</span>
+              </div>
+            </div>
+            <div className={styles.inputWrapper}>
+              <label>Мінімальний крок ставки</label>
+              <div className={styles.bidInput}>
+                <input
+                  type="number"
+                  placeholder="Ваша ставка"
+                  onChange={(e) => setStep(e.target.value)}
+                  value={step}
+                  max={1000000000}
+                />
+                <span>грн</span>
               </div>
             </div>
           </div>
-        </main>
-        <Footer />
-      </>
+          <div className={styles.btnWrapper}>
+            <Button
+              onClick={editAuctionHandle}
+              disabled={
+                !(
+                  name &&
+                  description &&
+                  startPrice &&
+                  step &&
+                  imagesBlob.find((blob) => blob)
+                )
+              }
+              loading={loading}
+            >
+              Зберегти зміни
+            </Button>
+          </div>
+        </div>
+      </PageStructure>
     );
   } else {
     return (
-      <>
-        <Header />
-        <main className={styles.darkMain}>
-          <div className={styles.mainContent}>
-            <div className="responsiveWrapper">
-              <div className={`${styles.newLot} ${styles.lotPublished}`}>
-                <h2>Дякуємо за участь в аукціоні!</h2>
-                <h3>Ваш лот буде відредаговано, після модерації</h3>
-                <div className={styles.btnWrapper}>
-                  <Link to={ACCOUNT_ROUTE}>
-                    <Button>Повернутись до особистого кабінету</Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
+      <PageStructure>
+        <div className={`${styles.newLot} ${styles.lotPublished}`}>
+          <h2>Дякуємо за участь в аукціоні!</h2>
+          <h3>Ваш лот буде відредаговано, після модерації</h3>
+          <div className={styles.btnWrapper}>
+            <Link to={ACCOUNT_ROUTE}>
+              <Button>Повернутись до особистого кабінету</Button>
+            </Link>
           </div>
-        </main>
-        <Footer />
-      </>
+        </div>
+      </PageStructure>
     );
   }
 };
 
-export default index;
+export default AccountEditLot;

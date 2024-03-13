@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './lotlist.module.css';
-import { Header, Footer } from '@/layout';
-import { Loader, LotCard } from '@/components';
+import { Loader, LotCard, PageStructure } from '@/components';
 import Select from 'react-select';
 import {
   categoryOptions,
@@ -13,7 +12,7 @@ import {
 import { getAuctionList } from '@/http/auctionAPI';
 import { useSortLotList } from '@/utils/hooks/useSortLotList';
 
-const index = () => {
+const LotList = () => {
   const [lotCardsData, setLotCardsData] = useState([]);
   const itemsPerPage = 9; // Количество элементов на странице
   const [totalPages, setTotalPages] = useState(0);
@@ -111,82 +110,74 @@ const index = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main className={styles.darkMain}>
-        <div className={styles.mainContent}>
-          <div className="responsiveWrapper">
-            <h2 className={styles.header}>Актуальні лоти</h2>
-            <div className={styles.filters}>
-              <div className={styles.selectWrapper}>
-                <Select
-                  placeholder="Категорія"
-                  options={categoryOptions}
-                  styles={selectStyles}
-                  isMulti
-                />
-              </div>
-              <div className={styles.sortWrapper}>
-                <label>Сортувати за</label>
-                <div className={styles.selectWrapper}>
-                  <Select
-                    placeholder="Ціною"
-                    options={priceOptions}
-                    styles={selectStyles}
-                    value={sortByPriceValue}
-                    onChange={(selected) => {
-                      setSortByPriceValue(selected);
-                      setSortByNoveltyValue(null);
-                    }}
-                  />
-                </div>
-                <div className={styles.selectWrapper}>
-                  <Select
-                    placeholder="Новизною"
-                    options={noveltyOptions}
-                    styles={selectStyles}
-                    value={sortByNoveltyValue}
-                    onChange={(selected) => {
-                      setSortByNoveltyValue(selected);
-                      setSortByPriceValue(null);
-                    }}
-                  />
-                </div>
-                <div className={styles.selectWrapper}>
-                  <Select
-                    placeholder="Актуальністю"
-                    options={relevanceOptions}
-                    styles={selectStyles}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.lotList}>
-              {loading ? (
-                <div style={{ margin: '0 auto' }}>
-                  <Loader />
-                </div>
-              ) : (
-                visibleLotCardsData.map((lotCardData, i) => (
-                  <LotCard
-                    name={lotCardData.title}
-                    endTime={lotCardData.endDate}
-                    highestBid={lotCardData.currentPrice}
-                    id={lotCardData.id}
-                    pictures={lotCardData.pictures}
-                    btnDisable={true}
-                    key={`Lot ${i}`}
-                  />
-                ))
-              )}
-            </div>
-            {renderPagination()}
+    <PageStructure alignItemsCenter>
+      <h2 className={styles.header}>Актуальні лоти</h2>
+      <div className={styles.filters}>
+        <div className={styles.selectWrapper}>
+          <Select
+            placeholder="Категорія"
+            options={categoryOptions}
+            styles={selectStyles}
+            isMulti
+          />
+        </div>
+        <div className={styles.sortWrapper}>
+          <label>Сортувати за</label>
+          <div className={styles.selectWrapper}>
+            <Select
+              placeholder="Ціною"
+              options={priceOptions}
+              styles={selectStyles}
+              value={sortByPriceValue}
+              onChange={(selected) => {
+                setSortByPriceValue(selected);
+                setSortByNoveltyValue(null);
+              }}
+            />
+          </div>
+          <div className={styles.selectWrapper}>
+            <Select
+              placeholder="Новизною"
+              options={noveltyOptions}
+              styles={selectStyles}
+              value={sortByNoveltyValue}
+              onChange={(selected) => {
+                setSortByNoveltyValue(selected);
+                setSortByPriceValue(null);
+              }}
+            />
+          </div>
+          <div className={styles.selectWrapper}>
+            <Select
+              placeholder="Актуальністю"
+              options={relevanceOptions}
+              styles={selectStyles}
+            />
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+      <div className={styles.lotList}>
+        {loading ? (
+          <div style={{ margin: '0 auto' }}>
+            <Loader />
+          </div>
+        ) : (
+          visibleLotCardsData.map((lotCardData, i) => (
+            <LotCard
+              name={lotCardData.title}
+              endTime={lotCardData.endDate}
+              highestBid={lotCardData.currentPrice}
+              id={lotCardData.id}
+              pictures={lotCardData.pictures}
+              btnDisable={true}
+              key={`Lot ${i}`}
+            />
+          ))
+        )}
+      </div>
+      {renderPagination()}
+    </PageStructure>
   );
 };
 
-export default index;
+export default LotList;

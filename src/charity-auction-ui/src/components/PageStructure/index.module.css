@@ -1,0 +1,18 @@
+.darkMain {
+  background-color: #131313;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding-top: calc(128px + 80px);
+  padding-bottom: 80px;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+}
+
+.mainContent__alignCenter {
+  align-items: center;
+}

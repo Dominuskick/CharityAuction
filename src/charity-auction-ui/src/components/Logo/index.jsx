@@ -1,9 +1,8 @@
-import React from 'react';
 import styles from './logo.module.css';
 import { Link } from 'react-router-dom';
 import { HOME_ROUTE } from '@/utils/constants/routes';
 
-const index = ({ children, isWhite }) => {
+const index = () => {
   return (
     <Link to={HOME_ROUTE}>
       <div className={styles.logoWrapper}>

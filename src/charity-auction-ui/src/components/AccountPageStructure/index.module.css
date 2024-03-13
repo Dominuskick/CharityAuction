@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  gap: 24px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.nameWrapper {
+  display: flex;
+  width: 306px;
+  height: 68px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 32px;
+  background-color: #fff;
+
+  color: #000;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 100% */
+}
+
+.content {
+  width: 966px;
+  min-height: 360px;
+  border-radius: 32px;
+  background-color: #fff;
+  padding: 56px 50px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #131313;
+}

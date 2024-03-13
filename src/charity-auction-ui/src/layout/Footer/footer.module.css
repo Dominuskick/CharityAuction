@@ -1,9 +1,13 @@
 .footer {
   height: 206px;
   padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.row {
+.footerContent {
+  width: calc(1440px - 72px * 2);
   display: flex;
   justify-content: space-between;
 }
