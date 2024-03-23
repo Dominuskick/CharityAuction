@@ -25,6 +25,27 @@
   gap: 16px;
 }
 
+.lotCardDescriptionEditable {
+  gap: 12px;
+  width: 313px;
+  align-items: flex-start;
+}
+
+.lotCardDescriptionEditable > h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.lotCardDescriptionEditable > h4,
+.lotCardDescriptionEditable > div {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 125% */
+}
+
 .lotCardDescriptionPoints {
   width: 100%;
   display: flex;
@@ -66,14 +87,6 @@
   align-items: center;
   gap: 24px;
   margin: 20px;
-}
-
-.row .lotCardDescription {
-  width: 313px;
-}
-
-.row > .lotCardDescription {
-  align-items: flex-start;
 }
 
 .lotCard.editable > hr {
@@ -120,4 +133,135 @@
 
 .imgContainer > img {
   width: 100%;
+}
+
+.timeGap {
+  display: flex;
+  gap: 4px;
+}
+
+.calendarIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../../assets/icons/calendar.svg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media only screen and (max-width: 1440px) {
+  .lotCard {
+    width: 286px;
+  }
+
+  .imgContainer {
+    height: 262px;
+  }
+
+  .lotCardDescription > button {
+    width: 100%;
+  }
+
+  .lotCard.editable {
+    width: 100%;
+  }
+
+  .row {
+    gap: 9px;
+    margin: 12px;
+  }
+
+  .lotCardDescriptionEditable {
+    gap: 8px;
+    width: 223px;
+  }
+
+  .row .imgContainer {
+    width: 120px;
+    height: 100px;
+  }
+
+  .lotCard.editable > hr {
+    margin: 0 12px;
+    width: calc(100% - 24px);
+  }
+
+  .controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 35.5px;
+    padding-right: 35.5px;
+    padding-bottom: 24.5px;
+    padding-top: 16.5px;
+  }
+
+  .btn {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
+
+  .imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 281px;
+    overflow: hidden;
+    border-radius: 32px;
+  }
+
+  .imgContainerEditable {
+    width: 176px;
+    height: 148px;
+  }
+
+  .imgContainer > img {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .lotCard {
+    width: 328px;
+    padding: 28px;
+    border-radius: 24px;
+    border: 1px solid #000;
+  }
+
+  .imgContainer {
+    height: 212px;
+  }
+
+  .lotCard.editable {
+    width: 280px;
+    padding: 0;
+  }
+
+  .row {
+    flex-direction: column;
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 12px;
+  }
+
+  .row .imgContainer {
+    width: 240px;
+    height: 179px;
+  }
+
+  .controls {
+    padding: 24px;
+    padding-top: 14px;
+  }
+
+  .lotCard.editable > hr {
+    margin: 0;
+    width: 100%;
+  }
 }

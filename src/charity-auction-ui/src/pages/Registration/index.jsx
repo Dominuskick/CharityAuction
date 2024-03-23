@@ -72,7 +72,7 @@ const Registration = () => {
     if (!userName) {
       setUserNameValidationError("Обов'язково");
       isValid = false;
-    } else if (name.length < 2) {
+    } else if (userName.length < 2) {
       setUserNameValidationError('Занадто коротко');
       isValid = false;
     }
@@ -249,25 +249,27 @@ const Registration = () => {
               </label>
             </div>
           </div>
-          <Button
-            onClick={registerUser}
-            disabled={
-              !(
-                name &&
-                surname &&
-                email &&
-                phoneNumber &&
-                isAdult &&
-                userName &&
-                password &&
-                confirmedPassword &&
-                isConfirm
-              )
-            }
-            loading={loading}
-          >
-            Зареєструватись
-          </Button>
+          <div className={styles.btnWrapper}>
+            <Button
+              onClick={registerUser}
+              disabled={
+                !(
+                  name &&
+                  surname &&
+                  email &&
+                  phoneNumber &&
+                  isAdult &&
+                  userName &&
+                  password &&
+                  confirmedPassword &&
+                  isConfirm
+                )
+              }
+              loading={loading}
+            >
+              Зареєструватись
+            </Button>
+          </div>
           <div className={styles.row}>
             <span>Вже маєте акаунт?</span>
             <Link to={LOGIN_ROUTE}>

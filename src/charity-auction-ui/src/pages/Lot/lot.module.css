@@ -192,8 +192,7 @@
 .btnContainer {
   width: fit-content;
   margin-top: 32px;
-  margin-left: auto;
-  margin-right: auto;
+  align-self: center;
 }
 
 .description {
@@ -202,6 +201,8 @@
 }
 
 .comments {
+  display: flex;
+  flex-direction: column;
   margin-top: 32px;
 }
 
@@ -286,4 +287,277 @@
 
 .microImgSelected {
   border: 2px solid white;
+}
+
+.infoCardContent > div > b,
+.column > b {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+@media only screen and (max-width: 1440px) {
+  .name {
+    line-height: 32px;
+    height: 32px;
+  }
+
+  .category {
+    margin-top: 12px;
+  }
+
+  .line {
+    margin-top: 40px;
+  }
+
+  .images {
+    width: 196px;
+  }
+
+  .imageSelected {
+    width: 196px;
+    height: 214px;
+  }
+
+  .imageSelected > img {
+    height: 100%;
+  }
+
+  .imageWrapper {
+    border-radius: 16px;
+  }
+
+  .imgRow > .imageWrapper:nth-child(n + 3) {
+    display: none;
+  }
+
+  .infoCard {
+    width: 416px;
+    height: 300px;
+    padding: 12px 20px;
+  }
+
+  .betStepWord {
+    display: none;
+  }
+
+  .infoCardContent > p b,
+  .infoCardContent > div b {
+    width: 150px;
+    margin-right: 16px;
+  }
+
+  .bidInput {
+    width: 210px;
+  }
+
+  .btnContainer {
+    width: fit-content;
+    margin-top: 6px;
+  }
+
+  .btnContainer > button {
+    /* width: 240px; */
+    height: 40px;
+  }
+
+  .infoCardContent > div > span {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 125% */
+  }
+
+  .description {
+    margin-top: 24px;
+  }
+
+  .description > p {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+  }
+
+  .comments {
+    margin-top: 20px;
+  }
+
+  .comments > h3 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .comments > h3 > span {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .comment {
+    margin-top: 16px;
+  }
+
+  .comment hr {
+    margin-bottom: 16px;
+  }
+
+  .commentHeader {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .comment > p {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .comments > h4 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .name {
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+    margin: 0 auto;
+  }
+
+  .category {
+    margin-top: 12px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .line {
+    margin-top: 24px;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 24px;
+  }
+
+  .images {
+    width: 100%;
+  }
+
+  .imageSelected {
+    width: 100%;
+    height: 212px;
+  }
+
+  .imgRow {
+    margin-top: 12px;
+    gap: 12px;
+  }
+
+  .microImgSelected {
+    border: 2px solid #131313;
+  }
+
+  .infoCard {
+    width: 100%;
+    height: fit-content;
+    padding: 0;
+  }
+
+  .infoCardContent > p b,
+  .infoCardContent > div b,
+  .makeBid > label {
+    width: 144px;
+    margin-right: 0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  .bidInput {
+    width: 150px;
+  }
+
+  .makeBid {
+    align-items: center;
+  }
+
+  /* .btnContainer {
+    width: fit-content;
+    margin-top: 6px;
+  } */
+
+  .btnContainer > button {
+    /* width: 240px; */
+    height: 40px;
+  }
+
+  .infoCardContent > div > span {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 125% */
+  }
+
+  .description {
+    margin-top: 24px;
+  }
+
+  .description > p {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+  }
+
+  .comments {
+    margin-top: 20px;
+  }
+
+  .comments > h3 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .comments > h3 > span {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .comment {
+    margin-top: 16px;
+  }
+
+  .comment hr {
+    margin-bottom: 16px;
+  }
+
+  .commentHeader {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .comment > p {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .comments > h4 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 36px;
+    margin-top: 20px;
+  }
 }

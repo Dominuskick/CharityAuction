@@ -75,3 +75,31 @@
   margin-right: 2.5px;
   transform: rotate(180deg);
 }
+
+.logoutTextSmallerScreen {
+  display: none;
+}
+
+@media only screen and (max-width: 1440px) {
+  .menu {
+    width: 196px;
+  }
+
+  .menuItem {
+    padding-left: 20px;
+  }
+
+  .logoutText {
+    display: none;
+  }
+
+  .logoutTextSmallerScreen {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .menu {
+    width: 100%;
+  }
+}

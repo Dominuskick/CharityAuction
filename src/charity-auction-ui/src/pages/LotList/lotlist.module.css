@@ -36,8 +36,16 @@
 }
 
 .sortWrapper > label {
-  min-width: 100.1px;
-  margin-right: 20px;
+  min-width: 140px;
+  margin-right: 8px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.selectListWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .lotList {
@@ -93,4 +101,120 @@
 
 .pageNext {
   transform: rotate(180deg);
+}
+
+@media only screen and (max-width: 1440px) {
+  .filters {
+    max-width: 100%;
+    margin-bottom: 28px;
+    align-items: flex-start;
+  }
+
+  .sortWrapper {
+    min-width: 100%;
+    width: 100%;
+    gap: 23px;
+    align-items: flex-start;
+  }
+
+  .sortWrapper > label {
+    margin-right: 0;
+    margin-top: 4px;
+  }
+
+  .selectListWrapper {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lotList {
+    width: 100%;
+    gap: 24px;
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .pageControls {
+    display: flex;
+    gap: 11px;
+  }
+
+  .pageControls span {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 71.429% */
+
+    cursor: pointer;
+  }
+
+  .pagePrev,
+  .pageNext {
+    background: url('../../assets/icons/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+  }
+
+  .page.curPage {
+    background-color: #fff;
+    color: #131313;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .pageNext {
+    transform: rotate(180deg);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .header {
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px; /* 114.286% */
+    height: 32px;
+    margin-bottom: 24px;
+  }
+
+  .filters {
+    width: 100%;
+    gap: unset;
+    justify-content: space-between;
+  }
+
+  .selectWrapper {
+    min-width: 156px;
+    max-width: 156px;
+  }
+
+  .sortWrapper {
+    min-width: unset;
+    width: unset;
+  }
+
+  .sortWrapper > label {
+    display: none;
+  }
+
+  .filters {
+    margin-bottom: 20px;
+  }
+
+  .lotList {
+    gap: 20px;
+    padding: 0;
+    margin-bottom: 20px;
+    background-color: transparent;
+  }
 }

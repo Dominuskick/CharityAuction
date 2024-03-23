@@ -11,6 +11,7 @@
 }
 
 .headerContent {
+  position: relative;
   width: calc(1440px - 72px * 2);
   display: flex;
   align-items: center;
@@ -57,6 +58,14 @@
   background-color: transparent;
 }
 
+.searchBar > input::placeholder {
+  color: #a5a5a5;
+}
+
+.searchBar.isFocus {
+  outline: 1px solid #131313;
+}
+
 .links {
   width: 269px;
   margin-left: auto;
@@ -79,6 +88,10 @@
   background-size: 100% 0.1em;
 }
 
+.authWrapper {
+  font-weight: 700;
+}
+
 .auth {
   display: flex;
   width: 126px;
@@ -93,7 +106,8 @@
   cursor: pointer;
 }
 
-.auth:hover {
+.auth:hover,
+.account:hover {
   background-color: #edeeef;
 }
 
@@ -132,4 +146,222 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.accountTextMobile {
+  display: none;
+}
+
+.burgerButton {
+  display: none;
+}
+
+.burgerMenuContent {
+  display: none;
+}
+
+@media only screen and (max-width: 1440px) {
+  .header {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .headerContent {
+    width: calc(768px - 66px * 2);
+  }
+
+  .logo {
+    order: 0;
+  }
+
+  .links {
+    order: 1;
+    width: fit-content;
+    margin-left: 59px;
+    margin-right: 0;
+    gap: 20px;
+  }
+
+  .searchBar {
+    order: 2;
+    width: 68px;
+    margin-left: 59px;
+    background-color: #fff;
+
+    position: absolute;
+    right: 224px;
+
+    transition: width 0.3s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+  }
+
+  .searchBar.isFocus {
+    width: 320px;
+  }
+
+  .authWrapper {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .account {
+    width: 201px;
+    padding: 10px 12px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .header {
+    height: 96px;
+  }
+
+  .headerContent {
+    width: calc(360px - 16px * 2);
+  }
+
+  .links {
+    display: none;
+  }
+
+  .searchBar {
+    display: none;
+  }
+
+  .authWrapper {
+    order: 1;
+  }
+
+  .account {
+    width: 126px;
+  }
+
+  .accountText {
+    display: none;
+  }
+
+  .accountTextMobile {
+    display: unset;
+  }
+
+  .burgerMenuButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    order: 2;
+    width: 48px;
+    height: 48px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+
+  .burgerMenuIcon {
+    position: relative;
+    display: flex;
+    width: 38px;
+    height: calc(6px * 3 + 8px * 2);
+  }
+
+  .burgerMenuIcon span {
+    display: flex;
+    width: 38px;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #2f2f37;
+    transition: all 0.2s ease-in;
+    position: absolute;
+  }
+
+  .burgerMenuIcon > span:first-child {
+    top: 0;
+  }
+
+  .burgerMenuIcon > span:nth-child(2) {
+    top: 14px;
+  }
+
+  .burgerMenuIcon > span:last-child {
+    bottom: 0;
+  }
+
+  .burgerMenuIcon.active > span:first-child {
+    transform: rotate(45deg) translate(9.5px, 10px);
+  }
+
+  .burgerMenuIcon.active > span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burgerMenuIcon.active > span:last-child {
+    transform: rotate(-45deg) translate(9.5px, -10px);
+  }
+
+  .burgerMenu {
+    position: fixed;
+    z-index: 2;
+    background-color: #131313;
+    color: #fff;
+    width: calc(100vw - 17px);
+    height: calc(100vh - 96px);
+    left: 0;
+    top: -100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: all 0.2s ease-in;
+  }
+
+  .burgerMenu.active {
+    top: 96px;
+  }
+
+  .burgerMenuContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .burgerLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .burgerLink {
+    display: flex;
+    width: 240px;
+    height: 48px;
+    padding: 10px 24px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    border: 1px solid #fff;
+    background-color: #131313;
+
+    box-shadow: 2px 2px 4px 0px rgba(255, 255, 255, 0.25);
+  }
+
+  .burgerLink:hover {
+    background-color: #4a4a4a;
+  }
+
+  .searchBarBurger {
+    display: flex;
+    order: unset;
+    position: relative;
+    right: unset;
+    margin: 0;
+    width: 143px;
+    background-color: #131313;
+    border: 1px solid #fff;
+  }
+
+  .searchBarBurger > span {
+    left: 15px;
+    background-image: url(../../assets/icons/searchWhite.svg);
+  }
+
+  .searchBarBurger > input {
+    color: #fff;
+  }
 }

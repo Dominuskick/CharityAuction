@@ -133,3 +133,114 @@
 .row span.underLine {
   font-weight: 700;
 }
+
+@media only screen and (max-width: 1440px) {
+  .registrationWrapper {
+    width: 100%;
+    height: fit-content;
+
+    padding: 32px 20px;
+  }
+
+  /* .btnWrapper {
+    margin: 24px 0;
+  } */
+
+  .registration > h2 {
+    margin-bottom: 12px;
+  }
+
+  .registration > hr {
+    margin-bottom: 28px;
+  }
+
+  .inputListWrapper {
+    gap: 20px;
+  }
+
+  .inputWrapperLine {
+    margin-top: -8px;
+    margin-left: 24px;
+    gap: 24px;
+  }
+
+  .text {
+    width: 473px;
+  }
+
+  .registration > button {
+    margin: 24px 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .registrationWrapper {
+    padding: 32px 12px;
+  }
+
+  .btnWrapper {
+    margin: 24px 0 12px 0;
+    width: 304px;
+  }
+
+  .btnWrapper > button {
+    width: 100%;
+  }
+
+  .registration > h2 {
+    width: 100%;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%;
+    letter-spacing: 0.2px;
+    margin-bottom: 16px;
+    height: 36px;
+  }
+
+  .registration > hr {
+    margin-bottom: 16px;
+  }
+
+  .inputListWrapper {
+    width: 100%;
+    gap: 16px;
+  }
+
+  .row {
+    width: 100%;
+  }
+
+  .inputWrapperLine {
+    margin-left: 11px;
+    gap: 8px;
+  }
+
+  .inputWrapperLine .text {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.2px;
+  }
+
+  .text {
+    width: 100%;
+  }
+
+  .underLine {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+  }
+
+  .row span {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.2px;
+  }
+}

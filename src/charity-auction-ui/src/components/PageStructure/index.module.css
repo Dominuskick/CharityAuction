@@ -10,9 +10,31 @@
 .mainContent {
   display: flex;
   flex-direction: column;
-  max-width: 1440px;
+  width: calc(1440px - 72px * 2);
 }
 
 .mainContent__alignCenter {
   align-items: center;
+}
+
+@media only screen and (max-width: 1440px) {
+  .darkMain {
+    padding-top: calc(128px + 60px);
+    padding-bottom: 60px;
+  }
+
+  .mainContent {
+    max-width: 636px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .darkMain {
+    padding-top: calc(96px + 40px);
+    padding-bottom: 40px;
+  }
+
+  .mainContent {
+    max-width: 328px;
+  }
 }

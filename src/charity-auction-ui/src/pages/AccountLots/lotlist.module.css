@@ -16,7 +16,7 @@
 .rowBtns {
   display: flex;
   justify-content: space-between;
-  width: 746px;
+  width: 100%;
   margin-bottom: 40px;
 }
 
@@ -35,4 +35,10 @@
   letter-spacing: 0.2px;
   text-decoration-line: underline;
   color: #010101;
+}
+
+@media only screen and (max-width: 1440px) {
+  .rowBtns {
+    margin-bottom: 24px;
+  }
 }

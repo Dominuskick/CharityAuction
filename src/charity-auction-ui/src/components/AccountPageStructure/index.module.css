@@ -1,4 +1,5 @@
 .row {
+  width: 100%;
   display: flex;
   gap: 24px;
 }
@@ -28,7 +29,7 @@
 }
 
 .content {
-  width: 966px;
+  width: 100%;
   min-height: 360px;
   border-radius: 32px;
   background-color: #fff;
@@ -39,4 +40,41 @@
   justify-content: center;
   align-items: center;
   color: #131313;
+}
+
+@media only screen and (max-width: 1440px) {
+  .nameWrapper {
+    width: 196px;
+  }
+
+  .content {
+    min-height: unset;
+    height: fit-content;
+    justify-content: unset;
+    padding: 32px 25px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .nameWrapper {
+    height: 48px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 24px;
+  }
+
+  .content {
+    padding: 24px;
+  }
 }

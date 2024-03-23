@@ -97,3 +97,175 @@ section.dark {
 .faqSection {
   scroll-margin-top: 128px;
 }
+
+@media only screen and (max-width: 1440px) {
+  .aucSection {
+    padding: 60px 0;
+  }
+
+  .aucSectionContent {
+    width: 636px;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .aucSectionContent > img {
+    width: 414px;
+    height: 414px;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .left > h2 {
+    font-size: 60px;
+    margin-bottom: 8px;
+    align-self: center;
+  }
+
+  .left > p {
+    font-size: 20px;
+  }
+
+  .scopeSection,
+  .popularSection,
+  .faqSection {
+    padding: 60px 0;
+  }
+
+  .scopeSectionContent,
+  .popularSectionContent,
+  .faqSectionContent {
+    width: 630px;
+  }
+
+  .popularSectionContent {
+    gap: 32px;
+  }
+
+  .scopeSectionContent > h2,
+  .popularSectionContent > h2,
+  .faqSectionContent > h2 {
+    font-size: 56px;
+  }
+
+  .popularSectionContent > h2 {
+    margin-bottom: 8px;
+  }
+
+  .lotList {
+    gap: 24px;
+  }
+
+  .lotList > a:nth-child(3) {
+    display: none;
+  }
+
+  .faqSectionContent {
+    gap: 40px;
+  }
+
+  .faqWrapper {
+    width: 100%;
+    padding: 26px 40px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .aucSection {
+    padding: 0 0 40px 0;
+  }
+
+  .aucSectionContent {
+    width: 100%;
+    gap: 16px;
+  }
+
+  .aucSectionContent > img {
+    width: 328px;
+    height: 328px;
+  }
+
+  .left {
+    gap: 24px;
+    align-items: center;
+  }
+
+  .left > h2 {
+    font-size: 32px;
+    line-height: 40px;
+    margin-bottom: 0;
+    align-self: center;
+    height: 40px;
+  }
+
+  .left > p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .buttons > a > button {
+    width: 156px;
+  }
+
+  .scopeSection,
+  .popularSection,
+  .faqSection {
+    padding: 40px 0;
+  }
+
+  .aucSectionContent,
+  .scopeSectionContent,
+  .popularSectionContent,
+  .faqSectionContent {
+    width: 328px;
+  }
+
+  .popularSectionContent {
+    gap: 32px;
+  }
+
+  .scopeSectionContent > h2,
+  .popularSectionContent > h2,
+  .faqSectionContent > h2 {
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 40px;
+    height: 40px;
+  }
+
+  .popularSectionContent {
+    gap: 24px;
+  }
+
+  .popularSectionContent > h2 {
+    margin-bottom: 0;
+  }
+
+  .lotList {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .popularSectionContent > a > button {
+    width: 328px;
+  }
+
+  .faqSectionContent {
+    gap: 24px;
+  }
+
+  .faqWrapper {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .scopeSection,
+  .faqSection {
+    scroll-margin-top: 96px;
+  }
+}

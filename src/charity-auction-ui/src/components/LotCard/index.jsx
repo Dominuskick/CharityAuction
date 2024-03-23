@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import {
   formatDateString,
   calculateTimeRemaining,
+  formatDateStringStartAndEnd,
 } from '@/utils/helpers/dateManipulation';
 import defaultImg from '../../assets/img/defaultLot.jpg';
 import { deleteAuction } from '@/http/auctionAPI';
@@ -13,6 +14,7 @@ const index = ({
   endTime,
   highestBid,
   id,
+  categoryNames,
   btnDisable,
   pictures,
   isEditable,
@@ -71,9 +73,19 @@ const index = ({
                 alt={`Картинка лоту під назвою ${name}`}
               />
             </div>
-            <div className={styles.lotCardDescription}>
+            <div
+              className={`${styles.lotCardDescription} ${styles.lotCardDescriptionEditable}`}
+            >
               <h3>{name}</h3>
-              <div className={styles.lotCardDescriptionPoints}>
+              <h4>{categoryNames[0] || 'Нема категорії'}</h4>
+              <div className={styles.timeGap}>
+                <span className={styles.calendarIcon}></span>
+                {formatDateStringStartAndEnd(endTime)}
+              </div>
+              <h4>
+                Поточна ціна: <b>{highestBid} грн</b>
+              </h4>
+              {/* <div className={styles.lotCardDescriptionPoints}>
                 <p>
                   <b>Закінчення:</b>
                   <span>{formatDateString(endTime)}</span>
@@ -86,7 +98,7 @@ const index = ({
                   <b>Найвища ставка:</b>
                   <span>{highestBid.toLocaleString()} грн</span>
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </Link>

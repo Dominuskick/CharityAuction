@@ -59,11 +59,11 @@ const LogIn = () => {
 
   const rememberMe = () => {
     if (isRememberMe) {
-      localStorage.setItem('remembered-email', email);
-      localStorage.setItem('remembered-password', password);
+      localStorage.setItem('BetOnGoodness-remembered-email', email);
+      localStorage.setItem('BetOnGoodness-remembered-password', password);
     } else {
-      localStorage.setItem('remembered-email', '');
-      localStorage.setItem('remembered-password', '');
+      localStorage.setItem('BetOnGoodness-remembered-email', '');
+      localStorage.setItem('BetOnGoodness-remembered-password', '');
     }
   };
 

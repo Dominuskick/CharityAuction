@@ -74,7 +74,7 @@ const AccountCreateLot = () => {
 
   if (!isPublished) {
     return (
-      <PageStructure>
+      <PageStructure alignItemsCenter>
         <div className={styles.newLot}>
           <h2 className={styles.header}>Створення аукціону</h2>
           <div className={`${styles.inputWrapper} ${styles.inputName}`}>
@@ -189,7 +189,11 @@ const AccountCreateLot = () => {
           <h3>Ваш лот стане доступним, після модерації</h3>
           <div className={styles.btnWrapper}>
             <Link to={ACCOUNT_ROUTE}>
-              <Button>Повернутись до особистого кабінету</Button>
+              <Button>
+                Повернутись до{' '}
+                <span className={styles.returnToCabinetWord}>особистого</span>{' '}
+                кабінету
+              </Button>
             </Link>
           </div>
         </div>

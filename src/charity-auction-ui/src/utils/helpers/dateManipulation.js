@@ -32,10 +32,29 @@ export function calculateTimeRemaining(endDate) {
   const hours = Math.floor(
     (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   );
-  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  // const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
   // Формируем строку с оставшимся временем
   const remainingTime = `${days} днів ${hours} годин`;
 
   return remainingTime;
+}
+
+export function formatDateStringStartAndEnd(endDateStr) {
+  const endDate = new Date(endDateStr);
+  const startDate = new Date(endDate.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  const endDateFormatted = formatDate(endDate);
+  const startDateFormatted = formatDate(startDate);
+
+  const result = `${startDateFormatted} - ${endDateFormatted}`;
+
+  return result;
 }

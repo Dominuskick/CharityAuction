@@ -14,7 +14,7 @@ import { useSortLotList } from '@/utils/hooks/useSortLotList';
 
 const LotList = () => {
   const [lotCardsData, setLotCardsData] = useState([]);
-  const itemsPerPage = 9; // Количество элементов на странице
+  const itemsPerPage = window.innerWidth > 1440 ? 9 : 4; // Количество элементов на странице
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -123,36 +123,38 @@ const LotList = () => {
         </div>
         <div className={styles.sortWrapper}>
           <label>Сортувати за</label>
-          <div className={styles.selectWrapper}>
-            <Select
-              placeholder="Ціною"
-              options={priceOptions}
-              styles={selectStyles}
-              value={sortByPriceValue}
-              onChange={(selected) => {
-                setSortByPriceValue(selected);
-                setSortByNoveltyValue(null);
-              }}
-            />
-          </div>
-          <div className={styles.selectWrapper}>
-            <Select
-              placeholder="Новизною"
-              options={noveltyOptions}
-              styles={selectStyles}
-              value={sortByNoveltyValue}
-              onChange={(selected) => {
-                setSortByNoveltyValue(selected);
-                setSortByPriceValue(null);
-              }}
-            />
-          </div>
-          <div className={styles.selectWrapper}>
-            <Select
-              placeholder="Актуальністю"
-              options={relevanceOptions}
-              styles={selectStyles}
-            />
+          <div className={styles.selectListWrapper}>
+            <div className={styles.selectWrapper}>
+              <Select
+                placeholder="Ціною"
+                options={priceOptions}
+                styles={selectStyles}
+                value={sortByPriceValue}
+                onChange={(selected) => {
+                  setSortByPriceValue(selected);
+                  setSortByNoveltyValue(null);
+                }}
+              />
+            </div>
+            <div className={styles.selectWrapper}>
+              <Select
+                placeholder="Новизною"
+                options={noveltyOptions}
+                styles={selectStyles}
+                value={sortByNoveltyValue}
+                onChange={(selected) => {
+                  setSortByNoveltyValue(selected);
+                  setSortByPriceValue(null);
+                }}
+              />
+            </div>
+            <div className={styles.selectWrapper}>
+              <Select
+                placeholder="Актуальністю"
+                options={relevanceOptions}
+                styles={selectStyles}
+              />
+            </div>
           </div>
         </div>
       </div>

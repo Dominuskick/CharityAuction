@@ -73,3 +73,85 @@
 .btnContainer button {
   width: 362px;
 }
+
+@media only screen and (max-width: 1440px) {
+  .betsWrapper {
+    width: 100%;
+    padding: 32px 20px;
+  }
+
+  .betsContent > h2 {
+    line-height: 36px;
+    margin-bottom: 20px;
+  }
+
+  .betListHeader {
+    margin-bottom: 12px;
+  }
+
+  .betListHeader > h3 {
+    font-size: 28px;
+    line-height: 36px;
+    width: 183px;
+  }
+
+  .loadingBet {
+    display: flex;
+    gap: 158px;
+  }
+
+  .bet > p {
+    width: 183px;
+  }
+
+  .btnContainer {
+    margin-top: 28px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .betsWrapper {
+    padding: 16px 12px;
+  }
+
+  .betsContent > h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    height: fit-content;
+  }
+
+  .betListHeader > h3 {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+    width: 68px;
+  }
+
+  .betListHeader > h3:last-child {
+    width: 100px;
+  }
+
+  .loadingBet {
+    display: flex;
+    gap: 41px;
+  }
+
+  .bet > p {
+    width: calc(100% / 3);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px; /* 100% */
+  }
+
+  .btnContainer {
+    margin-top: 24px;
+    width: 100%;
+  }
+
+  .btnContainer button {
+    margin-top: 24px;
+    width: 100%;
+  }
+}

@@ -21,6 +21,7 @@
 
 .left > p {
   font-size: 20px;
+  line-height: 28px;
 }
 
 .copyright {
@@ -88,4 +89,46 @@
 
 .email {
   align-items: center;
+}
+
+@media only screen and (max-width: 1440px) {
+  .footer {
+    height: 178px;
+  }
+
+  .footerContent {
+    width: calc(768px - 66px * 2);
+  }
+
+  .left {
+    width: 416px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .left > p {
+    font-size: 20px;
+  }
+
+  .copyright {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .footer {
+    padding: 24px 0;
+    height: fit-content;
+  }
+
+  .footerContent {
+    width: calc(360px - 16px * 2);
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .left {
+    width: 100%;
+  }
 }

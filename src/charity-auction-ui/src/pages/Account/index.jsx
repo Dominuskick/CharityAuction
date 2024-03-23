@@ -1,4 +1,4 @@
-import styles from './lotlist.module.css';
+import styles from './account.module.css';
 import { AccountPageStructure, Button } from '@/components';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -18,7 +18,9 @@ const Account = () => {
         платформі
       </p>
       <Link to={ACCOUNT_CREATE_LOT_ROUTE}>
-        <Button>Створити лот</Button>
+        <div className={styles.buttonWrapper}>
+          <Button>Створити лот</Button>
+        </div>
       </Link>
     </AccountPageStructure>
   );

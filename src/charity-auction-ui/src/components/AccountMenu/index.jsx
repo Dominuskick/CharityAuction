@@ -63,7 +63,8 @@ const index = () => {
       </NavLink>
       <div className={styles.menuItem} onClick={logOutHandle}>
         <span className={styles.menuLogout}></span>
-        Вийти з кабінету
+        <div className={styles.logoutText}>Вийти з кабінету</div>
+        <div className={styles.logoutTextSmallerScreen}>Вихід</div>
       </div>
     </nav>
   );

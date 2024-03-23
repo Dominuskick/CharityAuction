@@ -24,30 +24,30 @@ export const relevanceOptions = [
 ];
 
 export const selectStyles = {
-  menu: (provided, state) => ({
+  menu: (provided) => ({
     ...provided,
     marginTop: 0,
   }),
-  menuList: (provided, state) => ({
+  menuList: (provided) => ({
     ...provided,
     padding: 0,
   }),
 };
 
 export const selectStylesDarkColor = {
-  menu: (provided, state) => ({
+  menu: (provided) => ({
     ...provided,
     marginTop: 0, // Убираем верхний отступ между селектом и вариантами
   }),
-  menuList: (provided, state) => ({
+  menuList: (provided) => ({
     ...provided,
     padding: 0, // Убираем внутренний отступ вокруг вариантов
   }),
-  option: (provided, state) => ({
+  option: (provided) => ({
     ...provided,
     color: '#131313', // Устанавливаем цвет текста в черный
   }),
-  control: (provided, state) => ({
+  control: (provided) => ({
     ...provided,
     borderColor: '#131313', // Устанавливаем цвет обводки в черный
   }),

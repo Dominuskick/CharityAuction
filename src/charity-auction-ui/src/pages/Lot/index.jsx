@@ -174,7 +174,9 @@ const Lot = () => {
               </span>
             </div>
             <div>
-              <b>Мін. крок ставки</b>
+              <b>
+                Мін. крок <span className={styles.betStepWord}>ставки</span>
+              </b>
               <span>
                 {loading ? (
                   <LoaderInline size="28" />

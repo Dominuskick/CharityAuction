@@ -127,7 +127,7 @@ const AccountEditLot = () => {
   if (!isPublished) {
     return (
       <PageStructure>
-        <div className={styles.newLot}>
+        <div className={styles.editLot}>
           <h2 className={styles.header}>Редагування аукціону</h2>
           <div className={`${styles.inputWrapper} ${styles.inputName}`}>
             <label>Назва</label>
@@ -239,12 +239,16 @@ const AccountEditLot = () => {
   } else {
     return (
       <PageStructure>
-        <div className={`${styles.newLot} ${styles.lotPublished}`}>
+        <div className={`${styles.editLot} ${styles.lotPublished}`}>
           <h2>Дякуємо за участь в аукціоні!</h2>
           <h3>Ваш лот буде відредаговано, після модерації</h3>
           <div className={styles.btnWrapper}>
             <Link to={ACCOUNT_ROUTE}>
-              <Button>Повернутись до особистого кабінету</Button>
+              <Button>
+                Повернутись до{' '}
+                <span className={styles.returnToCabinetWord}>особистого</span>{' '}
+                кабінету
+              </Button>
             </Link>
           </div>
         </div>

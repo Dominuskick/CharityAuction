@@ -21,6 +21,7 @@ const AccountLots = () => {
       try {
         const response = await getUserAuctionList();
         setLotCardsData(response.data);
+        console.log(response.data);
       } catch (e) {
         if (e.response.status === 401) {
           try {
@@ -69,6 +70,7 @@ const AccountLots = () => {
                   highestBid={lotCardData.currentPrice}
                   pictures={lotCardData.pictures}
                   id={lotCardData.id}
+                  categoryNames={lotCardData.categoryNames}
                   isEditable={true}
                   onDelete={deleteHandle}
                 />
