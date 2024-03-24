@@ -14,7 +14,10 @@ import { useSortLotList } from '@/utils/hooks/useSortLotList';
 
 const LotList = () => {
   const [lotCardsData, setLotCardsData] = useState([]);
-  const itemsPerPage = window.innerWidth > 1440 ? 9 : 4; // Количество элементов на странице
+  const [itemsPerPage, setItemsPerPage] = useState(
+    window.innerWidth > 1440 ? 9 : 4
+  );
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -22,20 +25,26 @@ const LotList = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const [categoryNames, setCategoryNames] = useState([]);
   const [sortByPriceValue, setSortByPriceValue] = useState(null);
   const [sortByNoveltyValue, setSortByNoveltyValue] = useState(null);
+  const [sortByActiveValue, setSortByActiveValue] = useState({
+    value: 'Активні',
+    label: 'Активні',
+  });
 
   const sortedLotList = useSortLotList(
     lotCardsData,
+    categoryNames,
     sortByPriceValue ? sortByPriceValue.value : null,
-    sortByNoveltyValue ? sortByNoveltyValue.value : null
+    sortByNoveltyValue ? sortByNoveltyValue.value : null,
+    sortByActiveValue ? sortByActiveValue.value : null
   );
 
   useEffect(() => {
     getAuctionList()
       .then((response) => {
         setLotCardsData(response.data);
-        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
       })
       .catch()
       .finally(setLoading(false));
@@ -47,11 +56,15 @@ const LotList = () => {
     const newVisibleLotCardsData = sortedLotList.slice(startIndex, endIndex);
 
     setVisibleLotCardsData(newVisibleLotCardsData);
-  }, [currentPage, sortedLotList]);
+  }, [currentPage, sortedLotList, itemsPerPage]);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(sortedLotList.length / itemsPerPage));
+    setCurrentPage(1);
+  }, [sortedLotList, itemsPerPage]);
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
-    // Здесь можно добавить логику для загрузки данных по выбранной странице
   };
 
   const renderPages = () => {
@@ -98,7 +111,7 @@ const LotList = () => {
         {renderPages()}
         <span
           className={`${styles.pageNext} ${
-            currentPage === totalPages && styles.disabled
+            currentPage >= totalPages && styles.disabled
           }`}
           onClick={() =>
             currentPage !== totalPages &&
@@ -109,6 +122,26 @@ const LotList = () => {
     );
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth > 1440) {
+      setItemsPerPage(9);
+    } else {
+      setItemsPerPage(4);
+    }
+  }, [windowWidth]);
+
   return (
     <PageStructure alignItemsCenter>
       <h2 className={styles.header}>Актуальні лоти</h2>
@@ -118,6 +151,10 @@ const LotList = () => {
             placeholder="Категорія"
             options={categoryOptions}
             styles={selectStyles}
+            value={categoryNames}
+            onChange={(selected) => {
+              setCategoryNames(selected);
+            }}
             isMulti
           />
         </div>
@@ -153,6 +190,12 @@ const LotList = () => {
                 placeholder="Актуальністю"
                 options={relevanceOptions}
                 styles={selectStyles}
+                value={sortByActiveValue}
+                onChange={(selected) => {
+                  setSortByActiveValue(selected);
+                  setSortByPriceValue(null);
+                  setSortByNoveltyValue(null);
+                }}
               />
             </div>
           </div>

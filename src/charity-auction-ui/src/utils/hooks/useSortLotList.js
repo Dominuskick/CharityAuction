@@ -2,20 +2,75 @@ import { useMemo } from 'react';
 
 export const useSortLotList = (
   lotCardsData,
+  categoryNames,
   sortByPriceValue,
-  sortByNoveltyValue
+  sortByNoveltyValue,
+  sortByActiveValue
 ) => {
   return useMemo(() => {
-    return sortLotList(lotCardsData, sortByPriceValue, sortByNoveltyValue);
-  }, [lotCardsData, sortByPriceValue, sortByNoveltyValue]);
+    return sortAndFilterLotList(
+      lotCardsData,
+      categoryNames,
+      sortByPriceValue,
+      sortByNoveltyValue,
+      sortByActiveValue
+    );
+  }, [
+    lotCardsData,
+    categoryNames,
+    sortByPriceValue,
+    sortByNoveltyValue,
+    sortByActiveValue,
+  ]);
 };
 
-const sortLotList = (lotCardsData, sortByPriceValue, sortByNoveltyValue) => {
-  return sortByPriceValue
-    ? sortByPrice(lotCardsData, sortByPriceValue)
-    : sortByNoveltyValue
-    ? sortByNovelty(lotCardsData, sortByNoveltyValue)
+const sortAndFilterLotList = (
+  lotCardsData,
+  categoryNames,
+  sortByPriceValue,
+  sortByNoveltyValue,
+  sortByActiveValue
+) => {
+  const filterByActiveLotCardsData = sortByActiveValue
+    ? filterByActive(lotCardsData, sortByActiveValue)
     : lotCardsData;
+
+  const filteredLotCardsData =
+    categoryNames.length == 0
+      ? filterByActiveLotCardsData
+      : filterByCategory(filterByActiveLotCardsData, categoryNames);
+
+  return sortByPriceValue
+    ? sortByPrice(filteredLotCardsData, sortByPriceValue)
+    : sortByNoveltyValue
+    ? sortByNovelty(filteredLotCardsData, sortByNoveltyValue)
+    : filteredLotCardsData;
+};
+
+const filterByCategory = (lotCardsData, categoryNames) => {
+  const categoryNamesValues = categoryNames.map((el) => el.value);
+
+  return lotCardsData.filter((cardData) => {
+    return cardData.categoryNames.some((category) =>
+      categoryNamesValues.includes(category)
+    );
+  });
+};
+
+const filterByActive = (lotCardsData, sortByActiveValue) => {
+  const currentDate = new Date(); // Текущая дата
+
+  return lotCardsData.filter((cardData) => {
+    const endDate = new Date(cardData.endDate); // Преобразовываем строку endDate в объект Date
+
+    if (sortByActiveValue === 'Активні') {
+      return endDate > currentDate;
+    } else if (sortByActiveValue === 'Продані') {
+      return endDate <= currentDate;
+    } else {
+      return false;
+    }
+  });
 };
 
 const sortByPrice = (lotCardsData, sortByPriceValue) => {
