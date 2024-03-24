@@ -22,3 +22,42 @@
   text-align: center;
   font-weight: 600;
 }
+
+@media only screen and (max-width: 1440px) {
+  .img {
+    width: 320px;
+    height: 283px;
+  }
+
+  .message {
+    width: 100%;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .header {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 40px; /* 133.333% */
+  }
+
+  .img {
+    width: 328px;
+    height: 315px;
+  }
+
+  .message {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+  }
+}
