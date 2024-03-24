@@ -27,6 +27,7 @@ export function calculateTimeRemaining(endDate) {
   // Разница в миллисекундах между текущим временем и датой окончания
   const timeDifference = endTime - currentTime;
 
+  if (timeDifference <= 0) return 'Запізно :(';
   // Преобразуем разницу в дни, часы и минуты
   const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   const hours = Math.floor(

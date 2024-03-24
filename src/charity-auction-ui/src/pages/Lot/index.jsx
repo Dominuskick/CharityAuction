@@ -8,7 +8,7 @@ import {
   formatDateString,
   calculateTimeRemaining,
 } from '@/utils/helpers/dateManipulation';
-import { ERROR_ROUTE } from '@/utils/constants/routes';
+import { ERROR_ROUTE, LOTS_ROUTE } from '@/utils/constants/routes';
 import { getAuctionById } from '@/http/auctionAPI';
 import { createBid, getAuctionBidsById } from '@/http/bidAPI';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,8 @@ const Lot = () => {
   const [bids, setBids] = useState([]);
   const [selectedImg, setSelectedImg] = useState(defaultLotImg);
   const [loading, setLoading] = useState(true);
+
+  const [isAuctionClosed, setIsAuctionClosed] = useState(false);
 
   useEffect(() => {
     const getAuctionAndBidsData = async () => {
@@ -65,6 +67,11 @@ const Lot = () => {
       navigate(ERROR_ROUTE);
     }
   };
+
+  useEffect(() => {
+    const isClosed = new Date(lotCardData.endDate) < new Date();
+    setIsAuctionClosed(isClosed);
+  }, [lotCardData]);
 
   return (
     <PageStructure>
@@ -185,21 +192,23 @@ const Lot = () => {
                 )}
               </span>
             </div>
-            <div className={styles.makeBid}>
-              <label>Зробити ставку</label>
-              <div className={styles.bidInput}>
-                <input
-                  type="number"
-                  placeholder="Ваша ставка"
-                  onChange={(e) => {
-                    setBid(e.target.value);
-                  }}
-                  value={bid}
-                  disabled={!login}
-                />
-                <span>грн</span>
+            {!isAuctionClosed && (
+              <div className={styles.makeBid}>
+                <label>Зробити ставку</label>
+                <div className={styles.bidInput}>
+                  <input
+                    type="number"
+                    placeholder="Ваша ставка"
+                    onChange={(e) => {
+                      setBid(e.target.value);
+                    }}
+                    value={bid}
+                    disabled={!login}
+                  />
+                  <span>грн</span>
+                </div>
               </div>
-            </div>
+            )}
             <div className={styles.btnContainer}>
               <Button
                 onClick={createBidHandle}
@@ -211,9 +220,16 @@ const Lot = () => {
                       lotCardData?.currentPrice + lotCardData?.minIncrease)
                 }
               >
-                Підтвердити ставку
+                {isAuctionClosed ? 'Торги завершено' : 'Підтвердити ставку'}
               </Button>
             </div>
+            {isAuctionClosed && (
+              <div className={styles.btnContainer}>
+                <Link to={LOTS_ROUTE}>
+                  <Button>Повернутись до лотів</Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

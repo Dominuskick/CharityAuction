@@ -94,6 +94,7 @@
   font-weight: 600;
   line-height: 28px;
   display: flex;
+  align-items: center;
 }
 
 .infoCardContent > p b,
