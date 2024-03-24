@@ -67,6 +67,7 @@
 }
 
 .pageControls span {
+  position: relative;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -79,7 +80,7 @@
   font-size: 28px;
   font-style: normal;
   font-weight: 600;
-  line-height: 20px; /* 71.429% */
+  line-height: 20px;
 
   cursor: pointer;
 }
@@ -101,6 +102,13 @@
 
 .pageNext {
   transform: rotate(180deg);
+}
+
+.pagePrev.disabled,
+.pageNext.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 @media only screen and (max-width: 1440px) {
