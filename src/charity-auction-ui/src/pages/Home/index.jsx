@@ -14,10 +14,12 @@ import {
   SCOPE_ID,
 } from '@/utils/constants/routes';
 import { getAuctionList } from '@/http/auctionAPI';
+import { filterByActive } from '@/utils/hooks/useSortLotList';
 
 const Home = () => {
   const login = useSelector((state) => state.auth.login);
   const [lotCardsData, setLotCardsData] = useState([]);
+  const [filteredLotCardsData, setFilteredLotCardsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +30,10 @@ const Home = () => {
       .catch()
       .finally(setLoading(false));
   }, []);
+
+  useEffect(() => {
+    setFilteredLotCardsData(filterByActive(lotCardsData));
+  }, [lotCardsData]);
 
   const FAQdata = {
     title: '',
@@ -116,7 +122,7 @@ const Home = () => {
               {loading ? (
                 <Loader />
               ) : (
-                lotCardsData.map(
+                filteredLotCardsData.map(
                   (lotCardData, i) =>
                     i < 3 && (
                       <LotCard

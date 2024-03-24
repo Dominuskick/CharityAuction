@@ -57,7 +57,7 @@ const filterByCategory = (lotCardsData, categoryNames) => {
   });
 };
 
-const filterByActive = (lotCardsData, sortByActiveValue) => {
+export const filterByActive = (lotCardsData, sortByActiveValue = 'Активні') => {
   const currentDate = new Date(); // Текущая дата
 
   return lotCardsData.filter((cardData) => {
