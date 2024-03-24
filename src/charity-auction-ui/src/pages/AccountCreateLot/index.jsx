@@ -95,6 +95,8 @@ const AccountCreateLot = () => {
               isMulti
               value={categories}
               onChange={(value) => setCategories(value)}
+              inputProps={{ readOnly: true }}
+              isSearchable={false}
             />
           </div>
           <div className={styles.inputWrapper}>

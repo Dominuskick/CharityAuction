@@ -156,6 +156,8 @@ const LotList = () => {
               setCategoryNames(selected);
             }}
             isMulti
+            inputProps={{ readOnly: true }}
+            isSearchable={false}
           />
         </div>
         <div className={styles.sortWrapper}>
@@ -171,6 +173,8 @@ const LotList = () => {
                   setSortByPriceValue(selected);
                   setSortByNoveltyValue(null);
                 }}
+                inputProps={{ readOnly: true }}
+                isSearchable={false}
               />
             </div>
             <div className={styles.selectWrapper}>
@@ -183,6 +187,8 @@ const LotList = () => {
                   setSortByNoveltyValue(selected);
                   setSortByPriceValue(null);
                 }}
+                inputProps={{ readOnly: true }}
+                isSearchable={false}
               />
             </div>
             <div className={styles.selectWrapper}>
@@ -196,6 +202,8 @@ const LotList = () => {
                   setSortByPriceValue(null);
                   setSortByNoveltyValue(null);
                 }}
+                inputProps={{ readOnly: true }}
+                isSearchable={false}
               />
             </div>
           </div>
